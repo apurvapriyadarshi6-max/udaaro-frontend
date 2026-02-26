@@ -1,11 +1,9 @@
 import { useState } from "react";
 
 function ApplyFounder() {
-  const API_BASE =
-    process.env.NODE_ENV === "production"
-      ? "https://udaaro-backend.onrender.com"
-      : "http://localhost:5000";
-
+ const API_BASE = import.meta.env.PROD
+  ? "https://udaaro-backend.onrender.com"
+  : "http://localhost:5000";
   const [formData, setFormData] = useState({
     name: "",
     email: "",
