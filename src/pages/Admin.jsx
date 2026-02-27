@@ -80,7 +80,7 @@ function Admin() {
     }
   };
 
-  /* ================= DELETE (FIXED) ================= */
+  /* ================= DELETE ================= */
 
   const handleDelete = async (type, id) => {
     const token = localStorage.getItem("token");
@@ -137,14 +137,20 @@ function Admin() {
 
     [...founders, ...investors, ...mentors].forEach((item) => {
       if (!item.createdAt) return;
+
       const date = new Date(item.createdAt);
-      const key = `${date.getFullYear()}-${date.getMonth() + 1}`;
+      if (isNaN(date)) return;
+
+      const key = `${date.getFullYear()}-${String(
+        date.getMonth() + 1
+      ).padStart(2, "0")}`;
+
       monthMap[key] = (monthMap[key] || 0) + 1;
     });
 
     return Object.entries(monthMap)
       .map(([month, count]) => ({ month, count }))
-      .sort((a, b) => new Date(a.month) - new Date(b.month));
+      .sort((a, b) => a.month.localeCompare(b.month));
   };
 
   const monthlyGrowth = getMonthlyData();
@@ -189,6 +195,7 @@ function Admin() {
 
         {activeTab === "dashboard" && (
           <>
+            {/* Cards */}
             <div className="grid md:grid-cols-3 gap-6 mb-10">
               {userDistribution.map((item) => (
                 <div key={item.name} className="bg-white p-6 rounded-xl shadow border">
@@ -200,31 +207,36 @@ function Admin() {
               ))}
             </div>
 
+            {/* Charts */}
             <div className="grid md:grid-cols-2 gap-10">
               <div className="bg-white p-6 rounded-xl shadow border">
                 <h3 className="font-semibold mb-4">User Distribution</h3>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={userDistribution}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="count" fill="#2563eb" />
-                  </BarChart>
-                </ResponsiveContainer>
+                {userDistribution.length > 0 && (
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={userDistribution}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="name" />
+                      <YAxis />
+                      <Tooltip />
+                      <Bar dataKey="count" fill="#2563eb" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                )}
               </div>
 
               <div className="bg-white p-6 rounded-xl shadow border">
                 <h3 className="font-semibold mb-4">Monthly Growth</h3>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={monthlyGrowth}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip />
-                    <Line type="monotone" dataKey="count" stroke="#2563eb" />
-                  </LineChart>
-                </ResponsiveContainer>
+                {monthlyGrowth.length > 0 && (
+                  <ResponsiveContainer width="100%" height={300}>
+                    <LineChart data={monthlyGrowth}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" />
+                      <YAxis />
+                      <Tooltip />
+                      <Line type="monotone" dataKey="count" stroke="#2563eb" />
+                    </LineChart>
+                  </ResponsiveContainer>
+                )}
               </div>
             </div>
           </>
@@ -248,8 +260,7 @@ function Admin() {
                   ? investors
                   : mentors
               ).map((item) => {
-
-                const recordId = item._id || item.id; // 🔥 FIX
+                const recordId = item._id || item.id;
 
                 return (
                   <div key={recordId} className="bg-white p-6 rounded-xl shadow border">
@@ -262,12 +273,10 @@ function Admin() {
                     {item.stage && <p>Stage: {item.stage}</p>}
                     {item.fundingNeeded && <p>Funding: {item.fundingNeeded}</p>}
                     {item.description && <p>Description: {item.description}</p>}
-
                     {item.firm && <p>Firm: {item.firm}</p>}
                     {item.investmentFocus && <p>Focus: {item.investmentFocus}</p>}
                     {item.preferredStage && <p>Preferred Stage: {item.preferredStage}</p>}
                     {item.ticketSize && <p>Ticket Size: {item.ticketSize}</p>}
-
                     {item.expertise && <p>Expertise: {item.expertise}</p>}
                     {item.experienceLevel && <p>Experience: {item.experienceLevel}</p>}
                     {item.availability && <p>Availability: {item.availability}</p>}
