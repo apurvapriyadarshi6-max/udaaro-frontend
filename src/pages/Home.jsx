@@ -142,7 +142,45 @@ function Home() {
 
         </div>
       </section>
+      {/* ================= SEO CONTENT SECTION ================= */}
+<section className="py-20 px-6 bg-gray-50">
+  <div className="max-w-5xl mx-auto text-gray-700 leading-relaxed">
 
+    <h2 className="text-3xl font-bold text-blue-600 mb-8 text-center">
+      India’s Emerging Startup Ecosystem Platform
+    </h2>
+
+    <p className="mb-6">
+      Udaaro is a rapidly growing startup ecosystem platform in India designed
+      to connect founders, investors, and mentors in one unified digital space.
+      In today’s competitive startup environment, early-stage entrepreneurs
+      require more than just funding — they need mentorship, strategic guidance,
+      and long-term ecosystem support.
+    </p>
+
+    <p className="mb-6">
+      Through Udaaro, startup founders can showcase their ventures, connect
+      with aligned angel investors and venture capital participants, and build
+      meaningful partnerships that accelerate growth. Investors gain access to
+      curated early-stage startups across multiple industries including
+      technology, fintech, healthtech, edtech, and emerging digital sectors.
+    </p>
+
+    <p className="mb-6">
+      Mentors on Udaaro play a crucial role in shaping the next generation
+      of Indian startups. By offering experience-driven guidance, founders
+      can avoid common pitfalls and scale with clarity and confidence.
+    </p>
+
+    <p>
+      As India continues to establish itself as one of the world’s fastest-growing
+      startup ecosystems, Udaaro aims to become a trusted platform where innovation,
+      capital, and expertise come together to build sustainable and globally
+      competitive companies.
+    </p>
+
+  </div>
+</section>
       {/* ================= FINAL CTA ================= */}
       <section className="py-16 bg-blue-600 text-white text-center px-6">
         <h2 className="text-3xl font-bold mb-6">
