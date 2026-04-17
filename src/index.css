@@ -2,31 +2,52 @@
 @tailwind components;
 @tailwind utilities;
 
+/** * =============================================================================
+ * I. BASE LAYER & DESIGN TOKENS
+ * Defining the core DNA of the Udaaro visual identity.
+ * Architected by Apurva Priyadarshi
+ * =============================================================================
+ */
+
 @layer base {
   :root {
-    /* Comma-separated for Tailwind opacity support: rgb(var(--brand-blue) / 0.5) */
-    --brand-blue: 37, 99, 235; 
+    /* Brand Colors (RGB format for Tailwind opacity support) */
+    --brand-blue: 37, 99, 235;    /* #2563eb */
+    --brand-indigo: 79, 70, 229;  /* #4f46e5 */
+    --brand-cyan: 6, 182, 212;    /* #06b6d4 */
+    --slate-950: 2, 6, 23;        /* Deep Midnight */
+    
+    /* Layout Tokens */
+    --nav-height: 80px;
+    --border-radius-pill: 9999px;
+    --border-radius-squircle: 2rem;
   }
 
   html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
-    /* Keeps the layout from jumping when modals or routes change */
     scrollbar-gutter: stable;
+    /* Prevents layout shift during high-density data rendering */
+    font-size: 16px; 
   }
 
   body {
-    @apply bg-white text-slate-950 antialiased tracking-tight;
-    /* Inter is the 'Startup Standard' font - ensures crisp rendering */
+    @apply bg-[#fcfcfd] text-slate-950 antialiased;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
     text-rendering: optimizeLegibility;
+    line-height: 1.6;
   }
 
-  /* Custom Scrollbar - Minimalist 'Dashboard' feel */
+  /* Typography Oversaturation - High Signal Header Logic */
+  h1, h2, h3, h4 {
+    @apply tracking-tighter font-black uppercase italic;
+  }
+
+  /* Custom Scrollbar Architecture - Institutional Terminal Look */
   ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 4px;
+    height: 4px;
   }
 
   ::-webkit-scrollbar-track {
@@ -34,76 +55,151 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-slate-200 rounded-full hover:bg-blue-400 transition-colors duration-300;
+    @apply bg-slate-200 rounded-full transition-colors duration-500;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-blue-500 shadow-2xl;
   }
 }
+
+/** * =============================================================================
+ * II. COMPONENT LAYER
+ * Standardized UI nodes for the Venture Operating System.
+ * =============================================================================
+ */
 
 @layer components {
-  /* Enhanced Focus Ring for all Udaaro Forms */
-  .form-input-focus {
-    @apply ring-offset-2 ring-blue-500/20 focus:ring-2 focus:border-blue-500 transition-all duration-300 outline-none;
+  /* --- FORMS & INPUTS --- */
+  .udaaro-input {
+    @apply w-full bg-slate-50 border-0 ring-1 ring-slate-100 px-6 py-4 
+           rounded-[1.2rem] font-bold text-sm transition-all duration-300
+           placeholder:text-slate-300 outline-none
+           focus:ring-2 focus:ring-blue-600 focus:bg-white focus:shadow-xl focus:shadow-blue-500/5;
   }
 
-  /* The 'Udaaro Glass' utility for Navbars and CTAs */
-  .glass-effect {
-    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-sm;
+  .udaaro-label {
+    @apply text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] ml-2 mb-2 block;
   }
 
-  /* The Signature 'Squircle' Button - Architected by Apurva Priyadarshi */
+  /* --- BUTTONS: THE VANGUARD COLLECTION --- */
   .btn-primary {
-    @apply relative overflow-hidden px-8 py-4 bg-slate-950 text-white font-black uppercase tracking-[0.2em] text-[11px] rounded-2xl 
-           hover:bg-blue-600 hover:shadow-2xl hover:shadow-blue-200 
-           active:scale-[0.97] transition-all duration-500 
-           disabled:opacity-50 disabled:pointer-events-none;
+    @apply relative overflow-hidden px-10 py-5 bg-slate-950 text-white font-black 
+           uppercase tracking-[0.2em] text-[11px] rounded-2xl flex items-center gap-3
+           hover:bg-blue-600 hover:shadow-2xl hover:shadow-blue-200 hover:-translate-y-0.5
+           active:scale-[0.96] transition-all duration-500 
+           disabled:opacity-40 disabled:pointer-events-none;
   }
-  
-  /* Sidebar Links for Admin Terminal */
-  .nav-link-active {
-    @apply bg-blue-600 text-white shadow-xl shadow-blue-500/30;
+
+  .btn-secondary {
+    @apply px-10 py-5 bg-white border border-slate-200 text-slate-900 font-black 
+           uppercase tracking-[0.2em] text-[11px] rounded-2xl flex items-center gap-3
+           hover:border-blue-500 hover:text-blue-600 hover:bg-blue-50/50
+           active:scale-[0.96] transition-all duration-300;
+  }
+
+  /* --- GLASS & BLUR --- */
+  .glass-header {
+    @apply bg-white/60 backdrop-blur-2xl border-b border-slate-200/40 shadow-sm;
+  }
+
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-xl border border-white shadow-2xl shadow-slate-900/5;
+  }
+
+  /* --- DATA GRID & TABLES --- */
+  .table-cell-premium {
+    @apply px-10 py-8 text-sm font-medium border-b border-slate-50 transition-colors duration-300;
+  }
+
+  .table-row-hover {
+    @apply hover:bg-blue-50/40 cursor-default transition-all duration-300;
+  }
+
+  /* --- DASHBOARD ELEMENTS --- */
+  .stat-card {
+    @apply p-8 bg-white rounded-[2.5rem] border border-slate-100 shadow-sm
+           hover:shadow-2xl hover:shadow-blue-900/5 transition-all duration-500;
   }
 }
 
+/** * =============================================================================
+ * III. UTILITY LAYER
+ * Tactical visual modifiers for cinematic UX.
+ * =============================================================================
+ */
+
 @layer utilities {
-  /* Tactical feedback for credential validation errors */
-  .animate-head-shake {
-    animation: head-shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-  }
-
-  @keyframes head-shake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-5px); }
-    40%, 80% { transform: translateX(5px); }
-  }
-
-  /* High-impact text styling for the Hero Section */
-  .text-gradient {
+  /* Text Gradients */
+  .text-gradient-sovereign {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500;
   }
 
-  /* The 'Engineering' Grid Background - Sovereign Aesthetics */
-  .bg-grid-pattern {
-    background-image: radial-gradient(circle, #e2e8f0 0.8px, transparent 0.8px);
-    background-size: 32px 32px;
+  .text-gradient-silver {
+    @apply bg-clip-text text-transparent bg-gradient-to-b from-slate-950 to-slate-500;
   }
 
-  /* Cinematic Page Entrance Animation */
-  .fade-in-up {
-    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  /* Engineering Background Patterns */
+  .bg-grid-node {
+    background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px);
+    background-size: 40px 40px;
   }
 
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  .bg-mesh-dark {
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.15) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(79, 70, 229, 0.1) 0px, transparent 50%);
   }
 
-  /* Premium Image Reveal Effect */
-  .reveal-mask {
-    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  /* Animations & Keyframes */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+  }
+
+  .animate-pulse-subtle {
+    animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse-subtle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(0.98); }
+  }
+
+  /* Shadow Architectures */
+  .shadow-premium {
+    box-shadow: 0 40px 100px -20px rgba(2, 6, 23, 0.08);
+  }
+
+  .shadow-blue-glow {
+    box-shadow: 0 0 40px -10px rgba(37, 99, 235, 0.4);
+  }
+
+  /* Masking & Revealing */
+  .reveal-mask-bottom {
+    mask-image: linear-gradient(to top, transparent, black 20%);
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Adaptive Blur Triggers */
+  .blur-load {
+    filter: blur(20px);
+    transition: filter 0.8s ease-in-out;
+  }
+
+  .blur-load-complete {
+    filter: blur(0);
   }
 }
