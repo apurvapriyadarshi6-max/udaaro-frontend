@@ -1,8 +1,8 @@
 /** * =============================================================================
- * UDAARO SOVEREIGN VENTURE OS - MASTER CORE v5.6.0
+ * UDAARO SOVEREIGN VENTURE OS - MASTER CORE v5.7.0
  * -----------------------------------------------------------------------------
  * ARCHITECT: Apurva Priyadarshi (Batch 2026)
- * RECOVERY PROTOCOL: Hydration_Resilience_Final
+ * FEATURE: Ironclad Chunk Recovery & Logic Synchronization
  * ============================================================================= */
 
 import React, { lazy, Suspense, useEffect, useState, useReducer, useRef } from "react";
@@ -20,14 +20,30 @@ import ReactMarkdown from 'react-markdown';
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-// --- DYNAMIC NODE IMPORT (CODE-SPLITTING) ---
-// Using pre-fetching logic hints for Vercel deployment
-const Home = lazy(() => import("./pages/Home"));
-const Apply = lazy(() => import("./pages/ApplyFounder"));
-const Investors = lazy(() => import("./pages/Investors"));
-const Mentors = lazy(() => import("./pages/Mentors"));
-const Admin = lazy(() => import("./pages/Admin"));
-const Login = lazy(() => import("./pages/AdminLogin"));
+/** * REINFORCED DYNAMIC IMPORT LOGIC
+ * Intercepts ChunkLoadErrors (common on Vercel during new deployments) 
+ * and forces a localized re-sync of the grid.
+ */
+const lazyRetry = (componentImport) => {
+  return lazy(async () => {
+    try {
+      return await componentImport();
+    } catch (error) {
+      console.error("[UDAARO_CORE] CHUNK_LOAD_FAILURE: Initiating Recovery...", error);
+      // Force reload to fetch fresh build assets from the server
+      window.location.reload();
+      return { default: () => <SovereignLoader /> };
+    }
+  });
+};
+
+// --- DYNAMIC NODES WITH RETRY PROTOCOL ---
+const Home = lazyRetry(() => import("./pages/Home"));
+const Apply = lazyRetry(() => import("./pages/ApplyFounder"));
+const Investors = lazyRetry(() => import("./pages/Investors"));
+const Mentors = lazyRetry(() => import("./pages/Mentors"));
+const Admin = lazyRetry(() => import("./pages/Admin"));
+const Login = lazyRetry(() => import("./pages/AdminLogin"));
 
 /** * =============================================================================
  * MODULE I: THE NEURAL ENGINE (SovereignAI.jsx)
@@ -50,10 +66,8 @@ const SovereignAI = () => {
   const [isOpen, setIsOpen] = useState(false);
   const scrollRef = useRef(null);
 
-  // REINFORCED GUARD: Ensures the DOM node exists before attempting scroll logic
   useEffect(() => {
     if (!isOpen) return;
-    
     const syncScroll = () => {
       if (scrollRef.current) {
         scrollRef.current.scrollTo({
@@ -62,8 +76,6 @@ const SovereignAI = () => {
         });
       }
     };
-
-    // RequestAnimationFrame ensures we wait for the next repaint
     const frameId = requestAnimationFrame(syncScroll);
     return () => cancelAnimationFrame(frameId);
   }, [state.messages, state.isThinking, isOpen]);
@@ -84,7 +96,7 @@ const SovereignAI = () => {
         body: JSON.stringify({ prompt: userQuery }),
       });
       const data = await response.json();
-      dispatch({ type: 'ADD_MESSAGE', payload: { role: "ai", content: data.response || "Handshake timeout." } });
+      dispatch({ type: 'ADD_MESSAGE', payload: { role: "ai", content: String(data.response || "Handshake timeout.") } });
     } catch (err) {
       dispatch({ type: 'ADD_MESSAGE', payload: { role: "ai", content: "CRITICAL: Node offline." } });
     } finally {
@@ -116,13 +128,10 @@ const SovereignAI = () => {
                   </div>
                 </div>
               ))}
-              {state.isThinking && (
-                <div className="text-[#D4AF37] font-mono text-[9px] animate-pulse">ANALYZING_NODE...</div>
-              )}
             </div>
 
             <form onSubmit={handleLogicQuery} className="p-8 border-t bg-white flex gap-4">
-              <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Query..." className="flex-1 bg-slate-50 rounded-2xl px-6 py-4 text-xs italic font-bold outline-none" />
+              <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Query..." className="flex-1 bg-slate-50 rounded-2xl px-6 py-4 text-xs italic font-bold outline-none border border-transparent focus:border-[#D4AF37]/50" />
               <button className="w-14 h-14 bg-[#0F1419] text-[#D4AF37] rounded-2xl flex items-center justify-center"><Send size={18} /></button>
             </form>
           </motion.div>
@@ -154,7 +163,7 @@ export default function UdaaroCentralCommand() {
   }, []);
 
   return (
-    <div className="udaaro-sovereign-application bg-[#FDF9F3] min-h-screen">
+    <div className="udaaro-sovereign-application bg-[#FDF9F3] min-h-screen overflow-x-hidden">
       
       {/* TELEMETRY OVERLAY */}
       <div className="fixed bottom-10 left-10 z-[1000] hidden lg:block">
@@ -166,14 +175,16 @@ export default function UdaaroCentralCommand() {
 
       <Navbar />
 
+      {/* REINFORCED SUSPENSE LAYER */}
       <Suspense fallback={<SovereignLoader />}>
         <AnimatePresence mode="wait" initial={false}>
           <motion.main
             key={location.pathname}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -5 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            className="relative z-10"
           >
             <Routes location={location}>
               <Route path="/" element={<Home />} />
@@ -182,7 +193,7 @@ export default function UdaaroCentralCommand() {
               <Route path="/mentors" element={<Mentors />} />
               <Route path="/admin-login" element={<Login />} />
               <Route path="/admin/*" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
-              <Route path="*" element={<Navigate to="/" />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </motion.main>
         </AnimatePresence>
@@ -190,20 +201,16 @@ export default function UdaaroCentralCommand() {
 
       <SovereignAI />
 
-      {/* FOOTER */}
-      <footer className="bg-white border-t border-[#D4AF37]/10 py-20 px-12 text-center">
+      <footer className="bg-white border-t border-[#D4AF37]/10 py-20 px-12 text-center relative z-20">
         <div className="flex flex-col items-center gap-6">
           <div className="w-12 h-12 bg-[#0F1419] text-[#D4AF37] rounded-xl flex items-center justify-center font-black italic">U</div>
-          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-400">Architected by Apurva Priyadarshi © 2026</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-400 italic">Architected by Apurva Priyadarshi © 2026</p>
         </div>
       </footer>
     </div>
   );
 }
 
-/** * =============================================================================
- * SOVEREIGN LOADER
- * ============================================================================= */
 const SovereignLoader = () => (
   <div className="h-screen w-full bg-[#FDF9F3] flex flex-col items-center justify-center">
     <div className="w-20 h-20 bg-[#0F1419] rounded-2xl flex items-center justify-center text-[#D4AF37] font-black italic text-2xl animate-pulse">U</div>
