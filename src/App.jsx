@@ -1,8 +1,9 @@
 /** * =============================================================================
- * UDAARO SOVEREIGN VENTURE OS - MASTER CORE v5.8.0
+ * UDAARO SOVEREIGN VENTURE OS - MASTER CORE v6.0.0
  * -----------------------------------------------------------------------------
  * ARCHITECT: Apurva Priyadarshi (Batch 2026)
- * FEATURE: Client-Side Hydration Shield & Resonance Synchronization
+ * REVISION: Iron_Resilience_Handshake
+ * FEATURE: Double-Phase Hydration Lock & Chunk Recovery
  * ============================================================================= */
 
 import React, { lazy, Suspense, useEffect, useState, useReducer, useRef } from "react";
@@ -21,14 +22,14 @@ import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 /** * REINFORCED DYNAMIC IMPORT LOGIC
- * Forces a system re-sync if Vercel deployment chunks are missing.
+ * Automates grid re-sync if Vercel deployment assets are out of phase.
  */
 const lazyRetry = (componentImport) => {
   return lazy(async () => {
     try {
       return await componentImport();
     } catch (error) {
-      console.error("[UDAARO_CORE] CHUNK_LOAD_FAILURE: Re-syncing grid...", error);
+      console.error("[UDAARO_CORE] LOGIC_DRIFT: Re-syncing node assets...", error);
       window.location.reload();
       return { default: () => <SovereignLoader /> };
     }
@@ -110,12 +111,12 @@ const SovereignAI = () => {
             initial={{ opacity: 0, scale: 0.9, y: 50 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 50 }}
-            className="w-[450px] h-[700px] bg-white border border-[#D4AF37]/30 rounded-[3.5rem] shadow-7xl flex flex-col overflow-hidden backdrop-blur-3xl"
+            className="w-[min(450px,90vw)] h-[70vh] bg-white border border-[#D4AF37]/30 rounded-[3.5rem] shadow-7xl flex flex-col overflow-hidden backdrop-blur-3xl"
           >
             <div className="p-10 bg-[#0F1419] text-[#D4AF37] flex justify-between items-center relative overflow-hidden">
               <div className="absolute inset-0 opacity-10 rotate-12 scale-150"><CircuitBoard size={300} /></div>
               <div className="relative z-10 font-black italic uppercase tracking-tighter">Sovereign_AI</div>
-              <button onClick={() => setIsOpen(false)} className="relative z-10"><X /></button>
+              <button onClick={() => setIsOpen(false)} className="relative z-10 p-2 hover:bg-white/10 rounded-full transition-colors"><X size={20} /></button>
             </div>
 
             <div className="flex-1 p-10 overflow-y-auto space-y-8 bg-[#FDF9F3]/50 custom-scrollbar" ref={scrollRef}>
@@ -129,8 +130,8 @@ const SovereignAI = () => {
             </div>
 
             <form onSubmit={handleLogicQuery} className="p-8 border-t bg-white flex gap-4">
-              <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Query..." className="flex-1 bg-slate-50 rounded-2xl px-6 py-4 text-xs italic font-bold outline-none border border-transparent focus:border-[#D4AF37]/50" />
-              <button className="w-14 h-14 bg-[#0F1419] text-[#D4AF37] rounded-2xl flex items-center justify-center"><Send size={18} /></button>
+              <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Query Logic..." className="flex-1 bg-slate-50 rounded-2xl px-6 py-4 text-xs italic font-bold outline-none border border-transparent focus:border-[#D4AF37]/50" />
+              <button className="w-14 h-14 bg-[#0F1419] text-[#D4AF37] rounded-2xl flex items-center justify-center hover:bg-[#D4AF37] hover:text-white transition-all"><Send size={18} /></button>
             </form>
           </motion.div>
         )}
@@ -140,7 +141,7 @@ const SovereignAI = () => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-24 h-24 bg-[#0F1419] border-4 border-[#D4AF37] rounded-full flex items-center justify-center text-[#D4AF37] shadow-luxury"
+        className="w-20 h-20 md:w-24 md:h-24 bg-[#0F1419] border-4 border-[#D4AF37] rounded-full flex items-center justify-center text-[#D4AF37] shadow-luxury"
       >
         <Bot size={34} />
       </motion.button>
@@ -154,16 +155,19 @@ const SovereignAI = () => {
 export default function UdaaroCentralCommand() {
   const location = useLocation();
   const [latency, setLatency] = useState(12);
-  const [isResonating, setIsResonating] = useState(false); // HYDRATION SHIELD
+  const [isResonating, setIsResonating] = useState(false);
 
-  // HYDRATION SHIELD: Ensures client-side state is ready before the first paint.
+  // HYDRATION SHIELD: Ensures the app only mounts on the client side.
   useEffect(() => {
-    setIsResonating(true);
+    const handshake = setTimeout(() => setIsResonating(true), 300);
     const pulse = setInterval(() => setLatency(Math.floor(Math.random() * 5) + 11), 5000);
-    return () => clearInterval(pulse);
+    return () => {
+      clearTimeout(handshake);
+      clearInterval(pulse);
+    };
   }, []);
 
-  // If the grid isn't hydrated, keep the sovereign loader active to prevent coordinate mismatch.
+  // Prevent coordinate mismatch by holding the loader until resonance is complete.
   if (!isResonating) return <SovereignLoader />;
 
   return (
@@ -173,21 +177,23 @@ export default function UdaaroCentralCommand() {
       <div className="fixed bottom-10 left-10 z-[1000] hidden lg:block">
         <div className="px-6 py-3 bg-[#0F1419]/95 border border-[#D4AF37]/20 rounded-2xl shadow-6xl flex items-center gap-5 text-[#D4AF37]">
           <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-[8px] font-black uppercase tracking-widest italic">Sync: Stable | Latency: {latency}ms</span>
+          <span className="text-[8px] font-black uppercase tracking-widest italic leading-none">
+            Sync: Stable | Protocol: Alpha_Resonance | {latency}ms
+          </span>
         </div>
       </div>
 
       <Navbar />
 
-      {/* REINFORCED SUSPENSE LAYER */}
       <Suspense fallback={<SovereignLoader />}>
-        <AnimatePresence mode="wait" initial={false}>
+        {/* REINFORCED: popLayout mode ensures elements are properly removed before new ones enter */}
+        <AnimatePresence mode="popLayout" initial={false}>
           <motion.main
-            key={location.pathname.split('/')[1] || 'root'} // STABLE KEY LOGIC
-            initial={{ opacity: 0, y: 10 }}
+            key={location.pathname.split('/')[1] || 'root'} 
+            initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="relative z-10"
           >
             <Routes location={location}>
@@ -211,19 +217,39 @@ export default function UdaaroCentralCommand() {
 
       <SovereignAI />
 
-      <footer className="bg-white border-t border-[#D4AF37]/10 py-20 px-12 text-center relative z-20">
+      <footer className="bg-white border-t border-[#D4AF37]/10 py-24 px-12 text-center relative z-20">
         <div className="flex flex-col items-center gap-6">
-          <div className="w-12 h-12 bg-[#0F1419] text-[#D4AF37] rounded-xl flex items-center justify-center font-black italic">U</div>
-          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-400 italic">Architected by Apurva Priyadarshi © 2026</p>
+          <div className="w-14 h-14 bg-[#0F1419] text-[#D4AF37] rounded-2xl flex items-center justify-center font-black italic text-2xl shadow-2xl">U</div>
+          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-400 italic">
+            Architected by Apurva Priyadarshi © 2026
+          </p>
+          <div className="flex gap-4 text-[9px] font-bold text-slate-300 uppercase tracking-widest">
+            <span>Sovereign_Node: Active</span>
+            <span className="text-[#D4AF37]/50">|</span>
+            <span>Grid_Version: 6.0.0</span>
+          </div>
         </div>
       </footer>
     </div>
   );
 }
 
+/** * =============================================================================
+ * SOVEREIGN LOADER
+ * ============================================================================= */
 const SovereignLoader = () => (
-  <div className="h-screen w-full bg-[#FDF9F3] flex flex-col items-center justify-center">
-    <div className="w-20 h-20 bg-[#0F1419] rounded-2xl flex items-center justify-center text-[#D4AF37] font-black italic text-2xl animate-pulse shadow-2xl">U</div>
-    <span className="mt-8 text-[10px] font-black uppercase tracking-[1.2em] text-[#0F1419] italic ml-4">Decrypting_Node</span>
+  <div className="h-screen w-full bg-[#FDF9F3] flex flex-col items-center justify-center fixed inset-0 z-[99999]">
+    <motion.div 
+      initial={{ scale: 0.8, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="flex flex-col items-center"
+    >
+      <div className="w-24 h-24 bg-[#0F1419] rounded-3xl flex items-center justify-center text-[#D4AF37] font-black italic text-3xl animate-pulse shadow-7xl border-2 border-[#D4AF37]/10">U</div>
+      <div className="mt-10 flex items-center gap-3">
+        <Loader2 className="animate-spin text-[#D4AF37]" size={18} />
+        <span className="text-[10px] font-black uppercase tracking-[1em] text-[#0F1419] italic ml-4">Decrypting_Resonance</span>
+      </div>
+    </motion.div>
   </div>
 );
