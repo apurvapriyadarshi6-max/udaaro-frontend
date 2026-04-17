@@ -50,45 +50,75 @@ import {
   FileCode,
   Box,
   TrendingUp,
-  Workflow
+  Workflow,
+  Server,
+  Key,
+  Layers3,
+  ClipboardCheck,
+  Eye,
+  ActivitySquare,
+  BookOpen,
+  UserCheck
 } from "lucide-react";
 
 /** * =============================================================================
- * I. INSTITUTIONAL CONFIGURATION
- * Design System: Alpha-Advisory-Sync v3.0.4
- * Architected by Apurva Priyadarshi | Cycle: 2026-Alpha
+ * I. STARTUP ADVISORY CONFIGURATION (VERIFIED THEORY)
+ * Design System: Alpha-Advisory-Sync v3.1.0
+ * Logic: Phase 1 Venture Engineering
+ * Architected by Apurva Priyadarshi | Environment: Sovereign Node
  * =============================================================================
  */
 
-const EXPERIENCE_MATRIX = [
-  { level: "Growth_Expert", label: "5+ Years Precision", focus: "Operational Logic" },
-  { level: "Industry_Lead", label: "10+ Years Authority", focus: "Market Dominion" },
-  { level: "Executive_Node", label: "15+ Years Architecture", focus: "Institutional Scale" },
-  { level: "Board_Veteran", label: "20+ Years Legacy", focus: "Generational Governance" },
+const ADVISORY_PROTOCOL = {
+  status: "Prototype / Alpha Stage",
+  focus: "Execution Infrastructure",
+  handshake: "Manual Credential Vetting",
+  region: "India Regional Grid"
+};
+
+const EXPERIENCE_HIERARCHY = [
+  { level: "Industrial_Architect", label: "15+ Years Governance", focus: "Structural Integrity" },
+  { level: "Domain_Specialist", label: "10+ Years Precision", focus: "Deep Tech / AI / Fintech" },
+  { level: "Growth_Operator", label: "5+ Years Execution", focus: "Sustainable Scaling" },
+  { level: "Venture_Veteran", label: "Legacy Architect", focus: "Board-Level Synchronization" },
 ];
 
-const STARTUP_ALIGNMENT = [
-  { stage: "Validation", label: "Phase 1: Logic Synthesis", color: "blue" },
-  { stage: "MVP_Sync", label: "Phase 2: Market Handshake", color: "indigo" },
-  { stage: "Series_Alpha", label: "Phase 3: Capital Resonance", color: "cyan" },
-  { stage: "Institutional", label: "Phase 4: Global Ascension", color: "emerald" },
+const PHASE_ALIGNMENT = [
+  { stage: "Logic_Synthesis", label: "Phase 1: Engineering", color: "blue" },
+  { stage: "Market_Handshake", label: "Phase 2: Validation", color: "indigo" },
+  { stage: "Capital_Resonance", label: "Phase 3: Deployment", color: "cyan" },
+  { stage: "Global_Ascension", label: "Phase 4: Expansion", color: "emerald" },
 ];
 
-const BANDWIDTH_PROTOCOLS = [
-  "Strategic_Weekly (High Engagement)", 
-  "Monthly_Pulse (Tactical Review)", 
-  "On_Demand_Sync (Critical Intervention)",
-  "Foundational (Governance/Board)"
+const ADVISORY_PILLARS_V3 = [
+  {
+    icon: <BrainCircuit />,
+    title: "Structural Integrity",
+    desc: "Mentors provide the execution skeleton, moving beyond advice into venture engineering.",
+    node: "LOGIC_GRID_01"
+  },
+  {
+    icon: <Layers />,
+    title: "Sovereign Growth",
+    desc: "Synchronizing founder logic with high-fidelity industry networks and regulatory nodes.",
+    node: "INFRA_SYNC_08"
+  },
+  {
+    icon: <ShieldCheck />,
+    title: "Admission Council",
+    desc: "Acting as primary filters for the Alpha Cycle, ensuring only high-signal builders entry.",
+    node: "COUNCIL_VET_04"
+  }
 ];
 
-const ADVISORY_VITAL_TELEMETRY = [
-  { label: "Executive Nodes", val: "140+", sub: "Verified Pulse", color: "blue" },
-  { label: "Logic Hubs", val: "12", sub: "India Regional Grid", color: "indigo" },
-  { label: "Resilience Score", val: "94.2%", sub: "Survival Quotient", color: "emerald" }
+const GRID_TELEMETRY = [
+  { label: "Executive Nodes", val: "Alpha", sub: "Onboarding_In_Progress", color: "blue" },
+  { label: "Logic Hubs", val: "12", sub: "India_Regional_Clusters", color: "indigo" },
+  { label: "Handshake Mode", val: "Manual", sub: "Selective_Vetting", color: "emerald" },
 ];
 
 /** * =============================================================================
- * II. UI ATOMS: PREMIUM BUILDING BLOCKS
+ * II. UI ATOMS: PREMIUM ADVISORY NODES
  * =============================================================================
  */
 
@@ -108,8 +138,8 @@ const LuxuryInputTerminal = ({ label, icon: Icon, name, type = "text", placehold
     <div className="flex justify-between items-center px-1">
        <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] italic">{label}</label>
        <div className="flex items-center gap-1.5 opacity-40">
-          <div className="w-1 h-1 rounded-full bg-blue-500" />
-          <span className="text-[8px] font-bold text-slate-950 uppercase tracking-widest leading-none">Socket_Encrypted</span>
+          <div className="w-1 h-1 rounded-full bg-blue-500 animate-pulse" />
+          <span className="text-[8px] font-bold text-slate-950 uppercase tracking-widest leading-none">NODE_SYNC_ACTIVE</span>
        </div>
     </div>
     <div className="relative group">
@@ -138,7 +168,6 @@ export default function Mentors() {
   const API_BASE = import.meta.env.PROD ? "https://udaaro-backend.onrender.com" : "http://localhost:5000";
   const FOUNDER_NAME = "Apurva Priyadarshi";
 
-  // --- State Configuration ---
   const [formData, setFormData] = useState({
     name: "", email: "", expertise: "", experienceLevel: "", preferredStage: "", availability: "", linkedin: ""
   });
@@ -159,14 +188,13 @@ export default function Mentors() {
   const executeAdvisorSync = async (e) => {
     e.preventDefault();
     if (!formData.experienceLevel || !formData.preferredStage) {
-      setError("Logical Failure: Institutional alignment nodes must be selected.");
+      setError("Logical Failure: Strategic alignment mapping required.");
       return;
     }
 
     setMessage(""); setError(""); setLoading(true);
     setIsVetting(true);
 
-    // Simulated Vetting Logic Telemetry
     const interval = setInterval(() => {
       setVettingProgress(prev => (prev < 100 ? prev + 1 : 100));
     }, 30);
@@ -182,7 +210,7 @@ export default function Mentors() {
         const data = await response.json();
 
         if (response.ok) {
-          setMessage("Credential Synchronization Successful. The Alpha Council will initiate the handshake protocol via your terminal email.");
+          setMessage("Credential Synchronization Successful. Admission desk will initiate handshake protocol.");
           clearInterval(interval);
           setVettingProgress(100);
         } else {
@@ -191,13 +219,13 @@ export default function Mentors() {
           clearInterval(interval);
         }
       } catch (err) {
-        setError("Infrastructure Node Offline: Grid handshake timeout.");
+        setError("Infrastructure Offline: Peer node logic sync timeout.");
         setIsVetting(false);
         clearInterval(interval);
       } finally {
         setLoading(false);
       }
-    }, 3000);
+    }, 3200);
   };
 
   return (
@@ -222,18 +250,17 @@ export default function Mentors() {
           <div className="flex items-center gap-10">
              <div className="hidden lg:flex items-center gap-4 px-6 py-2.5 bg-slate-950 text-white rounded-2xl shadow-3xl">
                 <Activity size={12} className="text-emerald-500 animate-pulse" />
-                <span className="text-[9px] font-black uppercase tracking-[0.4em] italic leading-none">Council_Grid: Active</span>
+                <span className="text-[9px] font-black uppercase tracking-[0.4em] italic leading-none">Venture_OS: Active</span>
              </div>
-             <Network className="text-blue-600" size={28} />
+             <UserCheck className="text-blue-600" size={28} />
           </div>
         </div>
       </nav>
 
       <main className="flex-grow flex flex-col lg:flex-row pt-28 lg:pt-0">
         
-        {/* 2. LEFT SECTOR: ADVISORY BRANDING & TELEMETRY */}
+        {/* 2. LEFT SECTOR: ADVISORY BRANDING & THEORY */}
         <section className="lg:w-[45%] bg-blue-600 p-12 lg:p-24 text-white flex flex-col justify-between relative overflow-hidden">
-          {/* Background Visual Engineering */}
           <div className="absolute inset-0 z-0 opacity-[0.12] bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]" />
           <div className="absolute top-0 right-0 w-[60vw] h-[60vw] bg-white/10 rounded-full blur-[200px] pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-[40vw] h-[40vw] bg-blue-900/20 rounded-full blur-[160px] pointer-events-none" />
@@ -251,16 +278,12 @@ export default function Mentors() {
                 <span className="text-blue-100 underline decoration-white/30 decoration-[16px] underline-offset-[24px]">Legacy.</span>
               </h1>
               <p className="text-blue-100/80 mt-16 text-2xl md:text-3xl leading-relaxed max-w-lg font-medium italic">
-                Udaaro is an incubator of excellence where industry veterans shape the structural integrity of India's sovereign economy.
+                Udaaro is an incubator of excellence where industry veterans shape the structural integrity of India's sovereign ventures.
               </p>
             </div>
 
             <div className="space-y-16 mb-24">
-              {[
-                { icon: <Users/>, title: "Strategic Depth", desc: "1:1 engagement with founders focused on logic-synthesis and structural resilience." },
-                { icon: <Award/>, title: "Elite Peerage", desc: "Join an exclusive circle of sovereign leaders and industrial veterans in the global hub." },
-                { icon: <Lightbulb/>, title: "IP Synthesis", desc: "Guide high-signal innovation nodes from conceptual raw ideas to institutional dominance." }
-              ].map((prop, i) => (
+              {ADVISORY_PILLARS_V3.map((pillar, i) => (
                 <motion.div 
                   key={i} 
                   initial={{ opacity: 0, y: 20 }}
@@ -269,22 +292,23 @@ export default function Mentors() {
                   className="flex gap-10 group cursor-default"
                 >
                   <div className="flex-shrink-0 w-20 h-20 rounded-[2.5rem] bg-white/10 border border-white/20 flex items-center justify-center transition-all duration-700 group-hover:bg-white group-hover:shadow-7xl group-hover:scale-110">
-                    {React.cloneElement(prop.icon, { 
+                    {React.cloneElement(pillar.icon, { 
                       size: 32, 
                       className: "text-white group-hover:text-blue-600 transition-all duration-500" 
                     })}
                   </div>
                   <div>
-                    <h3 className="font-black text-xl uppercase tracking-tighter italic group-hover:text-blue-100 transition-colors leading-none mb-3">{prop.title}</h3>
-                    <p className="text-blue-100/60 text-base leading-relaxed max-w-sm font-medium group-hover:text-white transition-colors">{prop.desc}</p>
+                    <h3 className="font-black text-xl uppercase tracking-tighter italic group-hover:text-blue-100 transition-colors leading-none mb-3">{pillar.title}</h3>
+                    <p className="text-blue-100/60 text-base leading-relaxed max-w-sm font-medium group-hover:text-white transition-colors">"{pillar.desc}"</p>
+                    <span className="text-[9px] font-black text-blue-100 uppercase tracking-widest mt-2 block italic opacity-40">Node: {pillar.node}</span>
                   </div>
                 </motion.div>
               ))}
             </div>
 
-            {/* NETWORK VITAL TELEMETRY MATRIX */}
+            {/* GRID TELEMETRY MATRIX */}
             <div className="grid grid-cols-3 gap-10 pt-16 border-t border-white/20">
-               {ADVISORY_VITAL_TELEMETRY.map((stat, i) => (
+               {GRID_TELEMETRY.map((stat, i) => (
                  <div key={i} className="group">
                     <p className={`text-4xl font-black italic tracking-tighter text-white leading-none mb-4 group-hover:scale-110 transition-transform origin-left duration-500`}>{stat.val}</p>
                     <p className="text-[10px] font-black text-blue-200 uppercase tracking-[0.4em] mb-2 leading-none">{stat.label}</p>
@@ -294,11 +318,11 @@ export default function Mentors() {
             </div>
           </motion.div>
 
-          {/* Infrastructure & Architect Signature */}
+          {/* Infrastructure Signature */}
           <div className="mt-32 lg:mt-0 relative z-10 flex flex-col md:flex-row justify-between items-end gap-12 pt-12 border-t border-white/10">
             <div className="space-y-8">
                <div className="flex items-center gap-4 text-blue-100 font-black uppercase text-[10px] tracking-[0.5em] italic">
-                 <ShieldCheck size={16} className="text-white" /> Global_Advisory_Registry_v3.0
+                 <ShieldCheck size={16} className="text-white" /> Global_Advisory_Registry_v3.1
                </div>
                <div className="flex gap-6">
                   {[<Globe2/>, <CpuIcon/>, <Microscope/>].map((icon, i) => (
@@ -343,7 +367,7 @@ export default function Mentors() {
                     <div className="h-px w-16 bg-blue-100" />
                 </div>
                 <h2 className="text-6xl md:text-7xl font-black text-slate-950 tracking-tighter leading-none mb-8 uppercase italic">Advisor Intake</h2>
-                <p className="text-slate-400 text-xl font-medium italic uppercase tracking-widest opacity-60">Credential Handshake: Alpha Cycle 2026</p>
+                <p className="text-slate-400 text-xl font-medium italic uppercase tracking-widest opacity-60">Admission Node: Alpha Cycle 2026</p>
               </div>
 
               <AnimatePresence mode="wait">
@@ -355,11 +379,11 @@ export default function Mentors() {
                     <div className="absolute top-0 right-0 p-12 opacity-10 rotate-12"><CheckCircle size={160} /></div>
                     <div className="flex flex-col items-center text-center relative z-10">
                        <div className="w-24 h-24 rounded-[2.5rem] bg-white/20 flex items-center justify-center border-2 border-white/20 mb-8 shadow-4xl"><ShieldCheck size={56} /></div>
-                       <p className="font-black text-4xl tracking-tighter leading-none uppercase italic mb-6">Credential_Sync: SUCCESS</p>
+                       <p className="font-black text-4xl tracking-tighter leading-none uppercase italic mb-6">Handshake_Accepted</p>
                        <p className="text-xl opacity-90 font-medium tracking-wide leading-relaxed mb-12 uppercase italic tracking-widest">
                          {message}
                        </p>
-                       <Link to="/" className="inline-flex items-center gap-4 px-12 py-6 bg-white text-blue-600 rounded-2xl font-black text-[10px] uppercase tracking-[0.4em] shadow-4xl hover:scale-105 active:scale-95 transition-all italic">
+                       <Link to="/" className="inline-flex items-center gap-4 px-12 py-6 bg-white text-blue-600 rounded-2xl font-black text-xs uppercase tracking-[0.4em] shadow-4xl hover:scale-105 active:scale-95 transition-all italic">
                           Return to Sovereign Node <ChevronRight size={18}/>
                        </Link>
                     </div>
@@ -385,16 +409,16 @@ export default function Mentors() {
                         placeholder="linkedin.com/in/architect-profile" value={formData.linkedin} onChange={handleChange} 
                     />
 
-                    {/* Section 03: Decision Matrix (Industrial Experience) */}
+                    {/* Section 03: Decision Matrix */}
                     <div className="space-y-12 p-12 bg-slate-50 rounded-[4rem] border border-slate-100 relative group/matrix">
                        <div className="absolute top-0 right-0 p-12 opacity-5 group-hover/matrix:opacity-10 transition-opacity"><Binary size={120}/></div>
                        
                        <div className="space-y-10 relative z-10">
                           <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.5em] ml-2 flex items-center gap-4 italic">
-                             <FileBadge size={18} className="text-blue-600" /> Tenure Layer Alignment
+                             <FileBadge size={18} className="text-blue-600" /> Tenure Layer Scoping
                           </label>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                             {EXPERIENCE_MATRIX.map((item) => (
+                             {EXPERIENCE_HIERARCHY.map((item) => (
                                <button
                                  key={item.level}
                                  type="button"
@@ -422,10 +446,10 @@ export default function Mentors() {
 
                        <div className="space-y-10 relative z-10">
                           <label className="text-[10px] font-black text-slate-400 uppercase tracking-[0.5em] ml-2 flex items-center gap-4 italic">
-                             <Target size={18} className="text-indigo-600" /> Preferred Venture Phase
+                             <Target size={18} className="text-indigo-600" /> Strategic Phase Interest
                           </label>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                             {STARTUP_ALIGNMENT.map((item) => (
+                             {PHASE_ALIGNMENT.map((item) => (
                                <button
                                  key={item.stage}
                                  type="button"
@@ -444,52 +468,29 @@ export default function Mentors() {
                        </div>
                     </div>
 
-                    {/* Section 04: Capacity Logic */}
-                    <div className="space-y-8 p-12 bg-slate-50 rounded-[4rem] border border-slate-100 relative group/band">
-                       <label className="text-[10px] font-black text-blue-600 uppercase tracking-[0.5em] ml-2 flex items-center gap-4 italic">
-                          <Calendar size={18} /> bandwidth synchronization
-                       </label>
-                       <div className="flex flex-wrap gap-4">
-                          {BANDWIDTH_PROTOCOLS.map((protocol) => (
-                            <button
-                              key={protocol}
-                              type="button"
-                              onClick={() => setFormData({...formData, availability: protocol})}
-                              className={`px-10 py-5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-500 shadow-sm ${
-                                formData.availability === protocol 
-                                ? "bg-slate-950 text-white shadow-5xl scale-105" 
-                                : "bg-white text-blue-400 border border-blue-100 hover:border-blue-300 hover:bg-blue-50"
-                              }`}
-                            >
-                              {protocol}
-                            </button>
-                          ))}
-                       </div>
-                    </div>
-
                     {/* Vetting Telemetry Display */}
                     <AnimatePresence>
-                       {isVetting && !message && (
+                       {isSyncing && !message && (
                          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="p-12 bg-slate-950 rounded-[4rem] text-white border border-blue-500/30 shadow-7xl">
                             <div className="flex justify-between items-center mb-10">
                                <div className="flex items-center gap-5">
                                   <Cpu className="text-blue-500 animate-spin" size={28} />
                                   <div>
-                                     <span className="text-[11px] font-black uppercase tracking-[0.5em] italic block">Cognitive_Handshake_Active</span>
+                                     <span className="text-[11px] font-black uppercase tracking-[0.5em] italic block text-blue-500">Cognitive_Handshake_Active</span>
                                      <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest italic">Vetting Executive Credentials...</span>
                                   </div>
                                </div>
                                <span className="text-2xl font-black font-mono text-blue-400 italic">{vettingProgress}%</span>
                             </div>
-                            <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden mb-8">
+                            <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden mb-8 shadow-inner">
                                <motion.div animate={{ width: `${vettingProgress}%` }} className="h-full bg-blue-600 shadow-[0_0_20px_blue]" />
                             </div>
                             <div className="flex justify-between items-center opacity-40">
                                <div className="flex items-center gap-3">
                                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                  <span className="text-[8px] font-black uppercase tracking-[0.5em]">Ledger_Verification: STABLE</span>
+                                  <span className="text-[8px] font-black uppercase tracking-[0.5em]">Protocol: Encrypted</span>
                                </div>
-                               <span className="text-[8px] font-black uppercase tracking-[0.5em]">Protocol_ID: UDA_ADV_SYNC</span>
+                               <span className="text-[8px] font-black uppercase tracking-[0.5em]">Node: Tokyo_Alpha</span>
                             </div>
                          </motion.div>
                        )}
@@ -510,12 +511,12 @@ export default function Mentors() {
                       </button>
                     </div>
 
-                    {/* Industrial Logic Stacks */}
+                    {/* Logic Stacks */}
                     <div className="flex items-center justify-center gap-20 mt-24 opacity-20 group-hover:opacity-60 transition-opacity duration-1000">
-                       <TechNode icon={<Binary size={40}/>} label="Logic_Mesh" />
-                       <TechNode icon={<Globe size={40}/>} label="Global_Sync" />
-                       <TechNode icon={<Scale size={40}/>} label="Vetting_Core" />
-                       <TechNode icon={<Workflow size={40}/>} label="Matrix_Init" />
+                       <AdvisoryLogicNode icon={<Binary size={40}/>} label="Logic_Vetting" />
+                       <AdvisoryLogicNode icon={<Globe size={40}/>} label="Global_Mesh" />
+                       <AdvisoryLogicNode icon={<Scale size={40}/>} label="Vetting_Core" />
+                       <AdvisoryLogicNode icon={<Workflow size={40}/>} label="Grid_Init" />
                     </div>
                   </form>
                 )}
@@ -535,8 +536,8 @@ export default function Mentors() {
 
               <div className="mt-24 pt-14 border-t border-slate-50 text-center opacity-30">
                  <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.8em] leading-relaxed italic">
-                   Udaaro Global Architecture v3.0.4 <br /> 
-                   SECURE_GOVERNANCE_ADVISORY_NODE
+                   Udaaro Alpha Grid v3.1.0 <br /> 
+                   SECURE_ADVISORY_ADMISSION_NODE
                  </p>
               </div>
             </div>
@@ -556,14 +557,14 @@ export default function Mentors() {
            </div>
            <div className="h-12 w-[1px] bg-slate-200 hidden md:block" />
            <p className="text-[12px] font-bold text-slate-400 uppercase tracking-[0.3em] flex items-center gap-6 italic">
-             <ShieldCheck size={24} className="text-blue-600 animate-pulse" /> Vetted under {FOUNDER_NAME.toUpperCase()} Governance Protocol v3.0
+             <ShieldCheck size={24} className="text-blue-600 animate-pulse" /> Vetted under {FOUNDER_NAME.toUpperCase()} Governance Protocol v3.1
            </p>
         </div>
         <div className="flex flex-wrap justify-center gap-14">
-           <FooterUtility icon={<HardDrive size={18}/>} label="Node_Health" />
-           <FooterUtility icon={<ShieldQuestion size={18}/>} label="Ethical_Charter" />
-           <FooterUtility icon={<Terminal size={18}/>} label="Admin_Pulse" />
-           <FooterUtility icon={<Key size={18}/>} label="Sovereign_Access" color="blue" />
+           <FooterProtocol icon={<HardDrive size={18}/>} label="Node_Stability" />
+           <FooterProtocol icon={<ShieldQuestion size={18}/>} label="Ethical_Charter" />
+           <FooterProtocol icon={<Terminal size={18}/>} label="Admin_Sync" />
+           <FooterProtocol icon={<Key size={18}/>} label="Privacy_Logic" color="blue" />
         </div>
       </footer>
     </div>
@@ -574,14 +575,14 @@ export default function Mentors() {
  * IV. ATOMIC SUB-COMPONENTS
  * ============================================================================= */
 
-const TechNode = ({ icon, label }) => (
+const AdvisoryLogicNode = ({ icon, label }) => (
   <div className="flex flex-col items-center gap-5 group cursor-help">
     <div className="text-slate-400 group-hover:text-blue-600 group-hover:scale-125 transition-all duration-1000 transform group-hover:rotate-6">{icon}</div>
     <span className="text-[10px] font-black uppercase tracking-[0.6em] text-slate-400 group-hover:text-slate-950 transition-colors italic">{label}</span>
   </div>
 );
 
-const FooterUtility = ({ icon, label, color = "slate" }) => (
+const FooterProtocol = ({ icon, label, color = "slate" }) => (
   <div className="flex items-center gap-5 group cursor-pointer border-b-2 border-transparent hover:border-blue-600 pb-3 transition-all duration-700">
     <div className={`text-${color}-400 group-hover:scale-125 transition-transform duration-500`}>{icon}</div>
     <span className={`text-[11px] font-black text-${color}-400 group-hover:text-slate-950 uppercase tracking-[0.5em] italic transition-colors`}>{label}</span>
