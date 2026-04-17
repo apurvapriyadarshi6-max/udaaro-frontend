@@ -451,6 +451,33 @@ export default function Admin() {
                     <StatCard key={m.id} title={m.label} count={m.val} growth={m.trend} icon={m.icon} delay={i * 0.1} />
                   ))}
                 </div>
+                {/* --- Ecosystem Velocity Area Chart --- */}
+<GlassPanel className="p-10" dark>
+  <ChartTitle title="Ecosystem Velocity" sub="Growth of Vanguard Assets" icon={<TrendingUp size={20}/>} />
+  
+  {/* FIX: This wrapper MUST have a height (e.g., h-[350px] or h-96) */}
+  <div className="h-[350px] w-full"> 
+    <ResponsiveContainer width="100%" height="100%">
+      <AreaChart data={chartData}>
+        {/* ... AreaChart contents ... */}
+      </AreaChart>
+    </ResponsiveContainer>
+  </div>
+</GlassPanel>
+
+{/* --- Asset Synthesis Bar Chart --- */}
+<GlassPanel className="p-10">
+  <ChartTitle title="Asset Synthesis" sub="Syndicate vs Advisory Distribution" icon={<PieChart size={20}/>} />
+  
+  {/* FIX: Same applies here */}
+  <div className="h-[350px] w-full">
+    <ResponsiveContainer width="100%" height="100%">
+      <BarChart data={chartData}>
+        {/* ... BarChart contents ... */}
+      </BarChart>
+    </ResponsiveContainer>
+  </div>
+</GlassPanel>
 
                 {/* Intellectual Analytics Layer */}
                 <div className="grid lg:grid-cols-2 gap-12">
