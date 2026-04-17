@@ -1,8 +1,8 @@
 /** * =============================================================================
- * UDAARO SOVEREIGN VENTURE OS - MASTER CORE v5.7.0
+ * UDAARO SOVEREIGN VENTURE OS - MASTER CORE v5.8.0
  * -----------------------------------------------------------------------------
  * ARCHITECT: Apurva Priyadarshi (Batch 2026)
- * FEATURE: Ironclad Chunk Recovery & Logic Synchronization
+ * FEATURE: Client-Side Hydration Shield & Resonance Synchronization
  * ============================================================================= */
 
 import React, { lazy, Suspense, useEffect, useState, useReducer, useRef } from "react";
@@ -21,16 +21,14 @@ import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 /** * REINFORCED DYNAMIC IMPORT LOGIC
- * Intercepts ChunkLoadErrors (common on Vercel during new deployments) 
- * and forces a localized re-sync of the grid.
+ * Forces a system re-sync if Vercel deployment chunks are missing.
  */
 const lazyRetry = (componentImport) => {
   return lazy(async () => {
     try {
       return await componentImport();
     } catch (error) {
-      console.error("[UDAARO_CORE] CHUNK_LOAD_FAILURE: Initiating Recovery...", error);
-      // Force reload to fetch fresh build assets from the server
+      console.error("[UDAARO_CORE] CHUNK_LOAD_FAILURE: Re-syncing grid...", error);
       window.location.reload();
       return { default: () => <SovereignLoader /> };
     }
@@ -156,14 +154,20 @@ const SovereignAI = () => {
 export default function UdaaroCentralCommand() {
   const location = useLocation();
   const [latency, setLatency] = useState(12);
+  const [isResonating, setIsResonating] = useState(false); // HYDRATION SHIELD
 
+  // HYDRATION SHIELD: Ensures client-side state is ready before the first paint.
   useEffect(() => {
+    setIsResonating(true);
     const pulse = setInterval(() => setLatency(Math.floor(Math.random() * 5) + 11), 5000);
     return () => clearInterval(pulse);
   }, []);
 
+  // If the grid isn't hydrated, keep the sovereign loader active to prevent coordinate mismatch.
+  if (!isResonating) return <SovereignLoader />;
+
   return (
-    <div className="udaaro-sovereign-application bg-[#FDF9F3] min-h-screen overflow-x-hidden">
+    <div className="udaaro-sovereign-application bg-[#FDF9F3] min-h-screen overflow-x-hidden selection:bg-[#D4AF37] selection:text-[#0F1419]">
       
       {/* TELEMETRY OVERLAY */}
       <div className="fixed bottom-10 left-10 z-[1000] hidden lg:block">
@@ -179,11 +183,11 @@ export default function UdaaroCentralCommand() {
       <Suspense fallback={<SovereignLoader />}>
         <AnimatePresence mode="wait" initial={false}>
           <motion.main
-            key={location.pathname}
-            initial={{ opacity: 0, y: 5 }}
+            key={location.pathname.split('/')[1] || 'root'} // STABLE KEY LOGIC
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -5 }}
-            transition={{ duration: 0.4, ease: "easeInOut" }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="relative z-10"
           >
             <Routes location={location}>
@@ -192,7 +196,13 @@ export default function UdaaroCentralCommand() {
               <Route path="/investors" element={<Investors />} />
               <Route path="/mentors" element={<Mentors />} />
               <Route path="/admin-login" element={<Login />} />
-              <Route path="/admin/*" element={<ProtectedRoute><Admin /></ProtectedRoute>} />
+              <Route path="/admin/*" element={
+                <ProtectedRoute>
+                  <Suspense fallback={<SovereignLoader />}>
+                    <Admin />
+                  </Suspense>
+                </ProtectedRoute>
+              } />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </motion.main>
@@ -213,7 +223,7 @@ export default function UdaaroCentralCommand() {
 
 const SovereignLoader = () => (
   <div className="h-screen w-full bg-[#FDF9F3] flex flex-col items-center justify-center">
-    <div className="w-20 h-20 bg-[#0F1419] rounded-2xl flex items-center justify-center text-[#D4AF37] font-black italic text-2xl animate-pulse">U</div>
-    <span className="mt-8 text-[10px] font-black uppercase tracking-[1em] text-[#0F1419] italic">Decrypting_Node</span>
+    <div className="w-20 h-20 bg-[#0F1419] rounded-2xl flex items-center justify-center text-[#D4AF37] font-black italic text-2xl animate-pulse shadow-2xl">U</div>
+    <span className="mt-8 text-[10px] font-black uppercase tracking-[1.2em] text-[#0F1419] italic ml-4">Decrypting_Node</span>
   </div>
 );
