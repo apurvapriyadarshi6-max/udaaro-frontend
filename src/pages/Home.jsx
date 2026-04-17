@@ -150,7 +150,7 @@ const SovereignAI = () => {
                 <motion.div key={i} initial={{ opacity: 0, x: m.role === 'user' ? 20 : -20 }} animate={{ opacity: 1, x: 0 }} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[85%] p-8 rounded-[2.5rem] shadow-sm relative group ${m.role === 'user' ? 'bg-[#0F1419] text-white rounded-tr-none' : 'bg-white border-2 border-slate-100 text-slate-800 rounded-tl-none shadow-luxury'}`}>
                     <div className="text-sm font-medium italic leading-relaxed prose">
-                      <ReactMarkdown>{m.content}</ReactMarkdown>
+                      <ReactMarkdown>{m.content || "Node_Data_Empty"}</ReactMarkdown>
                     </div>
                     {m.role === 'ai' && (
                       <div className="absolute -bottom-8 left-0 flex gap-4 opacity-0 group-hover:opacity-100 transition-opacity">
