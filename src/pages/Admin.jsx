@@ -480,52 +480,47 @@ export default function Admin() {
 </GlassPanel>
 
                 {/* Intellectual Analytics Layer */}
-                <div className="grid lg:grid-cols-2 gap-12">
-                  <GlassPanel className="p-12" dark>
-                    <ChartTitle title="Ecosystem Velocity" sub="Growth of Vanguard Assets" icon={<TrendingUp size={24}/>} />
-                    <div className="h-[400px] w-full">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={timeSeriesData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                          <defs>
-                            <linearGradient id="colorF" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor={UI_THEME.primary} stopOpacity={0.6}/>
-                              <stop offset="95%" stopColor={UI_THEME.primary} stopOpacity={0}/>
-                            </linearGradient>
-                          </defs>
-                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
-                          <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 11, fontWeight: 'bold'}} />
-                          <YAxis hide />
-                          <Tooltip contentStyle={{backgroundColor: '#020617', border: '1px solid #1e293b', borderRadius: '24px', padding: '15px'}} />
-                          <Area type="monotone" dataKey="f" stroke={UI_THEME.primary} strokeWidth={6} fillOpacity={1} fill="url(#colorF)" />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </GlassPanel>
+<div className="grid lg:grid-cols-2 gap-12">
+  <GlassPanel className="p-12" dark>
+    <ChartTitle title="Ecosystem Velocity" sub="Growth of Vanguard Assets" icon={<TrendingUp size={24}/>} />
+    
+    {/* FIX: Wrapper with explicit height for ResponsiveContainer */}
+    <div className="h-[400px] w-full">
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart data={timeSeriesData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+          <defs>
+            <linearGradient id="colorF" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor={UI_THEME.primary} stopOpacity={0.6}/>
+              <stop offset="95%" stopColor={UI_THEME.primary} stopOpacity={0}/>
+            </linearGradient>
+          </defs>
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+          <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 11, fontWeight: 'bold'}} />
+          <YAxis hide />
+          <Tooltip contentStyle={{backgroundColor: '#020617', border: '1px solid #1e293b', borderRadius: '24px', padding: '15px'}} />
+          <Area type="monotone" dataKey="f" stroke={UI_THEME.primary} strokeWidth={6} fillOpacity={1} fill="url(#colorF)" />
+        </AreaChart>
+      </ResponsiveContainer>
+    </div>
+  </GlassPanel>
 
-                  <GlassPanel className="p-12">
-                    <ChartTitle title="Asset Synthesis" sub="Syndicate vs Advisory Load" icon={<PieChart size={24}/>} />
-                    <div className="h-[400px] w-full">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={timeSeriesData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                          <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 11, fontWeight: 'bold'}} />
-                          <Tooltip cursor={{fill: 'rgba(0,0,0,0.02)'}} contentStyle={{borderRadius: '24px', border: 'none', boxShadow: '0 40px 80px rgba(0,0,0,0.1)'}} />
-                          <Bar dataKey="i" fill={UI_THEME.secondary} radius={[12, 12, 12, 12]} barSize={16} />
-                          <Bar dataKey="m" fill={UI_THEME.accent} radius={[12, 12, 12, 12]} barSize={16} />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </GlassPanel>
-                </div>
-
-                {/* Industrial Metric Sub-Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                  <MiniMetric label="Handshake Latency" val="12ms" trend="-4%" />
-                  <MiniMetric label="Vetting Pipeline" val="192" trend="+18%" />
-                  <MiniMetric label="Deployment Rate" val="₹18Cr" trend="+31%" />
-                  <MiniMetric label="Alpha Entropy" val="2.9" trend="Stable" />
-                </div>
-
+  <GlassPanel className="p-12">
+    <ChartTitle title="Asset Synthesis" sub="Syndicate vs Advisory Load" icon={<PieChart size={24}/>} />
+    
+    {/* FIX: Wrapper with explicit height for ResponsiveContainer */}
+    <div className="h-[400px] w-full">
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={timeSeriesData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+          <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#94a3b8', fontSize: 11, fontWeight: 'bold'}} />
+          <Tooltip cursor={{fill: 'rgba(0,0,0,0.02)'}} contentStyle={{borderRadius: '24px', border: 'none', boxShadow: '0 40px 80px rgba(0,0,0,0.1)'}} />
+          <Bar dataKey="i" fill={UI_THEME.secondary} radius={[12, 12, 12, 12]} barSize={16} />
+          <Bar dataKey="m" fill={UI_THEME.accent} radius={[12, 12, 12, 12]} barSize={16} />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  </GlassPanel>
+</div>
                 {/* Audit & Security Terminal Log */}
                 <GlassPanel className="p-12">
                   <div className="flex justify-between items-center mb-12">
