@@ -154,47 +154,31 @@ const SovereignAI = () => {
  * ============================================================================= */
 export default function UdaaroCentralCommand() {
   const location = useLocation();
-  const [latency, setLatency] = useState(12);
   const [isResonating, setIsResonating] = useState(false);
 
-  // HYDRATION SHIELD: Ensures the app only mounts on the client side.
   useEffect(() => {
-    const handshake = setTimeout(() => setIsResonating(true), 300);
-    const pulse = setInterval(() => setLatency(Math.floor(Math.random() * 5) + 11), 5000);
-    return () => {
-      clearTimeout(handshake);
-      clearInterval(pulse);
-    };
+    // Force a micro-delay to let the browser stabilize its DOM coordinate system
+    const timer = setTimeout(() => setIsResonating(true), 150);
+    return () => clearTimeout(timer);
   }, []);
 
-  // Prevent coordinate mismatch by holding the loader until resonance is complete.
+  // MANDATORY: If not resonating, we MUST NOT render the Routes. 
+  // Rendering Routes before resonance is what causes the 'Tl' error in your logs.
   if (!isResonating) return <SovereignLoader />;
 
   return (
-    <div className="udaaro-sovereign-application bg-[#FDF9F3] min-h-screen overflow-x-hidden selection:bg-[#D4AF37] selection:text-[#0F1419]">
-      
-      {/* TELEMETRY OVERLAY */}
-      <div className="fixed bottom-10 left-10 z-[1000] hidden lg:block">
-        <div className="px-6 py-3 bg-[#0F1419]/95 border border-[#D4AF37]/20 rounded-2xl shadow-6xl flex items-center gap-5 text-[#D4AF37]">
-          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-[8px] font-black uppercase tracking-widest italic leading-none">
-            Sync: Stable | Protocol: Alpha_Resonance | {latency}ms
-          </span>
-        </div>
-      </div>
-
+    <div className="udaaro-sovereign-application bg-[#FDF9F3] min-h-screen selection:bg-[#D4AF37]">
       <Navbar />
 
       <Suspense fallback={<SovereignLoader />}>
-        {/* REINFORCED: popLayout mode ensures elements are properly removed before new ones enter */}
-        <AnimatePresence mode="popLayout" initial={false}>
+        {/* REINFORCED: mode="wait" ensures old coordinates are purged before new ones mount */}
+        <AnimatePresence mode="wait">
           <motion.main
-            key={location.pathname.split('/')[1] || 'root'} 
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="relative z-10"
+            key={location.pathname}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
           >
             <Routes location={location}>
               <Route path="/" element={<Home />} />
@@ -204,9 +188,7 @@ export default function UdaaroCentralCommand() {
               <Route path="/admin-login" element={<Login />} />
               <Route path="/admin/*" element={
                 <ProtectedRoute>
-                  <Suspense fallback={<SovereignLoader />}>
-                    <Admin />
-                  </Suspense>
+                  <Admin />
                 </ProtectedRoute>
               } />
               <Route path="*" element={<Navigate to="/" replace />} />
@@ -216,20 +198,6 @@ export default function UdaaroCentralCommand() {
       </Suspense>
 
       <SovereignAI />
-
-      <footer className="bg-white border-t border-[#D4AF37]/10 py-24 px-12 text-center relative z-20">
-        <div className="flex flex-col items-center gap-6">
-          <div className="w-14 h-14 bg-[#0F1419] text-[#D4AF37] rounded-2xl flex items-center justify-center font-black italic text-2xl shadow-2xl">U</div>
-          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-400 italic">
-            Architected by Apurva Priyadarshi © 2026
-          </p>
-          <div className="flex gap-4 text-[9px] font-bold text-slate-300 uppercase tracking-widest">
-            <span>Sovereign_Node: Active</span>
-            <span className="text-[#D4AF37]/50">|</span>
-            <span>Grid_Version: 6.0.0</span>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
