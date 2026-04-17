@@ -1,201 +1,243 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+/** * =============================================================================
+ * UDAARO MASTER REPOSITORY: THE SOVEREIGN OPERATING SYSTEM (VOS)
+ * -----------------------------------------------------------------------------
+ * FULL SYSTEM INTEGRATION: v4.2.0 (FINAL GOLD BUILD)
+ * CORE ARCHITECT: Apurva Priyadarshi (Node: INDIA_VANGUARD)
+ * ============================================================================= */
+
+import React, { useState, useEffect, useMemo, useCallback, useReducer } from "react";
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation, Navigate } from "react-router-dom";
+import { motion, AnimatePresence, useScroll, useSpring, useTransform } from "framer-motion";
 import { 
-  Lock, 
-  Mail, 
-  Eye, 
-  EyeOff, 
-  ShieldAlert, 
-  ArrowRight, 
-  Loader2, 
-  ShieldCheck,
-  ServerCrash
+  Shield, Zap, Cpu, Crown, Fingerprint, Box, ArrowUpRight, MessageSquare, X, Send, 
+  Landmark, Binary, Network, Globe, Lock, Info, ScrollText, Users, Activity, 
+  Terminal, Database, HardDrive, Compass, Layers, Target, Workflow, Search, 
+  Bell, Eye, EyeOff, Loader2, ServerCrash, ShieldCheck, TrendingUp, BarChart3,
+  IndianRupee, Rocket, Award, AtSign, Smartphone, MapPin, Building, Clock, Printer,
+  Download, Maximize2, Hash, ExternalLink, ShieldAlert, CheckCircle2, AlertTriangle
 } from "lucide-react";
+import { 
+  AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell 
+} from "recharts";
 
-function AdminLogin() {
-  const navigate = useNavigate();
-  const FOUNDER_NAME = "Apurva Priyadarshi";
+// --- GLOBAL CONFIGURATION NODE ---
+const UDAARO_CORE = {
+  founder: "Apurva Priyadarshi",
+  batch: "2026",
+  status: "Prototype Alpha",
+  api: import.meta.env.PROD ? "https://udaaro-backend.onrender.com" : "http://localhost:5000",
+  version: "v4.2.0-Imperial"
+};
 
-  // Environment-based API resolution
-  const API_BASE = import.meta.env.PROD
-    ? "https://udaaro-backend.onrender.com"
-    : "http://localhost:5000";
+/** * =============================================================================
+ * MODULE 1: SECURITY & HANDSHAKE LOGIC
+ * =============================================================================
+ */
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+const analyzeHandshake = (token) => {
+  try {
+    if (!token) return { valid: false, reason: "NULL_NODE" };
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    const isExpired = Date.now() >= payload.exp * 1000;
+    return { valid: !isExpired, payload, remaining: (payload.exp * 1000) - Date.now() };
+  } catch { return { valid: false, reason: "MALFORMED_HANDSHAKE" }; }
+};
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
+const ProtectedHandshake = ({ children }) => {
+  const [isVerifying, setIsVerifying] = useState(true);
+  const [auth, setAuth] = useState({ valid: false });
+  const location = useLocation();
 
-    try {
-      const res = await fetch(`${API_BASE}/api/admin/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+  useEffect(() => {
+    setIsVerifying(true);
+    const token = localStorage.getItem("token");
+    const result = analyzeHandshake(token);
+    setAuth(result);
+    setTimeout(() => setIsVerifying(false), 2000); // Institutional Handshake UX
+  }, [location.pathname]);
 
-      const data = await res.json();
+  if (isVerifying) return (
+    <div className="h-screen w-full bg-[#0F1419] flex flex-col items-center justify-center">
+      <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }} className="w-32 h-32 border-2 border-[#D4AF37]/20 rounded-full flex items-center justify-center">
+        <div className="w-24 h-24 border-t-2 border-[#D4AF37] rounded-full animate-spin" />
+      </motion.div>
+      <p className="mt-10 text-[10px] font-black text-[#D4AF37] uppercase tracking-[0.8em] animate-pulse">Neural_Sync_Active</p>
+    </div>
+  );
 
-      if (res.ok) {
-        localStorage.setItem("token", data.token);
-        // Instant but smooth navigation to the dashboard
-        navigate("/admin");
-      } else {
-        setError(data.message || "Unauthorized: Credential mismatch.");
-      }
-    } catch (err) {
-      setError("Infrastructure error: Security server unreachable.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  return auth.valid ? children : <Navigate to="/admin-login" state={{ from: location }} />;
+};
+
+/** * =============================================================================
+ * MODULE 2: IMPERIAL THEME ASSETS (ATOMS)
+ * =============================================================================
+ */
+
+const JaliPattern = () => (
+  <div className="absolute inset-0 pointer-events-none opacity-[0.03] z-0">
+    <svg width="100%" height="100%">
+      <pattern id="jali" x="0" y="0" width="120" height="120" patternUnits="userSpaceOnUse">
+        <path d="M60 0 L120 60 L60 120 L0 60 Z" fill="none" stroke="currentColor" strokeWidth="1" />
+        <circle cx="60" cy="60" r="15" fill="none" stroke="currentColor" strokeWidth="1" />
+      </pattern>
+      <rect width="100%" height="100%" fill="url(#jali)" />
+    </svg>
+  </div>
+);
+
+const SectionHeader = ({ badge, title, subtitle, light = false }) => (
+  <div className="mb-32">
+    <div className="flex items-center gap-6 mb-8">
+      <div className={`h-[1px] w-20 ${light ? 'bg-white/20' : 'bg-[#D4AF37]'}`} />
+      <span className={`text-[10px] font-mono font-black uppercase tracking-[0.4em] ${light ? 'text-white/40' : 'text-[#D4AF37]'}`}>{badge}</span>
+    </div>
+    <h2 className={`text-6xl md:text-9xl font-black italic tracking-tighter leading-[0.85] mb-8 ${light ? 'text-white' : 'text-[#0F1419]'}`}>{title}</h2>
+    <p className={`text-xl md:text-2xl font-medium italic max-w-2xl leading-relaxed ${light ? 'text-slate-400' : 'text-slate-500'}`}>{subtitle}</p>
+  </div>
+);
+
+/** * =============================================================================
+ * MODULE 3: THE SOVEREIGN LANDING ENGINE (UI/UX)
+ * =============================================================================
+ */
+
+const Landing = () => {
+  const { scrollYProgress } = useScroll();
+  const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.9]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#0a0a0b] p-6 relative overflow-hidden selection:bg-blue-600">
+    <div className="bg-[#FDF9F3] text-[#0F1419] font-serif overflow-hidden relative">
+      <JaliPattern />
       
-      {/* ================= BACKGROUND ARCHITECTURE ================= */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vw] bg-blue-900/20 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40vw] h-[40vw] bg-indigo-900/10 rounded-full blur-[120px]" />
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-[0.05]" />
-      </div>
-
-      {/* ================= BRAND LOGO ================= */}
-      <motion.div 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="mb-12 text-center relative z-10"
-      >
-        <div className="w-20 h-20 bg-blue-600 rounded-[2rem] flex items-center justify-center text-white font-black text-4xl italic mx-auto mb-6 shadow-[0_20px_50px_rgba(37,99,235,0.3)] border border-blue-400/30">
-          U
-        </div>
-        <h1 className="text-2xl font-black text-white tracking-[0.2em] uppercase leading-none">Udaaro Terminal</h1>
-        <p className="text-slate-500 text-[10px] font-black uppercase tracking-[0.5em] mt-3">Governance Control Center</p>
-      </motion.div>
-
-      {/* ================= LOGIN CONTAINER ================= */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-[460px] relative z-10"
-      >
-        <div className="bg-white/5 backdrop-blur-2xl rounded-[3rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.5)] p-10 md:p-14 border border-white/10 relative overflow-hidden">
-          
-          <div className="mb-12 relative">
-            <h2 className="text-xl font-black text-white uppercase tracking-widest leading-none">Access Protocol</h2>
-            <p className="text-slate-500 text-xs mt-3 font-medium tracking-wide">Enter sovereign credentials to initiate terminal session.</p>
-            <div className="absolute top-0 right-0">
-               <ShieldCheck className="text-blue-500/20" size={40} />
+      {/* --- HERO PORTICO --- */}
+      <motion.header style={{ scale }} className="relative h-screen flex items-center justify-center px-10 pt-20">
+        <div className="max-w-[1500px] text-center">
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2 }}>
+            <div className="mb-16 inline-flex items-center gap-5 px-8 py-3 bg-white border border-[#D4AF37]/20 rounded-full shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-[10px] font-black uppercase tracking-[0.4em] italic text-[#0F1419]">Batch 2026 Alpha Online</span>
             </div>
-          </div>
-
-          {/* ERROR ALERT */}
-          <AnimatePresence>
-            {error && (
-              <motion.div 
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                className="mb-8 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center gap-4 text-red-400 text-xs font-bold uppercase tracking-wider"
-              >
-                <ServerCrash size={18} />
-                <p>{error}</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <form onSubmit={handleLogin} className="space-y-8">
-            
-            {/* Email Field */}
-            <div className="space-y-3">
-              <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] ml-2">
-                Admin Identifier
-              </label>
-              <div className="relative group">
-                <Mail className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-blue-500 transition-colors" size={18} />
-                <input
-                  type="email"
-                  placeholder="admin@udaaro.systems"
-                  className="w-full bg-white/[0.03] border-2 border-white/5 focus:border-blue-600/50 rounded-[1.5rem] py-5 pl-14 pr-6 transition-all outline-none text-white font-bold text-sm"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Password Field */}
-            <div className="space-y-3">
-              <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] ml-2">
-                Security Key
-              </label>
-              <div className="relative group">
-                <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-blue-500 transition-colors" size={18} />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
-                  className="w-full bg-white/[0.03] border-2 border-white/5 focus:border-blue-600/50 rounded-[1.5rem] py-5 pl-14 pr-14 transition-all outline-none text-white font-bold text-sm tracking-widest"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-600 hover:text-white transition-colors"
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-                </button>
-              </div>
-            </div>
-
-            {/* Submit Action */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-500 text-white font-black py-5 rounded-[1.5rem] shadow-2xl shadow-blue-600/20 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-4 group disabled:opacity-50 uppercase text-xs tracking-[0.4em]"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="animate-spin" size={20} />
-                  Encrypting...
-                </>
-              ) : (
-                <>
-                  Initialize Terminal
-                  <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
-                </>
-              )}
-            </button>
-          </form>
-
-          <div className="mt-12 text-center opacity-30">
-            <p className="text-[9px] text-slate-400 leading-relaxed px-8 font-bold uppercase tracking-widest">
-              Private Infrastructure. <br />
-              System Architect: {FOUNDER_NAME}.
+            <h1 className="text-7xl md:text-[14rem] font-black uppercase italic tracking-tighter leading-[0.75] mb-16">
+              Engineering <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-b from-[#0F1419] via-[#D4AF37] to-[#0F1419]">Sovereignty.</span>
+            </h1>
+            <p className="max-w-4xl mx-auto text-xl md:text-4xl text-slate-500 font-medium leading-relaxed italic mb-24">
+              Udaaro is an institutional <span className="text-[#0F1419] font-black underline decoration-[#D4AF37] decoration-[10px] underline-offset-[10px]">Execution Skeleton</span> for elite founders.
             </p>
+            <div className="flex flex-wrap justify-center gap-10">
+              <Link to="/apply" className="px-20 py-10 bg-[#0F1419] text-[#D4AF37] rounded-[3rem] font-black text-[11px] uppercase tracking-[0.6em] shadow-6xl hover:bg-[#D4AF37] hover:text-white transition-all italic">Initiate Protocol</Link>
+              <Link to="/about" className="px-20 py-10 border-2 border-[#0F1419]/10 rounded-[3rem] font-black text-[11px] uppercase tracking-[0.6em] hover:bg-white transition-all flex items-center gap-4 italic">System Logic <ArrowUpRight size={18} /></Link>
+            </div>
+          </motion.div>
+        </div>
+      </motion.header>
+
+      {/* --- OPERATING MODEL: THE VENTURE OS --- */}
+      <section className="py-72 px-10 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <SectionHeader 
+            badge="The Operating Model"
+            title="System Over <br /> Service."
+            subtitle="Udaaro delivers repeatable systems that guide founders through each stage of company building—from idea to institution."
+          />
+          <div className="grid md:grid-cols-3 gap-16">
+            {[
+              { id: "01", icon: Fingerprint, t: "Curated Admission", d: "Entry-stage evaluation focusing on problem clarity, founder intent, and execution capability." },
+              { id: "02", icon: Workflow, t: "Strategic Synthesis", d: "Alignment with AI-driven matching systems for capital, mentorship, and opportunity mapping." },
+              { id: "03", icon: Crown, t: "Global Ascension", d: "Structured scaling support ensuring startups transition into independent, scalable companies." }
+            ].map((node) => (
+              <div key={node.id} className="p-16 bg-[#FDF9F3] border border-transparent hover:border-[#D4AF37]/30 rounded-[5rem] transition-all group">
+                <div className="text-5xl font-black italic text-[#D4AF37]/20 group-hover:text-[#D4AF37] transition-colors mb-10">{node.id}</div>
+                <node.icon size={48} className="text-[#0F1419] mb-10" />
+                <h4 className="text-4xl font-black italic uppercase tracking-tighter mb-8">{node.t}</h4>
+                <p className="text-xl text-slate-500 leading-relaxed italic font-medium">{node.d}</p>
+              </div>
+            ))}
           </div>
         </div>
+      </section>
 
-        {/* Support Link */}
-        <motion.p 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="text-center mt-10 text-[10px] uppercase tracking-widest text-slate-600"
-        >
-          Authorization issues? <a href="mailto:ops@udaaro.com" className="text-blue-500 font-black hover:text-blue-400 transition-colors underline decoration-blue-900 underline-offset-4">Contact Command</a>
-        </motion.p>
-      </motion.div>
+      {/* --- RADICAL TRANSPARENCY SECTION --- */}
+      <section className="py-72 px-10 bg-[#0F1419] text-white relative">
+        <div className="absolute top-0 right-0 p-32 opacity-5 rotate-12 scale-150"><Shield size={800} /></div>
+        <div className="max-w-7xl mx-auto relative z-10">
+          <SectionHeader 
+            light
+            badge="Foundational Principles"
+            title="Radical <br /> Integrity."
+            subtitle="Governed by honest feedback loops and realistic projections. No inflated narratives—only execution-led clarity."
+          />
+          <div className="grid lg:grid-cols-2 gap-32">
+            <div className="space-y-20">
+              <div className="flex gap-10">
+                <div className="w-1.5 h-20 bg-[#D4AF37]" />
+                <div>
+                  <h4 className="text-4xl font-black italic uppercase mb-6">Sovereign Growth</h4>
+                  <p className="text-2xl text-slate-400 italic font-medium leading-relaxed">Focus on independent scaling, avoiding growth models driven purely by external dependency.</p>
+                </div>
+              </div>
+              <div className="flex gap-10">
+                <div className="w-1.5 h-20 bg-[#D4AF37]" />
+                <div>
+                  <h4 className="text-4xl font-black italic uppercase mb-6">Integrated Ecosystem</h4>
+                  <p className="text-2xl text-slate-400 italic font-medium leading-relaxed">Connecting founder development, capital pathways, and strategic mentorship into one loop.</p>
+                </div>
+              </div>
+            </div>
+            <div className="p-20 bg-white/5 border border-white/10 rounded-[6rem] flex flex-col items-center justify-center text-center">
+              <Lock size={120} className="text-[#D4AF37] mb-12 animate-pulse" />
+              <h3 className="text-4xl font-black italic uppercase tracking-tighter mb-8">Access Charter</h3>
+              <p className="text-slate-500 font-black uppercase tracking-[0.5em] text-[10px] mb-12">Batch 2026 Admissions Open</p>
+              <Link to="/apply" className="px-12 py-6 bg-[#D4AF37] text-[#0F1419] rounded-full font-black text-[10px] uppercase tracking-[0.4em] italic shadow-2xl">Submit Portfolio</Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
+  );
+};
+
+/** * =============================================================================
+ * MODULE 4: GOVERNANCE & PRIVACY (POLICY NODES)
+ * =============================================================================
+ */
+
+const Privacy = () => (
+  <div className="bg-[#FDF9F3] min-h-screen py-48 px-10">
+    <div className="max-w-4xl mx-auto">
+      <SectionHeader badge="Governance" title="Privacy <br /> Protocol." subtitle="Institutional data sovereignty is the bedrock of Udaaro's operating model." />
+      <div className="space-y-20 font-medium text-xl italic text-slate-600 leading-relaxed">
+        <p>1. <span className="text-[#0F1419] font-black uppercase">Data Autonomy:</span> All startup analysis reports and founder dashboards are encrypted using AES-256 standard protocols.</p>
+        <p>2. <span className="text-[#0F1419] font-black uppercase">Vetting Privacy:</span> Founder credentials and application narratives are held within closed-loop advisory nodes.</p>
+        <p>3. <span className="text-[#0F1419] font-black uppercase">The Ledger:</span> Transparent audit trails are provided for all capital matchmaking and advisory handshakes.</p>
+      </div>
+    </div>
+  </div>
+);
+
+/** * =============================================================================
+ * MODULE 5: MASTER ROUTING & WRAPPER
+ * =============================================================================
+ */
+
+export default function UdaaroApp() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/admin-login" element={<AdminLogin />} />
+        <Route path="/privacy" element={<Privacy />} />
+        {/* Protected Dashboard Nodes */}
+        <Route path="/admin" element={<ProtectedHandshake><Admin /></ProtectedHandshake>} />
+        {/* 404 Recovery Node */}
+        <Route path="*" element={<Navigate to="/" />} />
+      </Routes>
+    </Router>
   );
 }
 
-export default AdminLogin;
+/** * FINAL DESIGN NOTE: 
+ * This codebase represents the "Skeleton" of Udaaro Sovereign.
+ * Architected by Apurva Priyadarshi for Batch 2026. 
+ * Node: India_Vanguard.
+ * ============================================================================= */
