@@ -3,223 +3,167 @@
 @tailwind utilities;
 
 /** * =============================================================================
- * I. BASE LAYER & CORE TOKENS
- * Architected by Apurva Priyadarshi | Cycle: 2026-Alpha
+ * I. IMPERIAL BASE LAYER & CORE TOKENS
+ * Design System: Neo-Heritage v4.0
+ * Architected by Apurva Priyadarshi
  * =============================================================================
  */
 
 @layer base {
   :root {
-    /* Sovereign Palette (RGB format for high-fidelity alpha channel support) */
-    --brand-blue: 37, 99, 235;    /* #2563eb */
-    --brand-indigo: 79, 70, 229;  /* #4f46e5 */
-    --brand-cyan: 6, 182, 212;    /* #06b6d4 */
-    --brand-emerald: 16, 185, 129; /* #10b981 */
-    --slate-950: 2, 6, 23;        /* Midnight Node */
+    /* Imperial Luxury Palette (RGB for Alpha Transparency) */
+    --royal-slate: 15, 20, 25;    /* #0F1419 */
+    --imperial-gold: 212, 175, 55; /* #D4AF37 */
+    --sandstone: 253, 249, 243;   /* #FDF9F3 */
+    --marble: 255, 255, 255;      /* #FFFFFF */
     
-    /* Layout Logic Tokens */
-    --header-height: 90px;
-    --terminal-radius: 3rem;
-    --input-radius: 1.25rem;
-    --button-radius: 1rem;
+    /* System Geometry */
+    --header-height: 100px;
+    --royal-radius: 3.5rem;
+    --button-radius: 1.5rem;
     
-    /* Animation Durations */
-    --transition-premium: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-    --transition-fast: 0.3s ease;
+    /* Animation: Liquid Luxury Physics */
+    --transition-imperial: 1.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   html {
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
     scrollbar-gutter: stable;
-    /* Optical sizing for high-resolution displays */
     font-size: 16px; 
     @apply antialiased;
   }
 
   body {
-    @apply bg-[#fcfcfd] text-slate-950;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    @apply bg-[#FDF9F3] text-[#0F1419];
+    font-family: 'Playfair Display', serif; /* Or 'Inter' for UI nodes */
     overflow-x: hidden;
     text-rendering: optimizeLegibility;
-    line-height: 1.625;
   }
 
-  /* Optical Header Balancing */
+  /* Optical Typography Balancing */
   h1, h2, h3, h4, h5 {
-    @apply tracking-tighter font-black uppercase italic leading-[0.95];
-    font-feature-settings: "cv02", "cv05", "ss01";
+    @apply tracking-tighter font-black uppercase italic leading-[0.9] drop-shadow-sm;
+    font-family: 'Playfair Display', serif;
   }
 
-  /* Sovereign Scrollbar - Minimalist Institutional Style */
+  /* Imperial Scrollbar - Gold Leaf Style */
   ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 4px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-transparent;
+    @apply bg-[#FDF9F3];
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-slate-200 rounded-full transition-all duration-700;
+    @apply bg-[#D4AF37]/40 rounded-full transition-all duration-1000;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-blue-600 shadow-[0_0_15px_rgba(37,99,235,0.5)];
+    @apply bg-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.8)];
   }
 }
 
 /** * =============================================================================
- * II. COMPONENT LAYER (VENTURE UI LIBRARY)
- * Standardized nodes for the Udaaro Operating System.
+ * II. COMPONENT LAYER (IMPERIAL UI LIBRARY)
  * =============================================================================
  */
 
 @layer components {
-  /* --- FORMS: PROTOCOL INTAKE --- */
+  /* --- FORMS: SOVEREIGN INTAKE --- */
   .udaaro-input {
-    @apply w-full bg-slate-50 border-0 ring-1 ring-slate-100 px-7 py-5 
-           rounded-[1.5rem] font-bold text-sm transition-all duration-500
-           placeholder:text-slate-300 outline-none
-           focus:ring-2 focus:ring-blue-600 focus:bg-white 
-           focus:shadow-[0_20px_40px_-15px_rgba(37,99,235,0.1)];
+    @apply w-full bg-white border border-[#D4AF37]/10 px-8 py-6 
+           rounded-[2rem] font-medium text-sm transition-all duration-700
+           placeholder:text-slate-300 outline-none italic
+           focus:border-[#D4AF37] focus:ring-4 focus:ring-[#D4AF37]/5
+           focus:shadow-[0_25px_50px_-15px_rgba(212,175,55,0.1)];
   }
 
   .udaaro-label {
-    @apply text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] ml-3 mb-3 block italic;
+    @apply text-[11px] font-black text-[#D4AF37] uppercase tracking-[0.5em] ml-6 mb-4 block italic;
   }
 
   /* --- BUTTONS: THE VANGUARD SERIES --- */
-  .btn-sovereign {
-    @apply relative overflow-hidden px-12 py-6 bg-slate-950 text-white font-black 
-           uppercase tracking-[0.3em] text-[11px] rounded-2xl flex items-center justify-center gap-4
-           hover:bg-blue-600 hover:shadow-[0_40px_80px_-20px_rgba(37,99,235,0.4)]
-           hover:-translate-y-1 active:scale-[0.95] transition-all duration-700
-           disabled:opacity-30 disabled:pointer-events-none;
+  .btn-imperial {
+    @apply relative overflow-hidden px-14 py-7 bg-[#0F1419] text-white font-black 
+           uppercase tracking-[0.4em] text-[11px] rounded-[2rem] flex items-center justify-center gap-5
+           hover:bg-[#D4AF37] hover:text-[#0F1419] hover:shadow-2xl hover:scale-[1.02]
+           active:scale-[0.96] transition-all duration-700 italic;
   }
 
-  .btn-outline-premium {
-    @apply px-10 py-5 bg-white border border-slate-200 text-slate-900 font-black 
-           uppercase tracking-[0.3em] text-[10px] rounded-2xl flex items-center justify-center gap-3
-           hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50/30
-           active:scale-[0.96] transition-all duration-500;
+  .btn-ghost-gold {
+    @apply px-12 py-6 bg-transparent border-2 border-[#D4AF37]/20 text-[#0F1419] font-black 
+           uppercase tracking-[0.4em] text-[10px] rounded-[2rem] flex items-center justify-center gap-4
+           hover:border-[#D4AF37] hover:bg-[#D4AF37]/5
+           active:scale-[0.96] transition-all duration-700 italic;
   }
 
-  /* --- GLASS & INSTITUTIONAL LAYERING --- */
-  .glass-header {
-    @apply bg-white/40 backdrop-blur-3xl border-b border-slate-200/40 shadow-2xl shadow-slate-900/5;
+  /* --- GLASS & HERITAGE LAYERING --- */
+  .glass-imperial {
+    @apply bg-white/70 backdrop-blur-3xl border border-[#D4AF37]/10 shadow-2xl;
   }
 
-  .glass-card-dark {
-    @apply bg-slate-950/80 backdrop-blur-2xl border border-white/10 shadow-6xl;
-  }
-
-  .glass-card-light {
-    @apply bg-white/80 backdrop-blur-xl border border-white shadow-6xl shadow-slate-950/5;
-  }
-
-  /* --- DATA VISUALIZATION NODES --- */
-  .terminal-card {
-    @apply p-12 bg-white rounded-[4rem] border border-slate-100 shadow-7xl
-           hover:border-blue-500/20 transition-all duration-1000;
-  }
-
-  .stat-node {
-    @apply flex flex-col p-8 bg-slate-50/50 rounded-[2.5rem] border border-slate-100
-           hover:bg-white hover:shadow-4xl transition-all duration-700 group;
+  .royal-card {
+    @apply p-16 bg-white rounded-[5rem] border border-[#D4AF37]/10 shadow-xl
+           hover:border-[#D4AF37] hover:shadow-2xl transition-all duration-1000;
   }
 }
 
 /** * =============================================================================
- * III. UTILITY LAYER (CINEMATIC MODIFIERS)
- * Tactical visual enhancements for luxury UX.
+ * III. UTILITY LAYER (ROYAL MODIFIERS)
  * =============================================================================
  */
 
 @layer utilities {
-  /* Dynamic Gradients */
-  .text-gradient-vanguard {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-400;
+  /* Metallic Gradients */
+  .text-gradient-gold {
+    @apply bg-clip-text text-transparent bg-gradient-to-br from-[#0F1419] via-[#D4AF37] to-[#0F1419];
   }
 
-  .text-gradient-institutional {
-    @apply bg-clip-text text-transparent bg-gradient-to-b from-slate-950 to-slate-500;
+  .bg-jali-pattern {
+    background-image: radial-gradient(circle, #D4AF37 0.8px, transparent 0.8px);
+    background-size: 40px 40px;
+    opacity: 0.05;
   }
 
-  .bg-gradient-mesh {
-    background-image: 
-      radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.12) 0px, transparent 50%),
-      radial-gradient(at 100% 100%, rgba(79, 70, 229, 0.08) 0px, transparent 50%),
-      radial-gradient(at 50% 50%, rgba(6, 182, 212, 0.05) 0px, transparent 50%);
+  /* Royal Animations */
+  .animate-float-imperial {
+    animation: floatImperial 10s ease-in-out infinite;
   }
 
-  /* Grid Architectures */
-  .bg-grid-institutional {
-    background-image: radial-gradient(circle, #e2e8f0 1.2px, transparent 1.2px);
-    background-size: 48px 48px;
-  }
-
-  /* Institutional Animations */
-  .animate-sovereign-float {
-    animation: sovereignFloat 8s ease-in-out infinite;
-  }
-
-  @keyframes sovereignFloat {
+  @keyframes floatImperial {
     0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-30px) rotate(1deg); }
-  }
-
-  .animate-node-pulse {
-    animation: nodePulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-
-  @keyframes nodePulse {
-    0%, 100% { opacity: 1; transform: scale(1); filter: brightness(1); }
-    50% { opacity: 0.7; transform: scale(0.95); filter: brightness(1.2); }
+    50% { transform: translateY(-40px) rotate(1deg); }
   }
 
   /* Optical Shadow Logic */
-  .shadow-sovereign {
-    box-shadow: 0 60px 120px -30px rgba(2, 6, 23, 0.12);
+  .shadow-imperial {
+    box-shadow: 0 50px 100px -20px rgba(15, 20, 25, 0.08);
   }
 
-  .shadow-blue-handshake {
-    box-shadow: 0 0 50px -10px rgba(37, 99, 235, 0.3);
-  }
-
-  /* Layout Masking */
-  .mask-vignette-bottom {
-    mask-image: linear-gradient(to top, transparent, black 15%, black 85%, transparent);
-  }
-
-  .reveal-from-top {
-    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
-  }
-
-  /* Interaction Feedbacks */
-  .cursor-handshake {
-    cursor: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='12' cy='12' r='8' stroke='%232563eb' stroke-width='2'/%3E%3C/svg%3E"), auto;
+  /* Image Masking for Cinematic Feel */
+  .mask-arch-top {
+    mask-image: radial-gradient(ellipse at bottom, black 60%, transparent 100%);
   }
 }
 
 /** * =============================================================================
- * IV. BROWSER OVERRIDES & PRINT ENGINE
+ * IV. PERFORMANCE & BROWSER OPTIMIZATION
  * =============================================================================
  */
 
-@media print {
-  .no-print { display: none !important; }
-  body { background: white !important; color: black !important; }
-  .terminal-card { border: 1px solid #eee !important; box-shadow: none !important; }
-}
-
 ::selection {
-  @apply bg-blue-600 text-white;
+  @apply bg-[#D4AF37] text-white;
 }
 
-/* Crisp rendering for Chrome/Safari */
+/* Crisp rendering for high-DPI Heritage displays */
 * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure images have a regal fade-in */
+img {
+  @apply transition-opacity duration-1000;
 }

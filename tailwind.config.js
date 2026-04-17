@@ -7,58 +7,63 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Advanced dynamic color mapping with opacity support
+        // Imperial Luxury Palette Mapping
         primary: {
-          DEFAULT: "rgb(var(--brand-blue) / <alpha-value>)",
-          foreground: "#ffffff",
-          50:  "#eff6ff",
-          100: "#dbeafe",
-          600: "#2563eb", // Base brand blue
-          700: "#1d4ed8",
+          DEFAULT: "rgb(var(--royal-slate) / <alpha-value>)",
+          foreground: "#FFFFFF",
+        },
+        imperial: {
+          gold: "rgb(var(--imperial-gold) / <alpha-value>)", // #D4AF37
+          slate: "#0F1419",
+          sandstone: "#FDF9F3",
         },
         slate: {
-          950: "#020617", // Deep institutional black
+          950: "#0F1419", // Deep Institutional Black
         },
-        brand: {
-          dark: "#0f172a", // Slate-900 for luxury text
-          light: "#f8fafc", // Slate-50 for secondary backgrounds
-          accent: "#38bdf8", // Cyan-400 for highlights
-        }
       },
       fontFamily: {
-        // Inter is the global standard for high-end SaaS
+        // Playfair for Royal Headings, Inter for OS UI
+        serif: ['Playfair Display', 'serif'],
         sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
       },
       borderRadius: {
-        // The "Squircle" geometry favored by Apple and premium startups
+        // "Royal Squircle" geometry for high-end containers
         '3xl': '1.5rem',
         '4xl': '2rem',
         '5xl': '3rem',
-        '6xl': '4rem',
+        '6xl': '4.5rem',
+        'royal': '5rem',
       },
       letterSpacing: {
-        // Luxury brands use tighter spacing for headings and wider for labels
+        // Luxury spacing protocols
         tightest: '-.075em',
-        sovereign: '0.3em',
+        sovereign: '0.5em', // For uppercase tracking-widest labels
+        imperial: '0.8em',
       },
       boxShadow: {
-        // Custom "Sovereign" shadows - soft, deep, and elegant
-        'luxury': '0 25px 50px -12px rgba(0, 0, 0, 0.08)',
-        'blue-glow': '0 20px 40px -15px rgba(37, 99, 235, 0.3)',
+        // Soft, deep, elegant shadows for glassmorphism
+        'luxury': '0 35px 70px -15px rgba(15, 20, 25, 0.12)',
+        'gold-glow': '0 20px 40px -15px rgba(212, 175, 55, 0.3)',
+        '7xl': '0 50px 100px -20px rgba(0, 0, 0, 0.15)',
       },
       animation: {
-        // Mapping index.css keyframes to Tailwind utilities
-        'shake': 'head-shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
-        'fade-in-up': 'fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        // OS Logic Animations
+        'float-slow': 'floatImperial 10s ease-in-out infinite',
+        'node-pulse': 'nodePulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'reverse-spin': 'reverse-spin 12s linear infinite',
+      },
+      keyframes: {
+        'reverse-spin': {
+          from: { transform: 'rotate(360deg)' },
+          to: { transform: 'rotate(0deg)' },
+        }
       },
       backgroundImage: {
-        // The institutional grid background utility
-        'grid-pattern': "radial-gradient(circle, #e2e8f0 1px, transparent 1px)",
+        // The Jali Pattern utility
+        'jali-grid': "radial-gradient(circle, #D4AF37 0.8px, transparent 0.8px)",
       }
     },
   },
-  plugins: [
-    // You can add tailwind-scrollbar or typography plugins here if needed
-  ],
+  plugins: [],
 };

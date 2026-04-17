@@ -2,51 +2,14 @@ import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import { 
-  Menu, 
-  X, 
-  ChevronRight, 
-  LayoutGrid, 
-  ShieldCheck, 
-  ArrowUpRight,
-  Sparkles,
-  Lock,
-  Zap,
-  Globe,
-  Circle,
-  Activity,
-  Cpu,
-  Database,
-  Fingerprint,
-  Network,
-  Terminal,
-  Search,
-  Command,
-  Bell,
-  UserCheck,
-  Binary,
-  Layers,
-  Shield,
-  Radio,
-  Globe2,
-  HardDrive,
-  CpuIcon,
-  IndianRupee,
-  Landmark,
-  ShieldAlert,
-  Compass,
-  ActivitySquare,
-  Key,
-  Server,
-  FileCode,
-  BookOpen,
-  Info
+  Menu, X, ChevronRight, Terminal, Search, Command, Bell, Fingerprint, 
+  ArrowUpRight, Globe2, IndianRupee, ShieldCheck, BookOpen, Cpu, Network, Globe, Lock
 } from "lucide-react";
 
 /** * =============================================================================
- * I. PREMIUM NAVIGATION TOPOLOGY (STARTUP CORE)
- * Design System: Alpha-Sync v3.1.0
- * Logic: Venture Operating System (Venture OS)
- * Architected by Apurva Priyadarshi | Deployment Node: INDIA_VANGUARD_HUB
+ * I. PREMIUM NAVIGATION TOPOLOGY
+ * Design Language: Imperial Modernism
+ * Architected by: Apurva Priyadarshi | Node: INDIA_VANGUARD
  * ============================================================================= */
 
 const NAV_CLUSTERS = [
@@ -164,53 +127,42 @@ function Navbar() {
         transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         className={`fixed top-0 w-full z-[1000] transition-all duration-700 ${
           isScrolled 
-          ? "bg-white/60 backdrop-blur-3xl py-4 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.08)] border-b border-slate-200/40" 
-          : "bg-transparent py-12"
+          ? "bg-white/70 backdrop-blur-3xl py-4 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.05)] border-b border-[#D4AF37]/10" 
+          : "bg-transparent py-10"
         }`}
       >
-        {/* Institutional Progress Node */}
-        <motion.div className="absolute top-0 left-0 right-0 h-[3px] bg-blue-600 origin-left shadow-[0_0_15px_blue]" style={{ scaleX }} />
+        {/* Institutional Progress Bar */}
+        <motion.div className="absolute top-0 left-0 right-0 h-[3px] bg-[#D4AF37] origin-left shadow-[0_0_15px_#D4AF37]" style={{ scaleX }} />
 
-        <div className="max-w-[1900px] mx-auto px-8 md:px-16 flex justify-between items-center">
+        <div className="max-w-[1800px] mx-auto px-8 md:px-16 flex justify-between items-center">
           
-          {/* ================= IDENTITY NODE: UDAARO OS ================= */}
+          {/* IDENTITY CLUSTER */}
           <div className="flex items-center gap-14">
-            <Link to="/" className="flex items-center gap-5 group relative">
+            <Link to="/" className="flex items-center gap-5 group">
               <motion.div 
                 whileHover={{ rotate: 90, scale: 1.1 }}
-                className="w-12 h-12 bg-slate-950 rounded-3xl flex items-center justify-center text-white font-black italic shadow-4xl group-hover:bg-blue-600 transition-all duration-700 border border-white/10"
+                className="w-12 h-12 bg-[#0F1419] rounded-2xl flex items-center justify-center text-[#D4AF37] font-black italic shadow-xl border border-[#D4AF37]/20"
               >
                 U
               </motion.div>
               <div className="flex flex-col">
-                <span className="text-3xl font-black tracking-tighter text-slate-950 uppercase leading-none italic">
+                <span className="text-2xl font-black tracking-tighter text-[#0F1419] uppercase leading-none italic">
                   Udaaro
                 </span>
-                <div className="flex items-center gap-2 mt-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.5em] italic">
-                    Grid_State: Alpha
-                  </span>
-                </div>
+                <span className="text-[9px] font-black text-[#D4AF37] uppercase tracking-[0.5em] italic mt-1.5">
+                  Sovereign_OS
+                </span>
               </div>
             </Link>
 
-            {/* Grid Telemetry Divider */}
-            <div className="hidden xl:flex items-center gap-10 border-l border-slate-200 pl-14">
+            <div className="hidden xl:flex items-center gap-10 border-l border-slate-200 pl-14 opacity-60">
                <GridHeartbeatNode />
-               <div className="flex flex-col">
-                 <span className="text-[8px] font-black text-slate-300 uppercase tracking-widest leading-none mb-1">Architecture_v3.1</span>
-                 <span className="text-[10px] font-bold text-blue-600 uppercase font-mono italic">Phase_1_Synthesis</span>
-               </div>
             </div>
           </div>
 
-          {/* ================= COMMAND BRIDGE (DESKTOP) ================= */}
-          <div className="hidden md:flex items-center gap-16">
-            
-            <SearchInterface />
-
-            <div className="flex items-center gap-12">
+          {/* COMMAND BRIDGE (DESKTOP) */}
+          <div className="hidden md:flex items-center gap-12">
+            <div className="flex items-center gap-12 mr-8">
               {NAV_CLUSTERS.map((node, idx) => (
                 <div
                   key={node.path}
@@ -219,14 +171,11 @@ function Navbar() {
                   className="relative py-2"
                 >
                   <Link to={node.path} className="group flex flex-col items-center">
-                    <div className="flex items-center gap-3">
-                      <span className={`text-[12px] font-black uppercase tracking-[0.4em] transition-all duration-500 italic ${
-                        isActive(node.path) ? "text-blue-600" : "text-slate-500 group-hover:text-slate-950"
-                      }`}>
-                        {node.name}
-                      </span>
-                      <ChevronRight size={12} className={`text-slate-200 transition-all duration-500 ${handshakeNode === idx ? 'rotate-90 text-blue-600' : ''}`} />
-                    </div>
+                    <span className={`text-[11px] font-black uppercase tracking-[0.4em] transition-all italic ${
+                      isActive(node.path) ? "text-[#D4AF37]" : "text-slate-500 hover:text-[#0F1419]"
+                    }`}>
+                      {node.name}
+                    </span>
                     
                     <AnimatePresence>
                       {(isActive(node.path) || handshakeNode === idx) && (
@@ -235,39 +184,34 @@ function Navbar() {
                           initial={{ opacity: 0, width: 0 }}
                           animate={{ opacity: 1, width: "100%" }}
                           exit={{ opacity: 0, width: 0 }}
-                          className="absolute -bottom-2 left-0 h-[2.5px] bg-blue-600 shadow-[0_5px_15px_blue]"
+                          className="absolute -bottom-2 left-0 h-[2px] bg-[#D4AF37] shadow-[0_4px_10px_#D4AF37]"
                         />
                       )}
                     </AnimatePresence>
                   </Link>
 
-                  {/* ================= MEGA-TERMINAL HANDSHAKE ================= */}
+                  {/* MEGA-TERMINAL DROP */}
                   <AnimatePresence>
                     {handshakeNode === idx && (
                       <motion.div 
-                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                        initial={{ opacity: 0, y: 20, scale: 0.98 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                        className="absolute top-full left-1/2 -translate-x-1/2 pt-10 w-[420px] z-[2000] pointer-events-none group-hover:pointer-events-auto"
+                        exit={{ opacity: 0, y: 20, scale: 0.98 }}
+                        className="absolute top-full left-1/2 -translate-x-1/2 pt-8 w-[380px] z-[2000]"
                       >
-                        <div className="bg-slate-950 rounded-[4rem] p-12 shadow-7xl border border-white/10 overflow-hidden relative group/mega">
-                           <div className="absolute top-0 right-0 p-10 opacity-10 text-white scale-150 group-hover/mega:scale-100 transition-transform duration-1000">
-                             {node.icon}
-                           </div>
-                           
+                        <div className="bg-[#0F1419] rounded-[3rem] p-10 shadow-2xl border border-[#D4AF37]/20 relative">
                            <div className="relative z-10">
-                              <h4 className="text-[10px] font-black text-blue-500 uppercase tracking-[0.7em] mb-8">{node.detail}</h4>
-                              <p className="text-sm text-slate-400 font-medium leading-relaxed mb-12 italic">"{node.description}"</p>
+                              <h4 className="text-[10px] font-black text-[#D4AF37] uppercase tracking-[0.6em] mb-6">{node.detail}</h4>
+                              <p className="text-xs text-slate-400 font-medium leading-relaxed mb-8 italic">"{node.description}"</p>
                               
-                              <div className="space-y-5">
+                              <div className="space-y-4">
                                  {node.subNodes.map((sub, i) => (
-                                   <div key={i} className="flex items-center justify-between group/sub cursor-pointer p-5 bg-white/5 rounded-2xl hover:bg-white/10 transition-all border border-transparent hover:border-white/10">
+                                   <div key={i} className="flex items-center justify-between p-4 bg-white/5 rounded-2xl hover:bg-[#D4AF37]/10 transition-all border border-transparent hover:border-[#D4AF37]/20 cursor-pointer group/sub">
                                       <div className="flex flex-col">
-                                         <span className="text-[12px] font-black text-white uppercase tracking-widest leading-none mb-2">{sub.label}</span>
-                                         <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-none">{sub.detail}</span>
+                                         <span className="text-[11px] font-black text-white uppercase tracking-widest">{sub.label}</span>
+                                         <span className="text-[8px] font-bold text-slate-500 uppercase">{sub.detail}</span>
                                       </div>
-                                      <ArrowUpRight size={16} className="text-slate-600 group-hover/sub:text-blue-500 group-hover/sub:translate-x-1 group-hover/sub:-translate-y-1 transition-all" />
+                                      <ArrowUpRight size={14} className="text-slate-600 group-hover/sub:text-[#D4AF37] transition-all" />
                                    </div>
                                  ))}
                               </div>
@@ -280,153 +224,71 @@ function Navbar() {
               ))}
             </div>
 
-            <div className="h-10 w-px bg-slate-200" />
+            <SearchInterface />
 
-            {/* CORE CONVERSION NODE */}
-            <div className="flex items-center gap-8">
-              <Link to="/admin-login" className="p-4 bg-slate-50 hover:bg-blue-600 hover:text-white text-slate-400 rounded-2xl transition-all duration-700 group shadow-inner border border-slate-100">
-                <Terminal size={22} className="group-hover:rotate-12 transition-transform" />
+            <div className="flex items-center gap-6">
+              <Link to="/admin-login" className="p-4 bg-[#0F1419] text-[#D4AF37] rounded-2xl hover:scale-110 transition-all shadow-lg">
+                <Terminal size={20} />
               </Link>
-              
               <Link 
                 to="/apply" 
-                className="relative flex items-center px-14 py-5 bg-slate-950 text-white rounded-[1.8rem] text-[13px] font-black uppercase tracking-[0.4em] shadow-7xl transition-all hover:scale-[1.05] hover:bg-blue-600 active:scale-95 group overflow-hidden border border-white/10"
+                className="px-12 py-4 bg-[#0F1419] text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.4em] shadow-xl hover:bg-[#D4AF37] transition-all italic"
               >
-                <span className="relative z-10 flex items-center gap-4 italic leading-none">
-                  Admission_Desk 
-                  <ArrowUpRight size={20} className="group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform duration-500" />
-                </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+                Join_Batch
               </Link>
             </div>
           </div>
 
-          {/* ================= MOBILE NAVIGATION ================= */}
-          <div className="md:hidden flex items-center gap-6">
-             <motion.button whileTap={{ scale: 0.9 }} className="p-4 bg-slate-950 text-white rounded-2xl shadow-3xl shadow-blue-900/20">
-                <Bell size={24} className="animate-pulse" />
-             </motion.button>
-             <button
-                className="p-5 text-slate-950 bg-white border border-slate-200 rounded-[2rem] transition-all active:scale-90 shadow-2xl"
-                onClick={() => setIsOpen(!isOpen)}
-              >
-                {isOpen ? <X size={28} /> : <Menu size={28} />}
-             </button>
+          {/* MOBILE TOGGLE */}
+          <div className="md:hidden">
+            <button
+              className="p-4 text-[#0F1419] bg-white border border-slate-200 rounded-2xl shadow-lg"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
         </div>
 
-        {/* ================= MOBILE OVERLAY TERMINAL ================= */}
+        {/* MOBILE OVERLAY */}
         <AnimatePresence>
           {isOpen && (
             <motion.div 
               initial={{ opacity: 0, x: "100%" }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: "100%", opacity: 0 }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed top-0 left-0 w-full h-screen bg-[#fcfcfd] z-[900] md:hidden flex flex-col pt-36 px-10 overflow-y-auto"
+              className="fixed top-0 left-0 w-full h-screen bg-[#FDF9F3] z-[900] md:hidden flex flex-col pt-32 px-10"
             >
-              <div className="absolute top-0 right-0 w-[100vw] h-[100vw] bg-blue-50/40 rounded-full blur-[180px] -z-10" />
-              
-              <div className="flex flex-col gap-16 pb-32">
-                <div className="space-y-10">
-                  <SectionLabel text="Sovereign_Clusters" />
-                  <div className="grid gap-6">
-                    {NAV_CLUSTERS.map((node) => (
-                      <Link
-                        key={node.path}
-                        to={node.path}
-                        className={`group flex items-center justify-between p-10 rounded-[3.5rem] transition-all duration-700 border ${
-                          isActive(node.path) 
-                          ? "bg-slate-950 text-white border-slate-950 shadow-7xl scale-[1.03]" 
-                          : "bg-white text-slate-600 border-slate-100 active:bg-slate-50 shadow-xl"
-                        }`}
-                      >
-                        <div className="flex items-center gap-10">
-                          <div className={`w-16 h-16 rounded-[2rem] flex items-center justify-center transition-all ${isActive(node.path) ? 'bg-blue-600 shadow-3xl' : 'bg-slate-50'}`}>
-                             {React.cloneElement(node.icon, { size: 32, className: isActive(node.path) ? 'text-white' : 'text-slate-400' })}
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="text-2xl font-black uppercase tracking-tighter italic leading-none mb-3">{node.name}</span>
-                            <span className={`text-[11px] font-bold uppercase tracking-widest ${isActive(node.path) ? 'text-blue-400' : 'text-slate-400'}`}>
-                              {node.detail}
-                            </span>
-                          </div>
-                        </div>
-                        <ChevronRight size={32} className={isActive(node.path) ? 'text-blue-500' : 'text-slate-200'} />
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="space-y-10">
-                   <SectionLabel text="System_Nodes" />
-                   <div className="grid grid-cols-2 gap-6">
-                      {UTILITY_NODES.map((util) => (
-                        <Link key={util.name} to={util.path} className="flex flex-col p-10 bg-white border border-slate-100 rounded-[3.5rem] shadow-xl active:scale-95 transition-all group">
-                           <div className="flex justify-between items-start mb-8">
-                              <div className="p-4 bg-slate-50 rounded-2xl text-slate-400 group-hover:text-blue-600 group-hover:bg-blue-50 transition-all shadow-inner">
-                                {util.icon}
-                              </div>
-                              <div className="flex items-center gap-2 px-3 py-1 bg-emerald-50 rounded-full border border-emerald-100">
-                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                                 <span className="text-[9px] font-black text-emerald-600">{util.status}</span>
-                              </div>
-                           </div>
-                           <span className="text-[13px] font-black uppercase tracking-[0.2em] text-slate-950 italic">{util.name}</span>
-                        </Link>
-                      ))}
-                   </div>
-                </div>
-
-                {/* Mobile Identity Conversion */}
-                <div className="p-16 bg-slate-950 text-white rounded-[5rem] shadow-8xl relative overflow-hidden group">
-                   <div className="absolute top-0 right-0 p-10 opacity-20"><Fingerprint size={200} className="text-blue-500" /></div>
-                   <h4 className="text-white text-5xl font-black italic tracking-tighter leading-[0.85] mb-12 relative z-10 uppercase">Architect <br /> Your Sovereign <br /> Impact.</h4>
-                   <Link to="/apply" className="inline-flex items-center gap-6 px-14 py-8 bg-blue-600 text-white rounded-[2.5rem] font-black text-[13px] uppercase tracking-[0.5em] shadow-6xl relative z-10 hover:bg-white hover:text-slate-950 transition-all italic leading-none">
-                      Initiate_Admission <ArrowUpRight size={24}/>
-                   </Link>
-                </div>
-
-                {/* Mobile Terminal Metadata */}
-                <div className="py-14 text-center border-t border-slate-100">
-                   <div className="flex justify-center gap-8 mb-10 opacity-20">
-                      <Network size={28} /> <Globe size={28} /> <Cpu size={28} /> <Lock size={28} />
-                   </div>
-                   <p className="text-[11px] font-black text-slate-300 uppercase tracking-[0.6em] leading-relaxed italic">
-                     Udaaro Global Grid v3.1.0 <br /> 
-                     Logic_Synthesis_Protocol_Active
-                   </p>
+              <div className="space-y-8">
+                {NAV_CLUSTERS.map((node) => (
+                  <Link
+                    key={node.path}
+                    to={node.path}
+                    className="flex items-center justify-between p-8 bg-white border border-slate-100 rounded-[2.5rem] shadow-sm active:scale-95 transition-all"
+                  >
+                    <div className="flex flex-col">
+                      <span className="text-xl font-black uppercase italic text-[#0F1419]">{node.name}</span>
+                      <span className="text-[9px] font-bold text-[#D4AF37] uppercase tracking-widest">{node.detail}</span>
+                    </div>
+                    <ChevronRight className="text-[#D4AF37]" />
+                  </Link>
+                ))}
+                
+                <div className="pt-10 border-t border-slate-100 flex flex-col gap-6">
+                  <Link to="/apply" className="w-full py-8 bg-[#0F1419] text-white rounded-[2.5rem] text-center font-black uppercase tracking-[0.5em] italic shadow-2xl">
+                    Initiate_Admission
+                  </Link>
+                  <Link to="/admin-login" className="w-full py-8 bg-white border-2 border-[#0F1419] text-[#0F1419] rounded-[2.5rem] text-center font-black uppercase tracking-[0.5em] italic">
+                    Executive_Terminal
+                  </Link>
                 </div>
               </div>
             </motion.div>
           )}
         </AnimatePresence>
       </motion.nav>
-
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-slate-950/40 backdrop-blur-2xl z-[850] md:hidden"
-            onClick={() => setIsOpen(false)}
-          />
-        )}
-      </AnimatePresence>
     </>
   );
 }
-
-/** * =============================================================================
- * IV. ATOMIC UI HELPERS (SYSTEM WRAPPERS)
- * ============================================================================= */
-
-const SectionLabel = ({ text }) => (
-  <div className="flex items-center gap-6 ml-6 mb-12">
-    <div className="h-[2.5px] w-14 bg-blue-600 shadow-[0_0_15px_blue]" />
-    <span className="text-[12px] font-black text-blue-600 uppercase tracking-[0.6em] leading-none italic">{text}</span>
-  </div>
-);
 
 export default Navbar;
