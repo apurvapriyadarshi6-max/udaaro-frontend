@@ -4,7 +4,7 @@
  * --------------------------------------------------------------------------------------------
  * DESIGN LANGUAGE: "NEO-HERITAGE IMPERIALISM"
  * LEAD ARCHITECT: APURVA PRIYADARSHI (BATCH 2026)
- * REVISION: ZERO_DRIFT_HYDRATION_SHIELD
+ * REVISION: ZERO_DRIFT_HYDRATION_SHIELD_FINAL
  * ============================================================================================
  */
 
@@ -83,8 +83,7 @@ const THEME = {
 const useResonance = () => {
   const [isResonating, setIsResonating] = useState(false);
   useEffect(() => {
-    // Initial delay to let the browser reconcile the Server DOM
-    const timer = setTimeout(() => setIsResonating(true), 500);
+    const timer = setTimeout(() => setIsResonating(true), 100);
     return () => clearTimeout(timer);
   }, []);
   return isResonating;
@@ -122,8 +121,19 @@ const JaliPattern = () => (
   </div>
 );
 
+const SectionHeader = ({ badge, title, subtitle }) => (
+  <div className="mb-32 space-y-8">
+    <div className="inline-flex items-center gap-4 px-8 py-3 bg-[#0F1419] text-[#D4AF37] rounded-full">
+      <div className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />
+      <span className={THEME.typography.ui}>{badge}</span>
+    </div>
+    <h2 className="text-9xl font-black italic uppercase tracking-tighter leading-none" dangerouslySetInnerHTML={{ __html: title }} />
+    <p className="text-3xl text-slate-400 font-medium italic max-w-4xl mx-auto">{subtitle}</p>
+  </div>
+);
+
 /** * =============================================================================
- * III. SOVEREIGN NEURAL AI (QUARANTINED)
+ * III. SOVEREIGN NEURAL AI
  * ============================================================================= */
 
 const aiReducer = (state, action) => {
@@ -199,7 +209,9 @@ const SovereignAI = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      <motion.button onClick={() => dispatch({ type: 'TOGGLE' })} className="w-32 h-32 bg-[#0F1419] border-8 border-[#D4AF37] rounded-full flex items-center justify-center text-[#D4AF37] shadow-luxury relative group">
+      <motion.button 
+        whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
+        onClick={() => dispatch({ type: 'TOGGLE' })} className="w-32 h-32 bg-[#0F1419] border-8 border-[#D4AF37] rounded-full flex items-center justify-center text-[#D4AF37] shadow-luxury relative group">
         <Bot size={48} />
       </motion.button>
     </div>
@@ -241,14 +253,13 @@ const Navbar = () => {
 };
 
 /** * =============================================================================
- * V. QUARANTINED COMPONENTS (PREVENTS HYDRATION DRIFT)
+ * V. QUARANTINED COMPONENTS
  * ============================================================================= */
 
 const StatModule = ({ label, val, icon, trend, color = "text-[#0F1419]" }) => {
   const [safeTrend, setSafeTrend] = useState(null);
   
   useEffect(() => {
-    // Only populate random or dynamic data after hydration
     setSafeTrend(trend);
   }, [trend]);
 
@@ -273,7 +284,7 @@ const StatModule = ({ label, val, icon, trend, color = "text-[#0F1419]" }) => {
 };
 
 /** * =============================================================================
- * VI. PAGE: MASTER CONTROL MCP (QUARANTINED DATA)
+ * VI. PAGE: MASTER CONTROL MCP
  * ============================================================================= */
 
 const MasterControl = () => {
@@ -281,7 +292,6 @@ const MasterControl = () => {
   const [safeChartData, setSafeChartData] = useState([]);
 
   useEffect(() => {
-    // CRITICAL: Generate random chart data ONLY on the client to prevent hydration mismatch
     const data = Array.from({ length: 24 }, (_, i) => ({
       time: `${i}:00`,
       res: 4000 + Math.random() * 2000,
@@ -301,7 +311,7 @@ const MasterControl = () => {
         </div>
         <nav className="flex-1 space-y-6">
            {["Intelligence", "Founder_Nodes", "Capital_Flow", "Infrastructure"].map(n => (
-             <button key={n} className="w-full flex items-center gap-10 px-10 py-7 rounded-[2.5rem] text-slate-500 hover:bg-white/5 hover:text-white transition-all font-mono text-xs uppercase tracking-widest">{n}</button>
+             <button key={n} onClick={() => setActiveTab(n.toLowerCase())} className={`w-full flex items-center gap-10 px-10 py-7 rounded-[2.5rem] transition-all font-mono text-xs uppercase tracking-widest ${activeTab === n.toLowerCase() ? 'bg-white/10 text-[#D4AF37]' : 'text-slate-500 hover:bg-white/5 hover:text-white'}`}>{n}</button>
            ))}
         </nav>
         <div className="mt-auto pt-16 border-t border-white/5">
@@ -314,7 +324,7 @@ const MasterControl = () => {
         </div>
       </aside>
 
-      <main className="flex-1 flex flex-col h-screen overflow-y-auto bg-jali-grid pb-32 custom-scrollbar">
+      <main className="flex-1 flex flex-col h-screen overflow-y-auto pb-32 custom-scrollbar">
          <header className="p-16 sticky top-0 z-40 bg-[#FDF9F3]/90 backdrop-blur-3xl border-b border-[#D4AF37]/15 flex justify-between items-center px-24">
             <h1 className="text-6xl font-black italic tracking-tighter uppercase">{activeTab}_Protocol</h1>
             <div className="w-20 h-20 bg-[#0F1419] rounded-[2rem] flex items-center justify-center text-[#D4AF37] shadow-7xl"><Fingerprint size={36} /></div>
@@ -351,10 +361,6 @@ const MasterControl = () => {
   );
 };
 
-/** * =============================================================================
- * VII. PAGE: HOME LOGIC
- * ============================================================================= */
-
 const Home = () => {
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 0.5], [0, -300]);
@@ -382,17 +388,17 @@ const Home = () => {
         <div className="max-w-[1700px] mx-auto text-center">
            <SectionHeader badge="Ecosystem clusters" title="Vanguard <br /> Clusters." subtitle="specializing in six core institutional sectors critical to sovereignty." />
            <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mt-40">
-              {[
-                { i: <Landmark size={40}/>, t: "Neo-Banking", d: "Hard-logic institutional finance and deep-payment infrastructure." },
-                { i: <Zap size={40}/>, t: "Energy Grid", d: "Sovereign power solutions and decentralized energy orchestration." },
-                { i: <Microscope size={40}/>, t: "Deep-Health", d: "Algorithmic longevity and precision medical infrastructure." }
-              ].map((s, i) => (
-                <div key={i} className="p-20 bg-white border border-slate-100 rounded-[5rem] shadow-xl hover:border-[#D4AF37] transition-all group">
-                   <div className="w-20 h-20 bg-[#FDF9F3] border border-[#D4AF37]/30 rounded-2xl flex items-center justify-center text-[#D4AF37] mb-12 mx-auto group-hover:bg-[#0F1419] transition-all">{s.i}</div>
-                   <h4 className="text-4xl font-black italic uppercase mb-6 tracking-tighter">{s.t}</h4>
-                   <p className="text-xl text-slate-500 font-medium italic">{s.d}</p>
-                </div>
-              ))}
+             {[
+               { i: <Landmark size={40}/>, t: "Neo-Banking", d: "Hard-logic institutional finance and deep-payment infrastructure." },
+               { i: <Zap size={40}/>, t: "Energy Grid", d: "Sovereign power solutions and decentralized energy orchestration." },
+               { i: <Microscope size={40}/>, t: "Deep-Health", d: "Algorithmic longevity and precision medical infrastructure." }
+             ].map((s, i) => (
+               <div key={i} className="p-20 bg-white border border-slate-100 rounded-[5rem] shadow-xl hover:border-[#D4AF37] transition-all group">
+                  <div className="w-20 h-20 bg-[#FDF9F3] border border-[#D4AF37]/30 rounded-2xl flex items-center justify-center text-[#D4AF37] mb-12 mx-auto group-hover:bg-[#0F1419] transition-all">{s.i}</div>
+                  <h4 className="text-4xl font-black italic uppercase mb-6 tracking-tighter">{s.t}</h4>
+                  <p className="text-xl text-slate-500 font-medium italic">{s.d}</p>
+               </div>
+             ))}
            </div>
         </div>
       </section>
@@ -401,24 +407,18 @@ const Home = () => {
 };
 
 /** * =============================================================================
- * VIII. THE RESILIENCE WRAPPER (SYSTEM CORE)
+ * VII. SYSTEM CORE WRAPPER
  * ============================================================================= */
 
 const AppCore = () => {
   const isResonating = useResonance();
   const location = useLocation();
 
-  /**
-   * CRITICAL FIX FOR HYDRATION ERROR:
-   * By returning the Loader until isResonating is true, we ensure that the 
-   * browser DOM and Server DOM match exactly at the first paint.
-   */
   if (!isResonating) return <SovereignLoader />;
 
   return (
     <div className="udaaro-application bg-[#FDF9F3] min-h-screen selection:bg-[#D4AF37] selection:text-[#0F1419] overflow-x-hidden">
       <Navbar />
-
       <Suspense fallback={<SovereignLoader />}>
         <AnimatePresence mode="wait" initial={false}>
           <motion.main
@@ -430,62 +430,35 @@ const AppCore = () => {
           >
             <Routes location={location}>
               <Route path="/" element={<Home />} />
-              <Route path="/syndicate" element={<Investors />} />
               <Route path="/intelligence" element={<MasterControl />} />
-              <Route path="/apply" element={<div className="h-screen flex items-center justify-center bg-[#0F1419]"><h1 className="text-white text-5xl font-black italic uppercase tracking-[1em]">Gate_Open</h1></div>} />
+              <Route path="/apply" element={<div className="h-screen flex items-center justify-center bg-[#0F1419] text-white">GATE_ACTIVE</div>} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </motion.main>
         </AnimatePresence>
       </Suspense>
-
       <SovereignAI />
-
-      {/* INSTITUTIONAL FOOTER */}
-      <footer className="bg-[#0F1419] pt-[40rem] pb-32 px-16 border-t-8 border-[#D4AF37]/10 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.02] flex items-center justify-center pointer-events-none scale-150"><Network size={1200} /></div>
+      <footer className="bg-[#0F1419] pt-80 pb-32 px-16 border-t-8 border-[#D4AF37]/10 relative overflow-hidden">
         <div className="max-w-[1900px] mx-auto relative z-10">
-          <div className="grid lg:grid-cols-6 gap-48 mb-[20rem]">
-            <div className="lg:col-span-2 space-y-16">
+          <div className="grid lg:grid-cols-4 gap-24 mb-40">
+            <div className="lg:col-span-2 space-y-12">
                <div className="flex items-center gap-10 group">
-                  <div className="w-24 h-24 bg-[#D4AF37] text-[#0F1419] rounded-3xl flex items-center justify-center font-black italic text-5xl">U</div>
-                  <h3 className="text-8xl font-black text-white uppercase italic tracking-tighter leading-none">Udaaro</h3>
+                  <div className="w-16 h-16 bg-[#D4AF37] text-[#0F1419] rounded-2xl flex items-center justify-center font-black italic text-3xl">U</div>
+                  <h3 className="text-6xl font-black text-white uppercase italic tracking-tighter">Udaaro</h3>
                </div>
-               <p className="text-slate-400 text-3xl font-medium italic leading-relaxed max-w-md opacity-60">The Sovereign Venture Operating System. Engineered for Indian innovation clusters.</p>
+               <p className="text-slate-400 text-xl font-medium italic leading-relaxed max-w-md opacity-60">Sovereign Venture Operating System v{UDAARO_CONFIG.version}</p>
             </div>
-            
-            <div className="space-y-12">
+            <div className="space-y-8">
                <h5 className={THEME.typography.ui + " text-[#D4AF37]"}>Venture_Ecosystem</h5>
-               <ul className="space-y-10 text-base font-black uppercase tracking-[0.5em] italic text-slate-500">
-                  <li><Link to="/apply" className="hover:text-white transition-all inline-block">Vanguard_Intake</Link></li>
-                  <li><Link to="/syndicate" className="hover:text-white transition-all inline-block">Syndicate_Portal</Link></li>
-                  <li><Link to="/advisory" className="hover:text-white transition-all inline-block">Council_Resonance</Link></li>
+               <ul className="space-y-4 text-sm font-black uppercase tracking-[0.5em] italic text-slate-500">
+                  <li><Link to="/apply" className="hover:text-white transition-all">Vanguard_Intake</Link></li>
+                  <li><Link to="/intelligence" className="hover:text-white transition-all">Control_Grid</Link></li>
                </ul>
             </div>
-
-            <div className="lg:col-span-2 space-y-20 text-right">
-               <h5 className={THEME.typography.ui + " text-[#D4AF37]"}>Grid_Telemetry</h5>
-               <div className="p-16 bg-white/5 border border-white/10 rounded-[4rem] backdrop-blur-3xl shadow-luxury">
-                  <div className="flex justify-between items-center mb-10">
-                    <span className={THEME.typography.ui + " text-slate-500"}>Node_Sync_State</span>
-                    <span className="text-2xl font-black italic text-emerald-500">99.99%</span>
-                  </div>
-                  <div className="w-full h-3 bg-white/5 rounded-full overflow-hidden">
-                    <motion.div initial={{ width: 0 }} whileInView={{ width: "99.9%" }} transition={{ duration: 4 }} className="h-full bg-gradient-to-r from-[#D4AF37] to-emerald-500" />
-                  </div>
-               </div>
-            </div>
           </div>
-
-          <div className="pt-32 border-t border-white/5 flex flex-col xl:flex-row justify-between items-center gap-16 opacity-30">
-             <div className="flex items-center gap-10">
-                <span className="text-[11px] font-black uppercase tracking-[0.6em] italic">Architected by Apurva Priyadarshi © 2026</span>
-                <span className="text-[11px] font-black uppercase tracking-[0.6em] italic text-[#D4AF37]">Batch 2026 / India Vanguard</span>
-             </div>
-             <div className="flex gap-12 text-[10px] font-black uppercase tracking-[0.8em] italic">
-                <span>Infrastructure: ENCRYPTED_STABLE</span>
-                <span>OS_VER: {UDAARO_CONFIG.version}</span>
-             </div>
+          <div className="pt-20 border-t border-white/5 flex flex-col xl:flex-row justify-between items-center gap-8 opacity-30 text-[10px] font-black uppercase tracking-[0.6em] italic text-white">
+            <span>Architected by Apurva Priyadarshi © 2026</span>
+            <span>OS_VER: {UDAARO_CONFIG.version} / SHIELD: ACTIVE</span>
           </div>
         </div>
       </footer>
@@ -493,25 +466,15 @@ const AppCore = () => {
   );
 };
 
-/** * =============================================================================
- * IX. STYLING PROTOCOLS
- * ============================================================================= */
-
 const styleInject = `
   @import url('https://fonts.googleapis.com/css2?family=Italiana&family=Inter:ital,wght@0,100..900;1,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
-
   :root { --gold: #D4AF37; --slate: #0F1419; --sand: #FDF9F3; }
-
   body { background-color: var(--sand); font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; color: var(--slate); -webkit-font-smoothing: antialiased; }
   h1, h2, h3, h4, h5, h6 { font-family: 'Italiana', serif; margin: 0; }
   .custom-scrollbar::-webkit-scrollbar { width: 10px; }
-  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-  .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 100px; border: 3px solid var(--sand); }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 100px; }
   .shadow-luxury { box-shadow: 0 60px 150px -40px rgba(15, 20, 25, 0.12); }
   .shadow-7xl { box-shadow: 0 120px 200px -60px rgba(0,0,0,0.4); }
-  .btn-imperial { background: var(--slate); color: white; border-radius: 5rem; text-transform: uppercase; font-weight: 900; font-style: italic; letter-spacing: 1em; transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 50px 100px -30px rgba(0,0,0,0.5); cursor: pointer; border: none; }
-  .btn-imperial:hover { background: var(--gold); color: var(--slate); transform: scale(1.05) translateY(-10px); }
-  ::selection { background: var(--gold); color: white; }
 `;
 
 if (typeof document !== 'undefined') {
@@ -527,11 +490,3 @@ const App = () => (
 );
 
 export default App;
-
-/**
- * =============================================================================
- * XII. END_OF_SYSTEM_INTEGRATION
- * AUTHENTICATED: ARCHITECT APURVA PRIYADARSHI
- * GRID_STATE: STABLE_RESONANCE_v6.1.1
- * =============================================================================
- */
