@@ -2,7 +2,108 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  @apply bg-white text-gray-800;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+@layer base {
+  :root {
+    /* Comma-separated for Tailwind opacity support: rgb(var(--brand-blue) / 0.5) */
+    --brand-blue: 37, 99, 235; 
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+    /* Keeps the layout from jumping when modals or routes change */
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    @apply bg-white text-slate-950 antialiased tracking-tight;
+    /* Inter is the 'Startup Standard' font - ensures crisp rendering */
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Custom Scrollbar - Minimalist 'Dashboard' feel */
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-200 rounded-full hover:bg-blue-400 transition-colors duration-300;
+  }
+}
+
+@layer components {
+  /* Enhanced Focus Ring for all Udaaro Forms */
+  .form-input-focus {
+    @apply ring-offset-2 ring-blue-500/20 focus:ring-2 focus:border-blue-500 transition-all duration-300 outline-none;
+  }
+
+  /* The 'Udaaro Glass' utility for Navbars and CTAs */
+  .glass-effect {
+    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-sm;
+  }
+
+  /* The Signature 'Squircle' Button - Architected by Apurva Priyadarshi */
+  .btn-primary {
+    @apply relative overflow-hidden px-8 py-4 bg-slate-950 text-white font-black uppercase tracking-[0.2em] text-[11px] rounded-2xl 
+           hover:bg-blue-600 hover:shadow-2xl hover:shadow-blue-200 
+           active:scale-[0.97] transition-all duration-500 
+           disabled:opacity-50 disabled:pointer-events-none;
+  }
+  
+  /* Sidebar Links for Admin Terminal */
+  .nav-link-active {
+    @apply bg-blue-600 text-white shadow-xl shadow-blue-500/30;
+  }
+}
+
+@layer utilities {
+  /* Tactical feedback for credential validation errors */
+  .animate-head-shake {
+    animation: head-shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+  }
+
+  @keyframes head-shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+  }
+
+  /* High-impact text styling for the Hero Section */
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-500;
+  }
+
+  /* The 'Engineering' Grid Background - Sovereign Aesthetics */
+  .bg-grid-pattern {
+    background-image: radial-gradient(circle, #e2e8f0 0.8px, transparent 0.8px);
+    background-size: 32px 32px;
+  }
+
+  /* Cinematic Page Entrance Animation */
+  .fade-in-up {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Premium Image Reveal Effect */
+  .reveal-mask {
+    mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+  }
 }
