@@ -155,28 +155,7 @@ export default function UdaaroApp() {
       </div>
 
       {/* 2. THE GRAND NAVIGATION PORTICO */}
-      <nav className="fixed top-0 left-0 w-full z-[1000] p-10 lg:px-20 pointer-events-none flex justify-between items-center">
-        <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-6 bg-white/40 backdrop-blur-3xl border border-white/50 p-5 rounded-[2.5rem] pointer-events-auto shadow-sm">
-          <div className="w-14 h-14 bg-[#0F1419] text-[#D4AF37] rounded-2xl flex items-center justify-center font-black italic text-3xl shadow-xl">U</div>
-          <div className="flex flex-col">
-            <span className="text-3xl font-black uppercase tracking-tighter italic leading-none">Udaaro</span>
-            <span className="text-[9px] font-black uppercase tracking-[0.5em] text-[#D4AF37] mt-1 italic">Sovereign_OS</span>
-          </div>
-        </motion.div>
-
-        <div className="hidden xl:flex items-center gap-16 bg-white/40 backdrop-blur-3xl border border-white/50 px-16 py-6 rounded-full pointer-events-auto shadow-sm">
-          {["Identity", "Syndicate", "Advisory", "Registry"].map(item => (
-            <Link key={item} to={`/${item.toLowerCase()}`} className="text-[10px] font-black uppercase tracking-[0.5em] hover:text-[#D4AF37] transition-all italic relative group">
-              {item}
-              <span className="absolute -bottom-1 left-0 w-full h-[1px] bg-[#D4AF37] scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
-            </Link>
-          ))}
-        </div>
-
-        <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} className="pointer-events-auto">
-          <Link to="/apply" className="px-14 py-6 bg-[#0F1419] text-white rounded-[1.8rem] text-[10px] font-black uppercase tracking-[0.5em] hover:bg-[#D4AF37] transition-all shadow-2xl italic">Admission_Desk</Link>
-        </motion.div>
-      </nav>
+      
 
       {/* 3. HERO: THE ROYAL INITIALIZATION */}
       <motion.header style={{ scale: heroScale }} className="relative min-h-screen flex items-center justify-center pt-48 px-10 text-center overflow-hidden">
