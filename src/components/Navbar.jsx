@@ -22,13 +22,23 @@ import {
   Search,
   Command,
   Bell,
-  UserCheck
+  UserCheck,
+  Binary,
+  Layers,
+  Shield,
+  Radio,
+  Globe2,
+  HardDrive,
+  CpuIcon,
+  IndianRupee,
+  Landmark,
+  ShieldAlert
 } from "lucide-react";
 
 /** * =============================================================================
  * I. PREMIUM NAVIGATION TOPOLOGY
- * Design System: Alpha-Sync v2.9.4
- * Architected by Apurva Priyadarshi | Cycle: 2026-Alpha
+ * Design System: Alpha-Sync v3.0.4
+ * Architected by Apurva Priyadarshi | Node: INDIA_VANGUARD_HUB
  * ============================================================================= */
 
 const NAV_NODES = [
@@ -37,18 +47,26 @@ const NAV_NODES = [
     name: "The Vision", 
     path: "/", 
     detail: "Mission Directive",
-    icon: <Globe size={16} />,
-    description: "Architecting generational institutions through structured growth.",
-    nodes: ["Protocol_Alpha", "Venture_Blueprint", "Impact_Matrix"]
+    icon: <Globe2 size={16} />,
+    description: "Architecting generational institutions through Phase 1 Venture Engineering.",
+    subNodes: [
+      { label: "Structural_Logic", detail: "Unit Economic Moats" },
+      { label: "India_Stack", detail: "Modular Integration" },
+      { label: "Legacy_Architecture", detail: "IPO-Ready Scaffolding" }
+    ]
   },
   { 
     id: "syndicate",
     name: "Syndicate", 
     path: "/investors", 
     detail: "Capital Layer",
-    icon: <Lock size={16} />,
-    description: "Sovereign gateway for institutional and high-fidelity capital.",
-    nodes: ["Liquidity_Node", "Vetting_Core", "Deployment_Sync"]
+    icon: <IndianRupee size={16} />,
+    description: "Sovereign gateway for institutional HNI and Syndicate liquidity nodes.",
+    subNodes: [
+      { label: "Capital_Deployment", detail: "Vetted Dealflow" },
+      { label: "Vetting_Core", detail: "Level_01 Validation" },
+      { label: "Exit_Roadmaps", detail: "Liquidity Protocols" }
+    ]
   },
   { 
     id: "advisory",
@@ -56,40 +74,44 @@ const NAV_NODES = [
     path: "/mentors", 
     detail: "Elite Mentorship",
     icon: <ShieldCheck size={16} />,
-    description: "Synchronizing industry wisdom with the next wave of builders.",
-    nodes: ["Advisory_Council", "Legacy_Craft", "Strategic_Sync"]
+    description: "Synchronizing global expertise with regional Indian innovation clusters.",
+    subNodes: [
+      { label: "Advisory_Council", detail: "Council_Alpha Access" },
+      { label: "Strategic_Sync", detail: "1:1 Execution Depth" },
+      { label: "Sovereign_Network", detail: "Board-Level Peerage" }
+    ]
   },
 ];
 
-const SYSTEM_UTILITIES = [
-  { name: "Terminal", path: "/admin-login", icon: <Terminal size={14} />, status: "SECURE" },
-  { name: "Grid_Status", path: "#", icon: <Activity size={14} />, status: "SYNCED" },
+const TERMINAL_UTILITIES = [
+  { name: "Admin Terminal", path: "/admin-login", icon: <Terminal size={14} />, status: "SECURE" },
+  { name: "Node Status", path: "#", icon: <Activity size={14} />, status: "SYNCED" },
 ];
 
 /** * =============================================================================
- * II. UI ATOMS: PROTOCOL INDICATORS
+ * II. UI ATOMS: PROTOCOL VISUALIZERS
  * ============================================================================= */
 
 const InfrastructureHeartbeat = () => (
-  <div className="flex items-center gap-3 px-4 py-2 bg-slate-950/5 border border-white/20 rounded-full backdrop-blur-md">
+  <div className="flex items-center gap-3 px-4 py-2 bg-slate-950/5 border border-slate-200/50 rounded-full backdrop-blur-md">
     <motion.div 
       animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
       transition={{ duration: 2, repeat: Infinity }}
-      className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.8)]"
+      className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"
     />
-    <span className="text-[8px] font-black text-slate-500 uppercase tracking-[0.3em]">Grid_Synchronized</span>
+    <span className="text-[8px] font-black text-slate-500 uppercase tracking-[0.4em] italic">Node_Sync: Tokyo_Alpha</span>
   </div>
 );
 
-const SearchTerminal = () => (
-  <div className="hidden lg:flex items-center gap-3 px-5 py-2.5 bg-slate-50 border border-slate-100 rounded-2xl group focus-within:ring-2 focus-within:ring-blue-600/20 transition-all">
+const SearchTerminalNode = () => (
+  <div className="hidden lg:flex items-center gap-4 px-6 py-3 bg-white border border-slate-100 rounded-2xl group focus-within:ring-4 focus-within:ring-blue-600/5 transition-all shadow-sm">
     <Search size={14} className="text-slate-300 group-focus-within:text-blue-600 transition-colors" />
     <input 
       type="text" 
-      placeholder="Search Protocol..." 
-      className="bg-transparent border-none outline-none text-[11px] font-bold text-slate-900 placeholder:text-slate-300 w-32 focus:w-48 transition-all"
+      placeholder="Query Protocol..." 
+      className="bg-transparent border-none outline-none text-[11px] font-bold text-slate-950 placeholder:text-slate-200 w-32 focus:w-48 transition-all uppercase tracking-widest italic"
     />
-    <div className="flex items-center gap-1 px-2 py-1 bg-white border border-slate-200 rounded-lg shadow-sm">
+    <div className="flex items-center gap-1.5 px-2 py-1 bg-slate-50 border border-slate-200 rounded-lg shadow-inner">
       <Command size={10} className="text-slate-400" />
       <span className="text-[9px] font-black text-slate-400">K</span>
     </div>
@@ -97,36 +119,38 @@ const SearchTerminal = () => (
 );
 
 /** * =============================================================================
- * III. MAIN ARCHITECTURE: NAVBRIDGE
+ * III. MAIN ARCHITECTURE: NAVBRIDGE SYSTEM
  * ============================================================================= */
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeNode, setActiveNode] = useState(null);
+  const [activeHandshake, setActiveHandshake] = useState(null);
   const location = useLocation();
   const { scrollYProgress } = useScroll();
 
-  // Smooth scroll progress bar for the top of the nav
+  // Pulse spring for top progress node
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001
   });
 
-  // Evolution of background on scroll
+  // Background Evolution logic
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Sync menu state with route changes and lock body scroll
+  // Sync menu state with router coordinate changes
   useEffect(() => {
     setIsOpen(false);
-    document.body.style.overflow = isOpen ? 'hidden' : 'unset';
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
   }, [location, isOpen]);
 
   const isActive = (path) => location.pathname === path;
@@ -134,91 +158,88 @@ function Navbar() {
   return (
     <>
       <motion.nav 
-        initial={{ y: -100 }}
+        initial={{ y: -120 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className={`fixed top-0 w-full z-[100] transition-all duration-700 ${
+        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        className={`fixed top-0 w-full z-[1000] transition-all duration-700 ${
           scrolled 
-          ? "bg-white/60 backdrop-blur-3xl py-3 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.1)] border-b border-slate-200/40" 
+          ? "bg-white/60 backdrop-blur-3xl py-4 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.08)] border-b border-slate-200/40" 
           : "bg-transparent py-10"
         }`}
       >
-        {/* Top Scroll Indicator Node */}
-        <motion.div className="absolute top-0 left-0 right-0 h-[2px] bg-blue-600 origin-left" style={{ scaleX }} />
+        {/* Top Scroll Handshake Indicator */}
+        <motion.div className="absolute top-0 left-0 right-0 h-[3px] bg-blue-600 origin-left shadow-[0_0_10px_blue]" style={{ scaleX }} />
 
-        <div className="max-w-[1800px] mx-auto px-6 md:px-12 flex justify-between items-center">
+        <div className="max-w-[1900px] mx-auto px-8 md:px-16 flex justify-between items-center">
           
-          {/* ================= BRAND IDENTITY: CENTRAL HANDSHAKE ================= */}
-          <div className="flex items-center gap-10">
-            <Link to="/" className="flex items-center gap-4 group">
+          {/* ================= BRAND IDENTITY: SOVEREIGN NODE ================= */}
+          <div className="flex items-center gap-12">
+            <Link to="/" className="flex items-center gap-5 group relative">
               <motion.div 
-                whileHover={{ rotate: 90, scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="w-12 h-12 bg-slate-950 rounded-[1.2rem] flex items-center justify-center text-white font-black italic shadow-2xl shadow-blue-500/30 group-hover:bg-blue-600 transition-all duration-700"
+                whileHover={{ rotate: 90, scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                className="w-12 h-12 bg-slate-950 rounded-3xl flex items-center justify-center text-white font-black italic shadow-4xl shadow-blue-500/30 group-hover:bg-blue-600 transition-all duration-700 border border-white/10"
               >
                 U
               </motion.div>
               <div className="flex flex-col">
-                <span className="text-2xl font-black tracking-[-0.07em] text-slate-950 uppercase leading-none italic">
+                <span className="text-3xl font-black tracking-tighter text-slate-950 uppercase leading-none italic">
                   Udaaro
                 </span>
-                <div className="flex items-center gap-2 mt-1.5">
+                <div className="flex items-center gap-2 mt-2">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-[8px] font-black text-slate-400 uppercase tracking-[0.5em]">
-                    Active_Node_Alpha
+                  <span className="text-[9px] font-black text-slate-400 uppercase tracking-[0.5em] italic">
+                    Alpha_Node_Stable
                   </span>
                 </div>
               </div>
             </Link>
 
-            {/* Quick Metrics Divider */}
-            <div className="hidden xl:flex items-center gap-6 border-l border-slate-200 pl-10 ml-2">
+            {/* Institutional Telemetry Node */}
+            <div className="hidden xl:flex items-center gap-8 border-l border-slate-200 pl-12">
+               <InfrastructureHeartbeat />
                <div className="flex flex-col">
-                 <span className="text-[7px] font-black text-slate-300 uppercase tracking-widest leading-none mb-1">Grid_Uptime</span>
-                 <span className="text-[10px] font-bold text-emerald-500 uppercase font-mono">99.99%</span>
-               </div>
-               <div className="flex flex-col">
-                 <span className="text-[7px] font-black text-slate-300 uppercase tracking-widest leading-none mb-1">Latency</span>
-                 <span className="text-[10px] font-bold text-blue-500 uppercase font-mono">14ms</span>
+                 <span className="text-[8px] font-black text-slate-300 uppercase tracking-widest leading-none mb-1">Protocol_v3.0</span>
+                 <span className="text-[10px] font-bold text-blue-600 uppercase font-mono italic">Handshake_Active</span>
                </div>
             </div>
           </div>
 
-          {/* ================= DESKTOP COMMAND BRIDGE ================= */}
-          <div className="hidden md:flex items-center gap-12">
+          {/* ================= DESKTOP COMMAND TERMINAL ================= */}
+          <div className="hidden md:flex items-center gap-14">
             
-            <SearchTerminal />
+            <SearchTerminalNode />
 
-            <div className="flex items-center gap-10">
+            <div className="flex items-center gap-12">
               {NAV_NODES.map((node, idx) => (
                 <div
                   key={node.path}
-                  onMouseEnter={() => setActiveNode(idx)}
-                  onMouseLeave={() => setActiveNode(null)}
+                  onMouseEnter={() => setActiveHandshake(idx)}
+                  onMouseLeave={() => setActiveHandshake(null)}
                   className="relative py-2"
                 >
                   <Link
                     to={node.path}
                     className="group flex flex-col items-center"
                   >
-                    <div className="flex items-center gap-2.5">
-                      <span className={`text-[11px] font-black uppercase tracking-[0.3em] transition-all duration-500 ${
+                    <div className="flex items-center gap-3">
+                      <span className={`text-[12px] font-black uppercase tracking-[0.4em] transition-all duration-500 italic ${
                         isActive(node.path) ? "text-blue-600" : "text-slate-500 group-hover:text-slate-950"
                       }`}>
                         {node.name}
                       </span>
-                      <ChevronRight size={10} className={`text-slate-300 transition-transform duration-500 ${activeNode === idx ? 'rotate-90 text-blue-600' : ''}`} />
+                      <ChevronRight size={12} className={`text-slate-200 transition-all duration-500 ${activeHandshake === idx ? 'rotate-90 text-blue-600 translate-x-1' : ''}`} />
                     </div>
                     
-                    {/* Sovereign Indicator Underline */}
+                    {/* Visual Sync Line */}
                     <AnimatePresence>
-                      {(isActive(node.path) || activeNode === idx) && (
+                      {(isActive(node.path) || activeHandshake === idx) && (
                         <motion.div 
-                          layoutId="navGlow"
-                          initial={{ opacity: 0, scaleX: 0 }}
-                          animate={{ opacity: 1, scaleX: 1 }}
-                          exit={{ opacity: 0, scaleX: 0 }}
-                          className="absolute -bottom-1 left-0 w-full h-[2px] bg-blue-600 shadow-[0_0_10px_rgba(37,99,235,0.8)]"
+                          layoutId="navGlowNode"
+                          initial={{ opacity: 0, width: 0 }}
+                          animate={{ opacity: 1, width: "100%" }}
+                          exit={{ opacity: 0, width: 0 }}
+                          className="absolute -bottom-2 left-0 h-[2.5px] bg-blue-600 shadow-[0_5px_15px_blue]"
                         />
                       )}
                     </AnimatePresence>
@@ -226,25 +247,35 @@ function Navbar() {
 
                   {/* ================= MEGA-MENU HANDSHAKE ================= */}
                   <AnimatePresence>
-                    {activeNode === idx && (
+                    {activeHandshake === idx && (
                       <motion.div 
-                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        initial={{ opacity: 0, y: 15, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                        className="absolute top-full left-1/2 -translate-x-1/2 pt-6 w-80 z-50 pointer-events-none group-hover:pointer-events-auto"
+                        exit={{ opacity: 0, y: 15, scale: 0.95 }}
+                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                        className="absolute top-full left-1/2 -translate-x-1/2 pt-10 w-[400px] z-[2000] pointer-events-none group-hover:pointer-events-auto"
                       >
-                        <div className="bg-white rounded-[2.5rem] p-8 shadow-7xl border border-slate-100 overflow-hidden relative">
-                           <div className="absolute top-0 right-0 p-4 opacity-[0.03] text-slate-950">{node.icon}</div>
-                           <h4 className="text-[10px] font-black text-blue-600 uppercase tracking-[0.4em] mb-4">{node.detail}</h4>
-                           <p className="text-xs text-slate-500 font-medium leading-relaxed mb-6 italic">"{node.description}"</p>
-                           <div className="space-y-3">
-                              {node.nodes.map((sub, i) => (
-                                <div key={i} className="flex items-center justify-between group/item cursor-pointer">
-                                   <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest group-hover/item:text-slate-950 transition-colors">{sub}</span>
-                                   <ArrowUpRight size={10} className="text-slate-200 group-hover/item:text-blue-600 transition-all translate-y-1 opacity-0 group-hover/item:translate-y-0 group-hover/item:opacity-100" />
-                                </div>
-                              ))}
+                        <div className="bg-slate-950 rounded-[3.5rem] p-10 shadow-7xl border border-white/10 overflow-hidden relative group/mega">
+                           {/* Background Pattern */}
+                           <div className="absolute top-0 right-0 p-8 opacity-10 text-white scale-150 group-hover/mega:scale-100 transition-transform duration-1000">
+                             {node.icon}
+                           </div>
+                           
+                           <div className="relative z-10">
+                              <h4 className="text-[10px] font-black text-blue-500 uppercase tracking-[0.6em] mb-6">{node.detail}</h4>
+                              <p className="text-sm text-slate-400 font-medium leading-relaxed mb-10 italic">"{node.description}"</p>
+                              
+                              <div className="space-y-4">
+                                 {node.subNodes.map((sub, i) => (
+                                   <div key={i} className="flex items-center justify-between group/sub cursor-pointer p-4 bg-white/5 rounded-2xl hover:bg-white/10 transition-all border border-transparent hover:border-white/10">
+                                      <div className="flex flex-col">
+                                         <span className="text-[11px] font-black text-white uppercase tracking-widest leading-none mb-1.5">{sub.label}</span>
+                                         <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest">{sub.detail}</span>
+                                      </div>
+                                      <ArrowUpRight size={14} className="text-slate-600 group-hover/sub:text-blue-500 group-hover/sub:translate-x-1 group-hover/sub:-translate-y-1 transition-all" />
+                                   </div>
+                                 ))}
+                              </div>
                            </div>
                         </div>
                       </motion.div>
@@ -254,118 +285,124 @@ function Navbar() {
               ))}
             </div>
 
-            <div className="h-6 w-[1px] bg-slate-200" />
+            <div className="h-8 w-px bg-slate-200" />
 
-            {/* CTA SECTOR */}
-            <div className="flex items-center gap-6">
-              <Link to="/admin-login" className="p-3 bg-slate-50 hover:bg-blue-50 text-slate-400 hover:text-blue-600 rounded-2xl transition-all duration-500 group shadow-inner">
-                <Terminal size={18} className="group-hover:rotate-12 transition-transform" />
+            {/* PRIMARY CTA SECTOR */}
+            <div className="flex items-center gap-8">
+              <Link to="/admin-login" className="p-4 bg-slate-50 hover:bg-blue-600 hover:text-white text-slate-400 rounded-2xl transition-all duration-700 group shadow-inner border border-slate-100">
+                <Terminal size={20} className="group-hover:rotate-12 transition-transform" />
               </Link>
               
               <Link 
                 to="/apply" 
-                className="relative flex items-center px-10 py-5 bg-slate-950 text-white rounded-[1.5rem] text-[11px] font-black uppercase tracking-[0.4em] shadow-6xl transition-all hover:scale-[1.05] active:scale-95 group overflow-hidden"
+                className="relative flex items-center px-12 py-5 bg-slate-950 text-white rounded-[1.8rem] text-[12px] font-black uppercase tracking-[0.5em] shadow-7xl transition-all hover:scale-[1.05] hover:bg-blue-600 active:scale-95 group overflow-hidden border border-white/5"
               >
-                <span className="relative z-10 flex items-center gap-3 italic">
-                  Initiate Handshake 
-                  <ArrowUpRight size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-500" />
+                <span className="relative z-10 flex items-center gap-4 italic leading-none">
+                  Apply Admission 
+                  <ArrowUpRight size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-500" />
                 </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
               </Link>
             </div>
           </div>
 
-          {/* ================= MOBILE PROTOCOL TOGGLE ================= */}
-          <div className="md:hidden flex items-center gap-4">
+          {/* ================= MOBILE NAVIGATION TOGGLE ================= */}
+          <div className="md:hidden flex items-center gap-5">
              <motion.button 
                whileTap={{ scale: 0.9 }}
-               className="p-3 bg-slate-950 text-white rounded-xl shadow-xl"
+               className="p-4 bg-slate-950 text-white rounded-2xl shadow-xl shadow-blue-900/20"
              >
-                <Bell size={18} />
+                <Bell size={22} className="animate-pulse" />
              </motion.button>
              <button
-                className="p-4 text-slate-950 bg-white border border-slate-100 rounded-[1.5rem] transition-all active:scale-90 shadow-sm"
+                className="p-5 text-slate-950 bg-white border border-slate-200 rounded-[2rem] transition-all active:scale-90 shadow-2xl"
                 onClick={() => setIsOpen(!isOpen)}
               >
-                {isOpen ? <X size={20} /> : <Menu size={20} />}
+                {isOpen ? <X size={24} /> : <Menu size={24} />}
              </button>
           </div>
         </div>
 
-        {/* ================= MOBILE FULL-SCREEN TERMINAL ================= */}
+        {/* ================= MOBILE TERMINAL OVERLAY ================= */}
         <AnimatePresence>
           {isOpen && (
             <motion.div 
               initial={{ opacity: 0, x: "100%" }}
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: "100%", opacity: 0 }}
-              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className="fixed top-0 left-0 w-full h-screen bg-[#fcfcfd] z-[90] md:hidden flex flex-col pt-32 px-8 overflow-y-auto"
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="fixed top-0 left-0 w-full h-screen bg-[#fcfcfd] z-[90] md:hidden flex flex-col pt-32 px-10 overflow-y-auto"
             >
               {/* Background Architectural Patterns */}
-              <div className="absolute top-0 right-0 w-[80vw] h-[80vw] bg-blue-50/60 rounded-full blur-[120px] -z-10" />
+              <div className="absolute top-0 right-0 w-[100vw] h-[100vw] bg-blue-50/40 rounded-full blur-[160px] -z-10" />
               
-              <div className="flex flex-col gap-12 pb-20">
-                <div className="space-y-6">
-                  <SectionLabel text="Institutional_Routes" />
-                  <div className="grid gap-4">
+              <div className="flex flex-col gap-14 pb-32">
+                <div className="space-y-8">
+                  <SectionLabel text="Global_Nodes" />
+                  <div className="grid gap-5">
                     {NAV_NODES.map((node) => (
                       <Link
                         key={node.path}
                         to={node.path}
-                        className={`group flex items-center justify-between p-8 rounded-[2.5rem] transition-all duration-500 border ${
+                        className={`group flex items-center justify-between p-10 rounded-[3rem] transition-all duration-700 border ${
                           isActive(node.path) 
-                          ? "bg-slate-950 text-white border-slate-900 shadow-5xl scale-[1.02]" 
-                          : "bg-white text-slate-600 border-slate-100 active:bg-slate-50"
+                          ? "bg-slate-950 text-white border-slate-950 shadow-6xl scale-[1.03]" 
+                          : "bg-white text-slate-600 border-slate-100 active:bg-slate-50 shadow-sm"
                         }`}
                       >
-                        <div className="flex items-center gap-6">
-                          <div className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${isActive(node.path) ? 'bg-blue-600' : 'bg-slate-50'}`}>
-                             {React.cloneElement(node.icon, { size: 24, className: isActive(node.path) ? 'text-white' : 'text-slate-400' })}
+                        <div className="flex items-center gap-8">
+                          <div className={`w-16 h-16 rounded-[1.8rem] flex items-center justify-center transition-all ${isActive(node.path) ? 'bg-blue-600 shadow-xl shadow-blue-500/40' : 'bg-slate-50'}`}>
+                             {React.cloneElement(node.icon, { size: 28, className: isActive(node.path) ? 'text-white' : 'text-slate-400' })}
                           </div>
                           <div className="flex flex-col">
-                            <span className="text-xl font-black uppercase tracking-tighter italic leading-none mb-2">{node.name}</span>
-                            <span className={`text-[10px] font-bold uppercase tracking-widest ${isActive(node.path) ? 'text-blue-400' : 'text-slate-400'}`}>
+                            <span className="text-2xl font-black uppercase tracking-tighter italic leading-none mb-3 uppercase">{node.name}</span>
+                            <span className={`text-[11px] font-bold uppercase tracking-widest ${isActive(node.path) ? 'text-blue-400' : 'text-slate-400'}`}>
                               {node.detail}
                             </span>
                           </div>
                         </div>
-                        <ChevronRight size={20} className={isActive(node.path) ? 'text-blue-500' : 'text-slate-200'} />
+                        <ChevronRight size={28} className={isActive(node.path) ? 'text-blue-500' : 'text-slate-200'} />
                       </Link>
                     ))}
                   </div>
                 </div>
 
-                <div className="space-y-8">
-                   <SectionLabel text="System_Protocols" />
-                   <div className="grid grid-cols-2 gap-4">
-                      {SYSTEM_UTILITIES.map((util) => (
-                        <Link key={util.name} to={util.path} className="flex flex-col p-8 bg-white border border-slate-100 rounded-[3rem] shadow-sm active:scale-95 transition-all group">
-                           <div className="flex justify-between items-start mb-6">
-                              <div className="p-3 bg-slate-50 rounded-xl text-slate-400 group-hover:text-blue-600 group-hover:bg-blue-50 transition-all">
+                <div className="space-y-10">
+                   <SectionLabel text="Core_Infrastructure" />
+                   <div className="grid grid-cols-2 gap-5">
+                      {TERMINAL_UTILITIES.map((util) => (
+                        <Link key={util.name} to={util.path} className="flex flex-col p-10 bg-white border border-slate-100 rounded-[3.5rem] shadow-xl active:scale-95 transition-all group">
+                           <div className="flex justify-between items-start mb-8">
+                              <div className="p-4 bg-slate-50 rounded-2xl text-slate-400 group-hover:text-blue-600 group-hover:bg-blue-50 transition-all shadow-inner">
                                 {util.icon}
                               </div>
-                              <span className="text-[8px] font-black text-emerald-500 bg-emerald-50 px-2 py-0.5 rounded-lg">{util.status}</span>
+                              <div className="flex items-center gap-2 px-3 py-1 bg-emerald-50 rounded-full border border-emerald-100">
+                                 <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                 <span className="text-[9px] font-black text-emerald-600">{util.status}</span>
+                              </div>
                            </div>
-                           <span className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-950">{util.name}</span>
+                           <span className="text-[13px] font-black uppercase tracking-[0.2em] text-slate-950 italic">{util.name}</span>
                         </Link>
                       ))}
                    </div>
                 </div>
 
-                {/* Mobile Final Handshake CTA */}
-                <div className="p-12 bg-slate-950 rounded-[4rem] shadow-7xl relative overflow-hidden group">
-                   <div className="absolute top-0 right-0 p-8 opacity-20"><Fingerprint size={120} className="text-blue-500" /></div>
-                   <h4 className="text-white text-3xl font-black italic tracking-tighter leading-[0.9] mb-8 relative z-10 uppercase">Initiate <br /> Sovereign <br /> Handshake.</h4>
-                   <Link to="/apply" className="inline-flex items-center gap-4 px-10 py-5 bg-blue-600 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] shadow-4xl relative z-10 hover:bg-white hover:text-slate-950 transition-all">
-                      Admission_Desk <ArrowUpRight size={16}/>
+                {/* Mobile Admission CTA */}
+                <div className="p-14 bg-slate-950 text-white rounded-[5rem] shadow-7xl relative overflow-hidden group">
+                   <div className="absolute top-0 right-0 p-10 opacity-20"><Fingerprint size={160} className="text-blue-600" /></div>
+                   <h4 className="text-white text-4xl font-black italic tracking-tighter leading-[0.85] mb-10 relative z-10 uppercase">Architect <br /> Your Sovereign <br /> Institution.</h4>
+                   <Link to="/apply" className="inline-flex items-center gap-5 px-12 py-7 bg-blue-600 text-white rounded-[2rem] font-black text-[12px] uppercase tracking-[0.5em] shadow-6xl relative z-10 hover:bg-white hover:text-slate-950 transition-all italic">
+                      Start_Handshake <ArrowUpRight size={20}/>
                    </Link>
                 </div>
 
-                <div className="py-10 text-center opacity-40">
-                   <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.5em] leading-relaxed">
-                     Udaaro Global Architecture v2.9.4 <br /> 
-                     Secure_Handshake_Protocol_Active
+                <div className="py-12 text-center border-t border-slate-100">
+                   <div className="flex justify-center gap-6 mb-8 opacity-20">
+                      <Network size={24} /> <Globe size={24} /> <Cpu size={24} /> <Lock size={24} />
+                   </div>
+                   <p className="text-[10px] font-black text-slate-300 uppercase tracking-[0.6em] leading-relaxed italic">
+                     Udaaro Global Governance Node v3.0.4 <br /> 
+                     Architected by Apurva Priyadarshi
                    </p>
                 </div>
               </div>
@@ -374,14 +411,14 @@ function Navbar() {
         </AnimatePresence>
       </motion.nav>
 
-      {/* Backdrop blur for mobile when menu is open */}
+      {/* Background Overlay Cloak */}
       <AnimatePresence>
         {isOpen && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-slate-950/40 backdrop-blur-xl z-[80] md:hidden"
+            className="fixed inset-0 bg-slate-950/30 backdrop-blur-2xl z-[800] md:hidden"
             onClick={() => setIsOpen(false)}
           />
         )}
@@ -391,13 +428,13 @@ function Navbar() {
 }
 
 /** * =============================================================================
- * IV. ATOMIC UI HELPERS
+ * IV. ATOMIC UI HELPERS (HANDSHAKE WRAPPERS)
  * ============================================================================= */
 
 const SectionLabel = ({ text }) => (
-  <div className="flex items-center gap-4 ml-4 mb-8">
-    <div className="h-px w-8 bg-blue-600" />
-    <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.6em] leading-none">{text}</span>
+  <div className="flex items-center gap-5 ml-6 mb-10">
+    <div className="h-[2px] w-12 bg-blue-600 shadow-[0_0_10px_blue]" />
+    <span className="text-[11px] font-black text-blue-600 uppercase tracking-[0.6em] leading-none italic">{text}</span>
   </div>
 );
 
