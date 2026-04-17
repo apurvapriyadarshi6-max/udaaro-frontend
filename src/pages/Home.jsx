@@ -1,15 +1,15 @@
 /**
  * ============================================================================================
- * UDAARO SOVEREIGN VENTURE OPERATING SYSTEM (VOS) - IMPERIAL EDITION v6.0.0
+ * UDAARO SOVEREIGN VENTURE OPERATING SYSTEM (VOS) - IMPERIAL EDITION v6.1.0
  * --------------------------------------------------------------------------------------------
  * DESIGN LANGUAGE: "NEO-HERITAGE IMPERIALISM"
  * LEAD ARCHITECT: APURVA PRIYADARSHI (BATCH 2026)
- * REVISION: ULTIMATE_RESILIENCE_CORE
- * * CORE ARCHITECTURAL PRINCIPLES:
- * 1.  STRICT_RESONANCE_GATE: Zero-drift hydration protocol.
- * 2.  NEURAL_INTEGRITY: Isolated LLM compute nodes.
- * 3.  IMPERIAL_AESTHETIC: Deep-heritage UI nodes.
- * 4.  EXECUTIVE_MCP: High-fidelity telemetry dashboards.
+ * REVISION: HYDRATION_RESILIENCE_FINAL
+ * * * CORE ARCHITECTURAL PRINCIPLES:
+ * 1.  QUARANTINED_RANDOMNESS: No Math.random() during SSR.
+ * 2.  STRICT_RESONANCE_GATE: Zero-drift hydration protocol.
+ * 3.  NEURAL_INTEGRITY: Isolated LLM compute nodes.
+ * 4.  IMPERIAL_AESTHETIC: Deep-heritage UI nodes.
  * ============================================================================================
  */
 
@@ -47,19 +47,18 @@ import {
 import ReactMarkdown from 'react-markdown';
 
 /** * =============================================================================
- * I. SYSTEM CONFIGURATION & GLOBAL STATE
+ * I. SYSTEM CONFIGURATION & THEME DNA
  * ============================================================================= */
 
 const UDAARO_CONFIG = {
-  version: "6.0.0-Imperial",
+  version: "6.1.0-Imperial",
   founder: "Apurva Priyadarshi",
   batch: "2026",
   node: "INDIA_VANGUARD_01",
   apiBase: "https://udaaro-backend.onrender.com",
   handshakeDelay: 1500,
   neuralModel: "Sovereign-LLM-v6-Turbo",
-  encryption: "AES-256-GCM-INSTITUTIONAL",
-  telemetryInterval: 5000
+  encryption: "AES-256-GCM-INSTITUTIONAL"
 };
 
 const THEME = {
@@ -68,8 +67,6 @@ const THEME = {
     royalSlate: "#0F1419",
     goldLeaf: "#D4AF37",
     goldMuted: "#B59431",
-    goldBright: "#F9D976",
-    imperialBlue: "#1A365D",
     emerald: "#10B981",
     ruby: "#E11D48",
     graphite: "#1E293B"
@@ -78,16 +75,26 @@ const THEME = {
     heading: "font-serif tracking-tighter italic",
     ui: "font-mono uppercase tracking-[0.4em] text-[10px] font-black",
     body: "font-sans font-medium italic"
-  },
-  animations: {
-    imperial: { duration: 1.2, ease: [0.22, 1, 0.36, 1] }
   }
 };
 
 /** * =============================================================================
- * II. HYDRATION SHIELD (THE FIX FOR UNCAUGHT ERRORS)
+ * II. RESILIENCE HOOKS (THE HYDRATION FIX)
  * ============================================================================= */
 
+const useResonance = () => {
+  const [isResonating, setIsResonating] = useState(false);
+  useEffect(() => {
+    const timer = setTimeout(() => setIsResonating(true), 400);
+    return () => clearTimeout(timer);
+  }, []);
+  return isResonating;
+};
+
+/**
+ * COMPONENT: SovereignLoader
+ * Imperial-branded decryption visual for system boot.
+ */
 const SovereignLoader = () => (
   <div className="fixed inset-0 z-[99999] bg-[#FDF9F3] flex flex-col items-center justify-center">
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center">
@@ -234,7 +241,7 @@ const SovereignAI = () => {
 };
 
 /** * =============================================================================
- * IV. COMMAND BRIDGE (NAVIGATION)
+ * IV. NAVIGATION SYSTEM: COMMAND BRIDGE
  * ============================================================================= */
 
 const Navbar = () => {
@@ -262,7 +269,7 @@ const Navbar = () => {
             <div className="w-20 h-20 bg-[#0F1419] text-[#D4AF37] rounded-[2rem] flex items-center justify-center font-black italic text-5xl shadow-7xl border-2 border-[#D4AF37]/30 group-hover:rotate-[360deg] transition-all duration-[2s]">U</div>
             <div className="flex flex-col">
               <span className="text-5xl font-black italic tracking-tighter uppercase leading-none text-[#0F1419]">Udaaro</span>
-              <span className={THEME.typography.ui + " mt-3 opacity-40"}>Sovereign_Venture_OS_v6</span>
+              <span className={THEME.typography.ui + " mt-3 opacity-40"}>Sovereign_Venture_OS_v6.1</span>
             </div>
           </Link>
           
@@ -289,7 +296,7 @@ const Navbar = () => {
 };
 
 /** * =============================================================================
- * V. ATOMIC UI NODES (REUSABLE)
+ * V. ATOMIC UI NODES (QUARANTINED FROM SSR MISMISMATCH)
  * ============================================================================= */
 
 const SectionHeader = ({ badge, title, subtitle, light = false }) => {
@@ -308,27 +315,36 @@ const SectionHeader = ({ badge, title, subtitle, light = false }) => {
   );
 };
 
-const StatModule = ({ label, val, icon, trend, color = "text-[#0F1419]" }) => (
-  <motion.div whileHover={{ y: -25, scale: 1.02 }} className="p-20 bg-white rounded-[6rem] border border-slate-100 shadow-luxury relative overflow-hidden group">
-    <div className="absolute -right-8 -top-8 p-20 opacity-[0.03] group-hover:scale-150 group-hover:rotate-45 transition-all duration-1000 text-[#D4AF37]">{icon}</div>
-    <div className="flex items-center gap-8 mb-16">
-      <div className="w-20 h-20 bg-[#FDF9F3] border-2 border-[#D4AF37]/20 rounded-[2.5rem] flex items-center justify-center text-[#D4AF37] group-hover:bg-[#0F1419] group-hover:border-transparent transition-all duration-700">{React.cloneElement(icon, { size: 36 })}</div>
-      <p className={THEME.typography.ui + " text-[#D4AF37] tracking-[0.5em]"}>{label}</p>
-    </div>
-    <div className="flex items-end justify-between relative z-10">
-      <h3 className={`text-[9rem] font-black italic tracking-tighter leading-none ${color}`}>{val}</h3>
-      {trend && (
-        <div className="flex flex-col items-end pb-4">
-           <div className="px-6 py-3 bg-emerald-50 rounded-full flex items-center gap-3 mb-4 shadow-sm border border-emerald-100">
-              <TrendingUp size={16} className="text-emerald-500" />
-              <span className="text-sm font-black text-emerald-600 font-mono">{trend}</span>
-           </div>
-           <p className="text-[10px] font-black uppercase tracking-widest text-slate-300">Resonance_Delta</p>
-        </div>
-      )}
-    </div>
-  </motion.div>
-);
+const StatModule = ({ label, val, icon, trend, color = "text-[#0F1419]" }) => {
+  const [safeTrend, setSafeTrend] = useState(null);
+  
+  useEffect(() => {
+    // Quarantine trend randomness to client-side only
+    setSafeTrend(trend);
+  }, [trend]);
+
+  return (
+    <motion.div whileHover={{ y: -25, scale: 1.02 }} className="p-20 bg-white rounded-[6rem] border border-slate-100 shadow-luxury relative overflow-hidden group">
+      <div className="absolute -right-8 -top-8 p-20 opacity-[0.03] group-hover:scale-150 group-hover:rotate-45 transition-all duration-1000 text-[#D4AF37]">{icon}</div>
+      <div className="flex items-center gap-8 mb-16">
+        <div className="w-20 h-20 bg-[#FDF9F3] border-2 border-[#D4AF37]/20 rounded-[2.5rem] flex items-center justify-center text-[#D4AF37] group-hover:bg-[#0F1419] group-hover:border-transparent transition-all duration-700">{React.cloneElement(icon, { size: 36 })}</div>
+        <p className={THEME.typography.ui + " text-[#D4AF37] tracking-[0.5em]"}>{label}</p>
+      </div>
+      <div className="flex items-end justify-between relative z-10">
+        <h3 className={`text-[9rem] font-black italic tracking-tighter leading-none ${color}`}>{val}</h3>
+        {safeTrend && (
+          <div className="flex flex-col items-end pb-4">
+             <div className="px-6 py-3 bg-emerald-50 rounded-full flex items-center gap-3 mb-4 shadow-sm border border-emerald-100">
+                <TrendingUp size={16} className="text-emerald-500" />
+                <span className="text-sm font-black text-emerald-600 font-mono">{safeTrend}</span>
+             </div>
+             <p className="text-[10px] font-black uppercase tracking-widest text-slate-300">Resonance_Delta</p>
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+};
 
 /** * =============================================================================
  * VI. PAGE: HOME NODE (LANDING ARCHITECTURE)
@@ -516,7 +532,7 @@ const Investors = () => {
                            <input className="w-full bg-white/5 border-2 border-white/10 rounded-[3.5rem] px-12 py-10 text-white text-xl outline-none focus:border-[#D4AF37] transition-all italic font-bold" placeholder="institution@legal.com" />
                         </div>
                      </div>
-                     <button onClick={triggerHandshake} className="w-full py-16 bg-[#D4AF37] text-[#0F1419] rounded-[4rem] font-black uppercase tracking-[1em] text-sm italic shadow-7xl hover:bg-white transition-all flex items-center justify-center gap-10 active:scale-95">
+                     <button onClick={triggerHandshake} className="w-full py-16 bg-[#D4AF37] text-[#0F1419] rounded-4rem font-black uppercase tracking-[1em] text-sm italic shadow-7xl hover:bg-white transition-all flex items-center justify-center gap-10 active:scale-95">
                         {synced ? <Loader2 size={32} className="animate-spin" /> : <>Initialize_Vetting_Audit <ChevronRight size={32}/></>}
                      </button>
                   </motion.div>
@@ -559,11 +575,17 @@ const Investors = () => {
 
 const MasterControl = () => {
   const [activeTab, setActiveTab] = useState("neural");
-  const chartData = useMemo(() => Array.from({ length: 24 }, (_, i) => ({
-    time: `${i}:00`,
-    resonance: 4000 + Math.random() * 2000,
-    velocity: 2000 + Math.random() * 5000
-  })), []);
+  const [safeChartData, setSafeChartData] = useState([]);
+
+  useEffect(() => {
+    // Quarantine random data generation to client-side only
+    const data = Array.from({ length: 24 }, (_, i) => ({
+      time: `${i}:00`,
+      resonance: 4000 + Math.random() * 2000,
+      velocity: 2000 + Math.random() * 5000
+    }));
+    setSafeChartData(data);
+  }, []);
 
   const nodes = [
     { id: "neural", icon: <Brain size={28}/>, l: "Neural Insights" },
@@ -635,14 +657,18 @@ const MasterControl = () => {
                </div>
                <div className="h-[700px] relative z-10 w-full">
                   <ResponsiveContainer width="100%" height="100%">
-                     <AreaChart data={chartData}>
+                     {safeChartData.length > 0 ? (
+                       <AreaChart data={safeChartData}>
                         <defs>
                            <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#D4AF37" stopOpacity={0.8}/><stop offset="95%" stopColor="#D4AF37" stopOpacity={0}/></linearGradient>
                         </defs>
                         <Tooltip contentStyle={{ background: '#0F1419', borderRadius: '50px', color: '#fff', border: 'none', padding: '40px', shadow: '0 50px 100px rgba(0,0,0,0.5)' }} />
                         <Area type="monotone" dataKey="resonance" stroke="#D4AF37" strokeWidth={15} fill="url(#gGold)" animationDuration={4000} />
                         <Area type="monotone" dataKey="velocity" stroke="#0F1419" strokeWidth={5} fill="transparent" strokeDasharray="20 20" />
-                     </AreaChart>
+                       </AreaChart>
+                     ) : (
+                       <div className="w-full h-full flex items-center justify-center font-mono text-[#D4AF37] animate-pulse">BOOTING_ANALYTICS_NODE...</div>
+                     )}
                   </ResponsiveContainer>
                </div>
             </div>
@@ -660,11 +686,6 @@ const AppCore = () => {
   const isResonating = useResonance();
   const location = useLocation();
 
-  /**
-   * CRITICAL FIX FOR HYDRATION ERROR:
-   * By returning the Loader until isResonating is true, we prevent the browser
-   * from trying to re-calculate component coordinates before DOM is stable.
-   */
   if (!isResonating) return <SovereignLoader />;
 
   return (
@@ -769,7 +790,7 @@ const styleInject = `
   .shadow-7xl { box-shadow: 0 150px 250px -100px rgba(0,0,0,0.6); }
   .animate-spin-slow { animation: spin 60s linear infinite; }
   @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-  .animate-gold-shine { background-size: 200% auto; animation: shine 8s linear infinite; }
+  .animate-gold-shine { background-size: 200% auto; animation: shine 6s linear infinite; }
   @keyframes shine { to { background-position: 200% center; } }
   .btn-imperial { background: var(--slate); color: white; border-radius: 6rem; text-transform: uppercase; font-weight: 900; font-style: italic; letter-spacing: 1.2em; transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); box-shadow: 0 60px 120px -40px rgba(0,0,0,0.6); border: none; cursor: pointer; position: relative; overflow: hidden; }
   .btn-imperial:hover { background: var(--gold); color: var(--slate); transform: scale(1.05) translateY(-15px); box-shadow: 0 100px 150px -50px rgba(212, 175, 55, 0.5); }
