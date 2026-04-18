@@ -4,7 +4,7 @@
  * --------------------------------------------------------------------------------------------
  * DESIGN LANGUAGE: "NEO-HERITAGE IMPERIALISM"
  * LEAD ARCHITECT: APURVA PRIYADARSHI (BATCH 2026)
- * REVISION: ZERO_DRIFT_HYDRATION_SHIELD_FINAL
+ * REVISION: ZERO_DRIFT_HYDRATION_SHIELD_FINAL_STABLE
  * ============================================================================================
  */
 
@@ -77,13 +77,14 @@ const THEME = {
 };
 
 /** * =============================================================================
- * II. RESILIENCE HOOKS (THE HYDRATION GATEKEEPER)
+ * II. RESILIENCE HOOKS & UI PRIMITIVES
  * ============================================================================= */
 
 const useResonance = () => {
   const [isResonating, setIsResonating] = useState(false);
   useEffect(() => {
-    const timer = setTimeout(() => setIsResonating(true), 100);
+    // Initial delay to ensure client-side DOM matches Server SSR output
+    const timer = setTimeout(() => setIsResonating(true), 150);
     return () => clearTimeout(timer);
   }, []);
   return isResonating;
@@ -133,7 +134,7 @@ const SectionHeader = ({ badge, title, subtitle }) => (
 );
 
 /** * =============================================================================
- * III. SOVEREIGN NEURAL AI
+ * III. SOVEREIGN NEURAL AI (AI REDUCER & COMPONENT)
  * ============================================================================= */
 
 const aiReducer = (state, action) => {
@@ -253,13 +254,14 @@ const Navbar = () => {
 };
 
 /** * =============================================================================
- * V. QUARANTINED COMPONENTS
+ * V. QUARANTINED COMPONENTS (ANTI-HYDRATION ERRORS)
  * ============================================================================= */
 
 const StatModule = ({ label, val, icon, trend, color = "text-[#0F1419]" }) => {
   const [safeTrend, setSafeTrend] = useState(null);
   
   useEffect(() => {
+    // Only set dynamic trends on the client to prevent hydration mismatch
     setSafeTrend(trend);
   }, [trend]);
 
@@ -288,10 +290,11 @@ const StatModule = ({ label, val, icon, trend, color = "text-[#0F1419]" }) => {
  * ============================================================================= */
 
 const MasterControl = () => {
-  const [activeTab, setActiveTab] = useState("neural");
+  const [activeTab, setActiveTab] = useState("intelligence");
   const [safeChartData, setSafeChartData] = useState([]);
 
   useEffect(() => {
+    // Initialize chart data only on mount
     const data = Array.from({ length: 24 }, (_, i) => ({
       time: `${i}:00`,
       res: 4000 + Math.random() * 2000,
@@ -311,7 +314,13 @@ const MasterControl = () => {
         </div>
         <nav className="flex-1 space-y-6">
            {["Intelligence", "Founder_Nodes", "Capital_Flow", "Infrastructure"].map(n => (
-             <button key={n} onClick={() => setActiveTab(n.toLowerCase())} className={`w-full flex items-center gap-10 px-10 py-7 rounded-[2.5rem] transition-all font-mono text-xs uppercase tracking-widest ${activeTab === n.toLowerCase() ? 'bg-white/10 text-[#D4AF37]' : 'text-slate-500 hover:bg-white/5 hover:text-white'}`}>{n}</button>
+             <button 
+              key={n} 
+              onClick={() => setActiveTab(n.toLowerCase())} 
+              className={`w-full flex items-center gap-10 px-10 py-7 rounded-[2.5rem] transition-all font-mono text-xs uppercase tracking-widest ${activeTab === n.toLowerCase() ? 'bg-white/10 text-[#D4AF37]' : 'text-slate-500 hover:bg-white/5 hover:text-white'}`}
+             >
+              {n}
+             </button>
            ))}
         </nav>
         <div className="mt-auto pt-16 border-t border-white/5">
@@ -431,7 +440,7 @@ const AppCore = () => {
             <Routes location={location}>
               <Route path="/" element={<Home />} />
               <Route path="/intelligence" element={<MasterControl />} />
-              <Route path="/apply" element={<div className="h-screen flex items-center justify-center bg-[#0F1419] text-white">GATE_ACTIVE</div>} />
+              <Route path="/apply" element={<div className="h-screen flex items-center justify-center bg-[#0F1419] text-white font-black italic uppercase tracking-[1em]">GATE_ACTIVE</div>} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </motion.main>
