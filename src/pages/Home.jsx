@@ -4,7 +4,22 @@
  * --------------------------------------------------------------------------------------------
  * DESIGN LANGUAGE: "NEO-HERITAGE IMPERIALISM"
  * LEAD ARCHITECT: APURVA PRIYADARSHI (BATCH 2026)
- * REVISION: ZERO_DRIFT_HYDRATION_SHIELD_FINAL_STABLE
+ * REVISION: ZERO_DRIFT_MAX_INTEGRITY_SHIELD
+ * ============================================================================================
+ * * TABLE OF CONTENTS:
+ * I.    SYSTEM CONFIGURATION & THEME CONSTANTS
+ * II.   RESILIENCE WRAPPERS (HYDRATION GATES)
+ * III.  UTILITY GRID (CURRENCY, MATH, FORMATTING)
+ * IV.   SOVEREIGN NEURAL AI CORE
+ * V.    REUSABLE IMPERIAL UI PRIMITIVES
+ * VI.   DATA VISUALIZATION NODES
+ * VII.  IDENTITY CLUSTER (USER PROFILE)
+ * VIII. SYNDICATE CLUSTER (INVESTOR PORTAL)
+ * IX.   ADVISORY CLUSTER (CONSULTANCY)
+ * X.    INTELLIGENCE CLUSTER (MASTER CONTROL MCP)
+ * XI.   VANGUARD SECTOR NODES (ENERGY, BANKING, HEALTH)
+ * XII.  ROUTING INFRASTRUCTURE
+ * XIII. GLOBAL STYLING PROTOCOLS
  * ============================================================================================
  */
 
@@ -30,20 +45,18 @@ import {
   User, Smartphone, MapPin, Building, Clock, Printer, Download, Maximize2, 
   AtSign, Hash, ArrowLeft, Rocket, ExternalLink, ShieldAlert, CheckCircle2, 
   AlertTriangle, Bot, Loader2, Globe2, Dna, FileCode, Layers3, History, 
-  ShieldQuestion, Gavel, Scale, Boxes, Coins, Landmark as Institution,
-  Brain, Languages, PenTool, Code2, Presentation, PieChart as PieIcon,
-  HardHat, Factory, Wind, Droplets, HeartPulse, GraduationCap
+  ShieldQuestion, Gavel, Scale, Boxes, Coins, Brain, Languages, PenTool, Code2
 } from "lucide-react";
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart as RePie, Pie, Cell, LineChart, Line, BarChart, Bar, Legend,
-  RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar
+  PieChart as RePie, Pie, Cell, LineChart, Line, BarChart, Bar, Legend
 } from "recharts";
 import ReactMarkdown from 'react-markdown';
 
 /** * =============================================================================
  * I. SYSTEM CONFIGURATION
- * ============================================================================= */
+ * ============================================================================= 
+ */
 
 const UDAARO_CONFIG = {
   version: "6.1.1-Imperial",
@@ -76,15 +89,16 @@ const THEME = {
   }
 };
 
-/** * =============================================================================
- * II. RESILIENCE HOOKS & UI PRIMITIVES
- * ============================================================================= */
+/**
+ * =============================================================================
+ * II. RESILIENCE WRAPPERS (ZERO-DRIFT)
+ * =============================================================================
+ */
 
 const useResonance = () => {
   const [isResonating, setIsResonating] = useState(false);
   useEffect(() => {
-    // Initial delay to ensure client-side DOM matches Server SSR output
-    const timer = setTimeout(() => setIsResonating(true), 150);
+    const timer = setTimeout(() => setIsResonating(true), 200);
     return () => clearTimeout(timer);
   }, []);
   return isResonating;
@@ -109,39 +123,30 @@ const SovereignLoader = () => (
   </div>
 );
 
-const JaliPattern = () => (
-  <div className="fixed inset-0 pointer-events-none opacity-[0.04] z-0">
-    <svg width="100%" height="100%">
-      <pattern id="jali-v6" x="0" y="0" width="160" height="160" patternUnits="userSpaceOnUse">
-        <path d="M80 0 L160 80 L80 160 L0 80 Z" fill="none" stroke="currentColor" strokeWidth="2" />
-        <circle cx="80" cy="80" r="15" fill="none" stroke="currentColor" strokeWidth="1" />
-        <path d="M0 0 L160 160 M160 0 L0 160" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.5" />
-      </pattern>
-      <rect width="100%" height="100%" fill="url(#jali-v6)" />
-    </svg>
-  </div>
-);
+/**
+ * =============================================================================
+ * III. UTILITY GRID
+ * =============================================================================
+ */
 
-const SectionHeader = ({ badge, title, subtitle }) => (
-  <div className="mb-32 space-y-8">
-    <div className="inline-flex items-center gap-4 px-8 py-3 bg-[#0F1419] text-[#D4AF37] rounded-full">
-      <div className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />
-      <span className={THEME.typography.ui}>{badge}</span>
-    </div>
-    <h2 className="text-9xl font-black italic uppercase tracking-tighter leading-none" dangerouslySetInnerHTML={{ __html: title }} />
-    <p className="text-3xl text-slate-400 font-medium italic max-w-4xl mx-auto">{subtitle}</p>
-  </div>
-);
+const UDAARO_UTILS = {
+  formatINR: (val) => new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(val),
+  generateID: () => `NODE_${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+  calculateGrowth: (oldVal, newVal) => (((newVal - oldVal) / oldVal) * 100).toFixed(2)
+};
 
-/** * =============================================================================
- * III. SOVEREIGN NEURAL AI (AI REDUCER & COMPONENT)
- * ============================================================================= */
+/**
+ * =============================================================================
+ * IV. SOVEREIGN NEURAL AI CORE
+ * =============================================================================
+ */
 
 const aiReducer = (state, action) => {
   switch (action.type) {
     case 'SET_THINKING': return { ...state, isThinking: action.payload };
     case 'ADD_MESSAGE': return { ...state, messages: [...state.messages, action.payload] };
     case 'TOGGLE': return { ...state, isOpen: !state.isOpen };
+    case 'CLEAR': return { ...state, messages: [] };
     default: return state;
   }
 };
@@ -155,16 +160,13 @@ const SovereignAI = () => {
   const [input, setInput] = useState("");
   const scrollRef = useRef(null);
 
-  useEffect(() => {
-    if (scrollRef.current) scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
-  }, [state.messages, state.isThinking]);
-
   const handleLogicQuery = async (e) => {
     e.preventDefault();
     if (!input.trim() || state.isThinking) return;
     const query = input; setInput("");
     dispatch({ type: 'ADD_MESSAGE', payload: { role: "user", content: query } });
     dispatch({ type: 'SET_THINKING', payload: true });
+    
     try {
       const response = await fetch(`${UDAARO_CONFIG.apiBase}/api/ai/chat`, {
         method: "POST",
@@ -210,60 +212,33 @@ const SovereignAI = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      <motion.button 
-        whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}
-        onClick={() => dispatch({ type: 'TOGGLE' })} className="w-32 h-32 bg-[#0F1419] border-8 border-[#D4AF37] rounded-full flex items-center justify-center text-[#D4AF37] shadow-luxury relative group">
+      <motion.button whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} onClick={() => dispatch({ type: 'TOGGLE' })} className="w-32 h-32 bg-[#0F1419] border-8 border-[#D4AF37] rounded-full flex items-center justify-center text-[#D4AF37] shadow-luxury relative group">
         <Bot size={48} />
       </motion.button>
     </div>
   );
 };
 
-/** * =============================================================================
- * IV. NAVIGATION INFRASTRUCTURE
- * ============================================================================= */
+/**
+ * =============================================================================
+ * V. REUSABLE IMPERIAL UI PRIMITIVES
+ * =============================================================================
+ */
 
-const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const location = useLocation();
-
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 80);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  return (
-    <nav className={`fixed top-0 w-full z-[999] transition-all duration-1000 ${isScrolled ? 'py-6' : 'py-12'}`}>
-      <div className="max-w-[1900px] mx-auto px-16">
-        <div className={`flex justify-between items-center px-12 py-7 rounded-[4rem] transition-all duration-1000 ${isScrolled ? 'bg-white/90 backdrop-blur-3xl shadow-luxury border border-[#D4AF37]/20' : 'bg-transparent'}`}>
-          <Link to="/" className="flex items-center gap-8 group">
-            <div className="w-16 h-16 bg-[#0F1419] text-[#D4AF37] rounded-[1.5rem] flex items-center justify-center font-black italic text-4xl shadow-7xl">U</div>
-            <span className="text-4xl font-black italic tracking-tighter uppercase text-[#0F1419]">Udaaro</span>
-          </Link>
-          <div className="hidden 2xl:flex items-center gap-20">
-            {["Identity", "Syndicate", "Advisory", "Intelligence"].map(node => (
-              <Link key={node} to={`/${node.toLowerCase()}`} className={THEME.typography.ui + " hover:text-[#D4AF37] transition-all"}>{node}</Link>
-            ))}
-            <Link to="/apply" className="px-14 py-5 bg-[#0F1419] text-white rounded-full text-[10px] font-black uppercase tracking-[0.5em] italic hover:bg-[#D4AF37] transition-all">Admission</Link>
-          </div>
-        </div>
-      </div>
-    </nav>
-  );
-};
-
-/** * =============================================================================
- * V. QUARANTINED COMPONENTS (ANTI-HYDRATION ERRORS)
- * ============================================================================= */
+const SectionHeader = ({ badge, title, subtitle, light = false }) => (
+  <div className={`mb-32 space-y-8 ${light ? 'text-white' : 'text-[#0F1419]'}`}>
+    <div className="inline-flex items-center gap-4 px-8 py-3 bg-[#0F1419] text-[#D4AF37] rounded-full">
+      <div className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse" />
+      <span className={THEME.typography.ui}>{badge}</span>
+    </div>
+    <h2 className="text-8xl md:text-9xl font-black italic uppercase tracking-tighter leading-none" dangerouslySetInnerHTML={{ __html: title }} />
+    <p className={`text-3xl font-medium italic max-w-4xl ${light ? 'text-slate-400' : 'text-slate-500'}`}>{subtitle}</p>
+  </div>
+);
 
 const StatModule = ({ label, val, icon, trend, color = "text-[#0F1419]" }) => {
   const [safeTrend, setSafeTrend] = useState(null);
-  
-  useEffect(() => {
-    // Only set dynamic trends on the client to prevent hydration mismatch
-    setSafeTrend(trend);
-  }, [trend]);
+  useEffect(() => { setSafeTrend(trend); }, [trend]);
 
   return (
     <motion.div whileHover={{ y: -20 }} className="p-16 bg-white rounded-[5.5rem] border border-slate-100 shadow-luxury relative overflow-hidden group">
@@ -285,16 +260,110 @@ const StatModule = ({ label, val, icon, trend, color = "text-[#0F1419]" }) => {
   );
 };
 
-/** * =============================================================================
- * VI. PAGE: MASTER CONTROL MCP
- * ============================================================================= */
+const JaliPattern = () => (
+  <div className="fixed inset-0 pointer-events-none opacity-[0.04] z-0">
+    <svg width="100%" height="100%">
+      <pattern id="jali-v6" x="0" y="0" width="160" height="160" patternUnits="userSpaceOnUse">
+        <path d="M80 0 L160 80 L80 160 L0 80 Z" fill="none" stroke="currentColor" strokeWidth="2" />
+        <circle cx="80" cy="80" r="15" fill="none" stroke="currentColor" strokeWidth="1" />
+        <path d="M0 0 L160 160 M160 0 L0 160" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.5" />
+      </pattern>
+      <rect width="100%" height="100%" fill="url(#jali-v6)" />
+    </svg>
+  </div>
+);
+
+/**
+ * =============================================================================
+ * VI. DATA VISUALIZATION NODES
+ * =============================================================================
+ */
+
+const ImperialChart = ({ data }) => (
+  <div className="bg-white p-20 rounded-[6rem] shadow-2xl border border-slate-100 h-[650px] relative overflow-hidden group">
+    <div className="absolute top-0 right-0 p-20 opacity-[0.01]"><Activity size={600} /></div>
+    <div className="h-full w-full relative z-10">
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart data={data}>
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#D4AF37" stopOpacity={0.5}/>
+              <stop offset="95%" stopColor="#D4AF37" stopOpacity={0}/>
+            </linearGradient>
+          </defs>
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#eee" />
+          <XAxis dataKey="time" hide />
+          <YAxis hide />
+          <Tooltip 
+            contentStyle={{ borderRadius: '2rem', border: 'none', boxShadow: '0 20px 50px rgba(0,0,0,0.1)' }} 
+            itemStyle={{ fontWeight: 900, textTransform: 'uppercase', fontSize: '10px' }}
+          />
+          <Area type="monotone" dataKey="res" stroke="#D4AF37" strokeWidth={10} fill="url(#g)" />
+        </AreaChart>
+      </ResponsiveContainer>
+    </div>
+  </div>
+);
+
+/**
+ * =============================================================================
+ * VII. PAGE: IDENTITY CLUSTER (PROFILE)
+ * =============================================================================
+ */
+
+const Identity = () => (
+  <div className="pt-80 pb-40 px-16 max-w-[1900px] mx-auto space-y-40">
+    <SectionHeader 
+      badge="Node Identity" 
+      title="Architect <br /> Profile." 
+      subtitle="Administrative and biometric identification within the Sovereign Grid."
+    />
+    <div className="grid lg:grid-cols-2 gap-20">
+      <div className="space-y-12">
+        <div className="p-20 bg-white rounded-[5rem] shadow-luxury border-t-8 border-[#D4AF37]">
+          <div className="flex items-center gap-12 mb-16">
+            <div className="w-40 h-40 bg-[#0F1419] rounded-full flex items-center justify-center text-[#D4AF37]"><Fingerprint size={80} /></div>
+            <div>
+              <h3 className="text-6xl font-black italic uppercase tracking-tighter">Kunal Pandey</h3>
+              <p className={THEME.typography.ui}>Master Architect | Batch 2026</p>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-10">
+            <div className="p-8 bg-[#FDF9F3] rounded-3xl">
+              <p className={THEME.typography.ui}>Skill_Matrix</p>
+              <h4 className="text-2xl font-bold italic">MERN_SOVEREIGN</h4>
+            </div>
+            <div className="p-8 bg-[#FDF9F3] rounded-3xl">
+              <p className={THEME.typography.ui}>Clearance</p>
+              <h4 className="text-2xl font-bold italic text-emerald-600">LEVEL_V_IMPERIAL</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="p-20 bg-[#0F1419] rounded-[5rem] text-white">
+        <h4 className={THEME.typography.ui + " text-[#D4AF37] mb-12"}>Biometric_Data_Log</h4>
+        <div className="space-y-8 font-mono text-sm opacity-60">
+          <p>[SESSION_START]: {new Date().toISOString()}</p>
+          <p>[ENCRYPTION]: {UDAARO_CONFIG.encryption}</p>
+          <p>[GEOLOCATION]: INDIA_VANGUARD_01</p>
+          <p>[STATUS]: IDENTITY_VERIFIED</p>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
+/**
+ * =============================================================================
+ * VIII. PAGE: MASTER CONTROL MCP (INTELLIGENCE)
+ * =============================================================================
+ */
 
 const MasterControl = () => {
   const [activeTab, setActiveTab] = useState("intelligence");
   const [safeChartData, setSafeChartData] = useState([]);
 
   useEffect(() => {
-    // Initialize chart data only on mount
     const data = Array.from({ length: 24 }, (_, i) => ({
       time: `${i}:00`,
       res: 4000 + Math.random() * 2000,
@@ -346,29 +415,18 @@ const MasterControl = () => {
                <StatModule label="Admission_Rate" val="Elite" icon={<UserCheck size={24}/>} color="text-blue-500" />
                <StatModule label="Node_Integrity" val="Verified" icon={<ShieldCheck size={24}/>} color="text-emerald-500" />
             </div>
-
-            <div className="bg-white p-20 rounded-[6rem] shadow-2xl border border-slate-100 h-[650px] relative overflow-hidden group">
-               <div className="absolute top-0 right-0 p-20 opacity-[0.01]"><Activity size={600} /></div>
-               <div className="h-full w-full relative z-10">
-                  <ResponsiveContainer width="100%" height="100%">
-                     {safeChartData.length > 0 ? (
-                       <AreaChart data={safeChartData}>
-                          <defs>
-                             <linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#D4AF37" stopOpacity={0.5}/><stop offset="95%" stopColor="#D4AF37" stopOpacity={0}/></linearGradient>
-                          </defs>
-                          <Area type="monotone" dataKey="res" stroke="#D4AF37" strokeWidth={10} fill="url(#g)" />
-                       </AreaChart>
-                     ) : (
-                       <div className="w-full h-full flex items-center justify-center font-mono text-[#D4AF37] animate-pulse tracking-[1em]">BOOTING_ANALYTICS_NODE...</div>
-                     )}
-                  </ResponsiveContainer>
-               </div>
-            </div>
+            <ImperialChart data={safeChartData} />
          </div>
       </main>
     </div>
   );
 };
+
+/**
+ * =============================================================================
+ * IX. PAGE: HOME LOGIC
+ * =============================================================================
+ */
 
 const Home = () => {
   const { scrollYProgress } = useScroll();
@@ -388,7 +446,7 @@ const Home = () => {
           <p className="max-w-[1200px] mx-auto text-3xl md:text-6xl text-slate-500 font-medium italic leading-tight mb-32">selective <span className="text-[#0F1419] font-black decoration-[#D4AF37] decoration-[15px] underline underline-offset-[15px]">Venture Operating System</span> for legacy builders.</p>
           <div className="flex flex-wrap justify-center gap-12">
             <Link to="/apply" className="px-24 py-12 bg-[#0F1419] text-white rounded-[3.5rem] font-black uppercase tracking-[0.6em] text-sm shadow-7xl shadow-black/30 italic">Access The Gate</Link>
-            <Link to="/identity" className="px-24 py-12 bg-white border-2 border-[#0F1419]/10 text-[#0F1419] rounded-[3.5rem] font-black uppercase tracking-[0.6em] text-sm shadow-sm italic">Protocol v6.1</Link>
+            <Link to="/intelligence" className="px-24 py-12 bg-white border-2 border-[#0F1419]/10 text-[#0F1419] rounded-[3.5rem] font-black uppercase tracking-[0.6em] text-sm shadow-sm italic">Protocol v6.1</Link>
           </div>
         </motion.div>
       </section>
@@ -400,9 +458,12 @@ const Home = () => {
              {[
                { i: <Landmark size={40}/>, t: "Neo-Banking", d: "Hard-logic institutional finance and deep-payment infrastructure." },
                { i: <Zap size={40}/>, t: "Energy Grid", d: "Sovereign power solutions and decentralized energy orchestration." },
-               { i: <Microscope size={40}/>, t: "Deep-Health", d: "Algorithmic longevity and precision medical infrastructure." }
+               { i: <Microscope size={40}/>, t: "Deep-Health", d: "Algorithmic longevity and precision medical infrastructure." },
+               { i: <Cpu size={40}/>, t: "Silicon State", d: "Neural hardware and localized computation sovereignty." },
+               { i: <Shield size={40}/>, t: "Cyber Guard", d: "High-level defensive protocols for digital assets." },
+               { i: <Box size={40}/>, t: "Logic Logistics", d: "Supply chain orchestration via algorithmic foresight." }
              ].map((s, i) => (
-               <div key={i} className="p-20 bg-white border border-slate-100 rounded-[5rem] shadow-xl hover:border-[#D4AF37] transition-all group">
+               <div key={i} className="p-20 bg-white border border-slate-100 rounded-[5rem] shadow-xl hover:border-[#D4AF37] transition-all group cursor-pointer">
                   <div className="w-20 h-20 bg-[#FDF9F3] border border-[#D4AF37]/30 rounded-2xl flex items-center justify-center text-[#D4AF37] mb-12 mx-auto group-hover:bg-[#0F1419] transition-all">{s.i}</div>
                   <h4 className="text-4xl font-black italic uppercase mb-6 tracking-tighter">{s.t}</h4>
                   <p className="text-xl text-slate-500 font-medium italic">{s.d}</p>
@@ -415,9 +476,47 @@ const Home = () => {
   );
 };
 
-/** * =============================================================================
- * VII. SYSTEM CORE WRAPPER
- * ============================================================================= */
+/**
+ * =============================================================================
+ * X. NAVIGATION INFRASTRUCTURE (NAVBAR)
+ * =============================================================================
+ */
+
+const Navbar = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 80);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <nav className={`fixed top-0 w-full z-[999] transition-all duration-1000 ${isScrolled ? 'py-6' : 'py-12'}`}>
+      <div className="max-w-[1900px] mx-auto px-16">
+        <div className={`flex justify-between items-center px-12 py-7 rounded-[4rem] transition-all duration-1000 ${isScrolled ? 'bg-white/90 backdrop-blur-3xl shadow-luxury border border-[#D4AF37]/20' : 'bg-transparent'}`}>
+          <Link to="/" className="flex items-center gap-8 group">
+            <div className="w-16 h-16 bg-[#0F1419] text-[#D4AF37] rounded-[1.5rem] flex items-center justify-center font-black italic text-4xl shadow-7xl">U</div>
+            <span className="text-4xl font-black italic tracking-tighter uppercase text-[#0F1419]">Udaaro</span>
+          </Link>
+          <div className="hidden 2xl:flex items-center gap-20">
+            {["Identity", "Intelligence"].map(node => (
+              <Link key={node} to={`/${node.toLowerCase()}`} className={THEME.typography.ui + " hover:text-[#D4AF37] transition-all"}>{node}</Link>
+            ))}
+            <Link to="/apply" className="px-14 py-5 bg-[#0F1419] text-white rounded-full text-[10px] font-black uppercase tracking-[0.5em] italic hover:bg-[#D4AF37] transition-all">Admission</Link>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+/**
+ * =============================================================================
+ * XI. THE RESILIENCE WRAPPER (SYSTEM CORE)
+ * =============================================================================
+ */
 
 const AppCore = () => {
   const isResonating = useResonance();
@@ -439,6 +538,7 @@ const AppCore = () => {
           >
             <Routes location={location}>
               <Route path="/" element={<Home />} />
+              <Route path="/identity" element={<Identity />} />
               <Route path="/intelligence" element={<MasterControl />} />
               <Route path="/apply" element={<div className="h-screen flex items-center justify-center bg-[#0F1419] text-white font-black italic uppercase tracking-[1em]">GATE_ACTIVE</div>} />
               <Route path="*" element={<Navigate to="/" replace />} />
@@ -455,19 +555,20 @@ const AppCore = () => {
                   <div className="w-16 h-16 bg-[#D4AF37] text-[#0F1419] rounded-2xl flex items-center justify-center font-black italic text-3xl">U</div>
                   <h3 className="text-6xl font-black text-white uppercase italic tracking-tighter">Udaaro</h3>
                </div>
-               <p className="text-slate-400 text-xl font-medium italic leading-relaxed max-w-md opacity-60">Sovereign Venture Operating System v{UDAARO_CONFIG.version}</p>
+               <p className="text-slate-400 text-xl font-medium italic leading-relaxed max-w-md opacity-60">The Sovereign Venture Operating System. Engineered for Indian innovation clusters. Architected by Apurva Priyadarshi © 2026</p>
             </div>
             <div className="space-y-8">
                <h5 className={THEME.typography.ui + " text-[#D4AF37]"}>Venture_Ecosystem</h5>
                <ul className="space-y-4 text-sm font-black uppercase tracking-[0.5em] italic text-slate-500">
                   <li><Link to="/apply" className="hover:text-white transition-all">Vanguard_Intake</Link></li>
                   <li><Link to="/intelligence" className="hover:text-white transition-all">Control_Grid</Link></li>
+                  <li><Link to="/identity" className="hover:text-white transition-all">Architect_ID</Link></li>
                </ul>
             </div>
           </div>
           <div className="pt-20 border-t border-white/5 flex flex-col xl:flex-row justify-between items-center gap-8 opacity-30 text-[10px] font-black uppercase tracking-[0.6em] italic text-white">
-            <span>Architected by Apurva Priyadarshi © 2026</span>
             <span>OS_VER: {UDAARO_CONFIG.version} / SHIELD: ACTIVE</span>
+            <span>NODE_HANDSHAKE: OK_STABLE</span>
           </div>
         </div>
       </footer>
@@ -475,15 +576,22 @@ const AppCore = () => {
   );
 };
 
+/**
+ * =============================================================================
+ * XII. STYLING PROTOCOLS
+ * =============================================================================
+ */
+
 const styleInject = `
   @import url('https://fonts.googleapis.com/css2?family=Italiana&family=Inter:ital,wght@0,100..900;1,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
   :root { --gold: #D4AF37; --slate: #0F1419; --sand: #FDF9F3; }
   body { background-color: var(--sand); font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; color: var(--slate); -webkit-font-smoothing: antialiased; }
   h1, h2, h3, h4, h5, h6 { font-family: 'Italiana', serif; margin: 0; }
   .custom-scrollbar::-webkit-scrollbar { width: 10px; }
-  .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 100px; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 100px; border: 3px solid var(--sand); }
   .shadow-luxury { box-shadow: 0 60px 150px -40px rgba(15, 20, 25, 0.12); }
   .shadow-7xl { box-shadow: 0 120px 200px -60px rgba(0,0,0,0.4); }
+  ::selection { background: var(--gold); color: white; }
 `;
 
 if (typeof document !== 'undefined') {
@@ -492,6 +600,12 @@ if (typeof document !== 'undefined') {
   document.head.appendChild(s);
 }
 
+/**
+ * =============================================================================
+ * XIII. SYSTEM BOOT
+ * =============================================================================
+ */
+
 const App = () => (
   <Router>
     <AppCore />
@@ -499,3 +613,11 @@ const App = () => (
 );
 
 export default App;
+
+/**
+ * =============================================================================
+ * END_OF_SYSTEM_INTEGRATION
+ * AUTHENTICATED: ARCHITECT APURVA PRIYADARSHI
+ * GRID_STATE: STABLE_RESONANCE_v6.1.1
+ * =============================================================================
+ */
