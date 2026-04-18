@@ -97,10 +97,16 @@ const THEME = {
 
 const useResonance = () => {
   const [isResonating, setIsResonating] = useState(false);
+  
   useEffect(() => {
-    const timer = setTimeout(() => setIsResonating(true), 200);
+    // Using 0ms timeout to push execution to the end of the task queue
+    // This ensures all SSR HTML is fully parsed before we toggle state.
+    const timer = setTimeout(() => {
+      setIsResonating(true);
+    }, 0);
     return () => clearTimeout(timer);
   }, []);
+  
   return isResonating;
 };
 
