@@ -3,7 +3,6 @@
  * -----------------------------------------------------------------------------
  * ARCHITECT: Apurva Priyadarshi
  * PROTOCOL: SECURE_IMPERIAL_ALPHA
- * REVISION: REMOVED_INTERCEPTION_GATES
  * =============================================================================
  */
 
@@ -21,6 +20,7 @@ import App from "./App";
 const UdaaroTelemetry = {
   log: (event, metadata = {}) => {
     const timestamp = new Date().toISOString();
+    // Use styled console for imperial branding
     console.log(
       `%c[UDAARO_CORE] %c${timestamp} %c${event}`,
       "color: #D4AF37; font-weight: 900; background: #0F1419; padding: 2px 5px; border-radius: 4px;",
@@ -31,10 +31,10 @@ const UdaaroTelemetry = {
   },
   reportPulse: () => {
     const metrics = {
-      platform: navigator.platform,
+      platform: navigator.userAgentData?.platform || navigator.platform,
       node: "IMPERIAL_SYNC_2026",
       status: "STABLE",
-      mode: "SILENT_RESILIENCE"
+      performance_entry: `${performance.now().toFixed(2)}ms`
     };
     UdaaroTelemetry.log("INFRASTRUCTURE_PULSE_REPORT", metrics);
   }
@@ -42,7 +42,7 @@ const UdaaroTelemetry = {
 
 /**
  * PHASED BOOT SEQUENCE
- * Uses a non-blocking cycle to ensure DOM stability before React takes over.
+ * Ensures the DOM is fully interactive before React takes over the UI layer.
  */
 const initiateHandshake = () => {
   const rootContainer = document.getElementById("root");
@@ -53,6 +53,7 @@ const initiateHandshake = () => {
   }
 
   // REINFORCEMENT: Small delay to clear the browser's initial execution queue
+  // Using a 0ms task push to prioritize micro-tasks first
   setTimeout(() => {
     UdaaroTelemetry.log("INITIATING_BOOT_SEQUENCE", { cycle: "Alpha_Cycle_2026_v6.0" });
     UdaaroTelemetry.reportPulse();
@@ -61,8 +62,7 @@ const initiateHandshake = () => {
     
     /**
      * RENDER LOGIC: 
-     * Error Boundary removed to prevent the "Logical Handshake Failed" interface.
-     * System now favors native React error handling.
+     * System now favors native React handling for higher stability.
      */
     root.render(
       <StrictMode>
@@ -72,13 +72,15 @@ const initiateHandshake = () => {
       </StrictMode>
     );
 
-    // Final Sync Signal
-    setTimeout(() => {
-      UdaaroTelemetry.log("SYSTEM_STATE_SYNCHRONIZED", { 
-        ttInteraction: `${performance.now().toFixed(2)}ms`,
-        protocol: "SECURE_IMPERIAL_ALPHA"
-      });
-    }, 100);
+    // Final Sync Signal - Logged once the initial paint has likely occurred
+    requestAnimationFrame(() => {
+      setTimeout(() => {
+        UdaaroTelemetry.log("SYSTEM_STATE_SYNCHRONIZED", { 
+          ttInteraction: `${performance.now().toFixed(2)}ms`,
+          protocol: "SECURE_IMPERIAL_ALPHA"
+        });
+      }, 50);
+    });
   }, 0);
 };
 

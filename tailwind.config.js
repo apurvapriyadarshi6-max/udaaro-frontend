@@ -8,7 +8,7 @@ export default {
     extend: {
       colors: {
         // --- 1. IMPERIAL PALETTE ---
-        // Utilizing RGB variables for dynamic opacity control in UI components
+        // Ensuring the <alpha-value> placeholder is handled correctly by Tailwind's JIT
         primary: {
           DEFAULT: "rgb(var(--royal-slate) / <alpha-value>)", // #0F1419
           foreground: "#FFFFFF",
@@ -19,32 +19,31 @@ export default {
           sandstone: "#FDF9F3",
           marble: "#FFFFFF",
         },
-        // Semantic status nodes for the Venture OS Telemetry
+        // Semantic status nodes for Venture OS Telemetry
         status: {
-          active: "#10B981", // Emerald Handshake
-          warning: "#F59E0B", // Amber Alert
+          active: "#10B981",   // Emerald Handshake
+          warning: "#F59E0B",  // Amber Alert
           critical: "#EF4444", // Ruby Protocol
-          sync: "#3B82F6", // Cobalt Logic
+          sync: "#3B82F6",     // Cobalt Logic
         }
       },
       fontFamily: {
         // High-contrast pairing: Institutional Serif + Technical Sans
         serif: ['Playfair Display', 'serif'],
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'], // For terminal and telemetry data
+        mono: ['JetBrains Mono', 'monospace'],
       },
       borderRadius: {
         // --- 2. OS GEOMETRY ---
-        // Specialized squircles for luxury containers
         '3xl': '1.5rem',
         '4xl': '2rem',
         '5xl': '3rem',
         '6xl': '4.5rem',
-        'royal': '5rem', // The signature "Udaaro Card" radius
+        'royal': '5rem', // Signature Udaaro Card radius
         'terminal': '2.5rem',
       },
       letterSpacing: {
-        // Luxury spacing protocols for uppercase labels
+        // Luxury spacing protocols
         tightest: '-.075em',
         sovereign: '0.4em', 
         imperial: '0.8em',
@@ -90,19 +89,15 @@ export default {
         'glass-shine': "linear-gradient(110deg, transparent, rgba(255,255,255,0.05), transparent)",
       },
       transitionTimingFunction: {
-        // Liquid Luxury physics curve
+        // The signature Udaaro easing curve
         'imperial': 'cubic-bezier(0.16, 1, 0.3, 1)',
-      },
-      transitionDuration: {
-        '1500': '1500ms',
-        '2000': '2000ms',
       }
     },
   },
   plugins: [
-    // Custom plugin to handle institutional scrollbar styling via Tailwind classes
-    function({ addUtilities }) {
-      const newUtilities = {
+    // Custom utility plugin
+    ({ addUtilities }) => {
+      addUtilities({
         '.custom-scrollbar': {
           '&::-webkit-scrollbar': { width: '4px' },
           '&::-webkit-scrollbar-track': { background: '#FDF9F3' },
@@ -116,9 +111,9 @@ export default {
           'background': 'linear-gradient(to bottom right, #0F1419, #D4AF37, #0F1419)',
           '-webkit-background-clip': 'text',
           '-webkit-text-fill-color': 'transparent',
+          'display': 'inline-block'
         }
-      }
-      addUtilities(newUtilities)
+      })
     }
   ],
 };

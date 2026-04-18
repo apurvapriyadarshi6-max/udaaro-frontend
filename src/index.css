@@ -4,18 +4,15 @@
 
 /** * =============================================================================
  * I. IMPERIAL BASE LAYER & CORE TOKENS
- * Design System: Neo-Heritage v4.0
- * Architect: Apurva Priyadarshi (Node: INDIA_VANGUARD)
  * =============================================================================
  */
 
 @layer base {
   :root {
-    /* Imperial Luxury Palette */
-    --royal-slate: 15, 20, 25;    /* #0F1419 */
+    /* Imperial Luxury Palette (RGB for Opacity manipulation) */
+    --royal-slate: 15, 20, 25;     /* #0F1419 */
     --imperial-gold: 212, 175, 55; /* #D4AF37 */
-    --sandstone: 253, 249, 243;   /* #FDF9F3 */
-    --marble: 255, 255, 255;      /* #FFFFFF */
+    --sandstone: 253, 249, 243;    /* #FDF9F3 */
     
     /* System Geometry */
     --header-height: 100px;
@@ -30,12 +27,14 @@
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
     scrollbar-gutter: stable;
+    /* Ensure text remains legible when zoomed */
     font-size: 16px; 
     @apply antialiased;
   }
 
   body {
     @apply bg-[#FDF9F3] text-[#0F1419];
+    /* Fallback font stack included */
     font-family: 'Playfair Display', serif; 
     overflow-x: hidden;
     text-rendering: optimizeLegibility;
@@ -47,8 +46,8 @@
     font-family: 'Playfair Display', serif;
   }
 
-  p, span, label {
-    font-family: 'Inter', sans-serif; /* High-readability for functional nodes */
+  p, span, label, input, button {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
   }
 
   /* Imperial Scrollbar - Gold Leaf Style */
@@ -61,12 +60,12 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-[#D4AF37]/30 rounded-full border-4 border-transparent bg-clip-padding;
-    transition: var(--transition-imperial);
+    /* Fixed the transition in the thumb (some browsers ignore this) */
+    @apply bg-[#D4AF37]/30 rounded-full border-[2px] border-transparent bg-clip-padding;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-[#D4AF37] shadow-[0_0_20px_rgba(212,175,55,0.8)];
+    @apply bg-[#D4AF37];
   }
 }
 
@@ -86,22 +85,24 @@
   }
 
   .udaaro-label {
-    @apply text-[11px] font-black text-[#D4AF37] uppercase tracking-[0.5em] ml-6 mb-4 block italic;
+    /* Adjusted tracking for better readability at small sizes */
+    @apply text-[11px] font-black text-[#D4AF37] uppercase tracking-[0.3em] ml-6 mb-4 block italic;
   }
 
   /* --- BUTTONS: THE VANGUARD SERIES --- */
   .btn-imperial {
+    /* Added touch-none to prevent accidental double-tap zoom on mobile */
     @apply relative overflow-hidden px-14 py-7 bg-[#0F1419] text-white font-black 
            uppercase tracking-[0.4em] text-[11px] rounded-[2rem] flex items-center justify-center gap-5
            hover:bg-[#D4AF37] hover:text-[#0F1419] hover:shadow-2xl hover:scale-[1.02]
-           active:scale-[0.96] transition-all duration-700 italic;
+           active:scale-[0.96] transition-all duration-700 italic cursor-pointer select-none;
   }
 
   .btn-ghost-gold {
     @apply px-12 py-6 bg-transparent border-2 border-[#D4AF37]/20 text-[#0F1419] font-black 
            uppercase tracking-[0.4em] text-[10px] rounded-[2rem] flex items-center justify-center gap-4
            hover:border-[#D4AF37] hover:bg-[#D4AF37]/5
-           active:scale-[0.96] transition-all duration-700 italic;
+           active:scale-[0.96] transition-all duration-700 italic cursor-pointer select-none;
   }
 
   /* --- GLASS & HERITAGE LAYERING --- */
@@ -110,13 +111,8 @@
   }
 
   .royal-card {
-    @apply p-16 bg-white rounded-[5rem] border border-[#D4AF37]/10 shadow-xl
+    @apply p-12 md:p-16 bg-white rounded-[3rem] md:rounded-[5rem] border border-[#D4AF37]/10 shadow-xl
            hover:border-[#D4AF37] hover:shadow-2xl transition-all duration-1000;
-  }
-
-  /* --- LAYOUT NODES --- */
-  .mandala-grid {
-    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 py-24;
   }
 }
 
@@ -126,53 +122,47 @@
  */
 
 @layer utilities {
-  /* Metallic Gradients */
   .text-gradient-gold {
     @apply bg-clip-text text-transparent bg-gradient-to-br from-[#0F1419] via-[#D4AF37] to-[#0F1419];
   }
 
   .bg-jali-dots {
+    /* Performance optimization: use a fixed background-attachment if scrolling lag occurs */
     background-image: radial-gradient(circle, #D4AF37 0.8px, transparent 0.8px);
     background-size: 40px 40px;
     opacity: 0.05;
   }
 
-  /* Royal Animations */
   .animate-float-imperial {
     animation: floatImperial 10s ease-in-out infinite;
+    /* Will-change warns the browser of an upcoming transformation */
+    will-change: transform;
   }
 
   @keyframes floatImperial {
     0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-30px) rotate(1.5deg); }
+    50% { transform: translateY(-20px) rotate(1deg); }
   }
 
-  /* Optical Shadow Logic */
   .shadow-imperial {
     box-shadow: 0 50px 100px -20px rgba(15, 20, 25, 0.08);
-  }
-
-  /* Cinematic Masking */
-  .mask-sovereign-fade {
-    mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
   }
 }
 
 /** * =============================================================================
- * IV. PERFORMANCE & BROWSER OPTIMIZATION
+ * IV. GLOBAL POLISH
  * ============================================================================= */
 
 ::selection {
   @apply bg-[#D4AF37] text-white;
 }
 
-/* Crisp rendering for high-DPI Heritage displays */
-* {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Ensure images have a regal fade-in */
-img {
-  @apply transition-opacity duration-1000;
+/* Reduced motion support for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
