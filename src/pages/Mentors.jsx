@@ -26,24 +26,39 @@ export default function AdvisoryTerminal() {
     identity: "", terminal: "", tenure: "Industry_Lead", phase: "MVP_Sync"
   });
 
-  // --- COUNCIL HANDSHAKE ---
-  const initiateCouncilHandshake = useCallback(() => {
-    if (activeHandshake) return;
-    setActiveHandshake(true);
-    let auditTick = 0;
-    
-    const coreAudit = setInterval(() => {
-      auditTick += Math.floor(Math.random() * 3) + 2;
-      if (auditTick >= 100) {
-        setAuditPercentage(100);
-        clearInterval(coreAudit);
-      } else {
-        setAuditPercentage(auditTick);
-      }
-    }, 50);
+  // --- STATE HANDSHAKE MANAGEMENT EFFECT ---
+  useEffect(() => {
+    let coreAudit = null;
 
-    return () => clearInterval(coreAudit);
+    if (activeHandshake) {
+      coreAudit = setInterval(() => {
+        setAuditPercentage((prev) => {
+          const nextTick = prev + Math.floor(Math.random() * 3) + 2;
+          if (nextTick >= 100) {
+            clearInterval(coreAudit);
+            return 100;
+          }
+          return nextTick;
+        });
+      }, 50);
+    } else {
+      setAuditPercentage(0);
+    }
+
+    return () => {
+      if (coreAudit) clearInterval(coreAudit);
+    };
   }, [activeHandshake]);
+
+  // --- TRIGGER ACTION HANDLER ---
+  const handleFormSubmission = useCallback((e) => {
+    e.preventDefault();
+    if (!mentorNode.identity.trim() || !mentorNode.terminal.trim()) {
+      alert("Please initialize all authentication tokens (Identity & Terminal Node).");
+      return;
+    }
+    setActiveHandshake(true);
+  }, [mentorNode]);
 
   return (
     <div className="min-h-screen bg-[#FDF9F3] flex flex-col font-serif selection:bg-[#D4AF37] overflow-x-hidden">
@@ -130,10 +145,22 @@ export default function AdvisoryTerminal() {
                  <p className="text-slate-400 font-black uppercase tracking-widest text-[10px] md:text-xs italic opacity-60">Phase 01: Institutional Vetting</p>
               </div>
 
-              <form onSubmit={(e) => { e.preventDefault(); initiateCouncilHandshake(); }} className="space-y-8 md:space-y-10">
+              <form onSubmit={handleFormSubmission} className="space-y-8 md:space-y-10">
                 <div className="grid md:grid-cols-2 gap-6">
-                  <MentorInput label="Identity" icon={User} placeholder="Full Legal Name" />
-                  <MentorInput label="Institutional Node" icon={AtSign} placeholder="executive@corp.com" />
+                  <MentorInput 
+                    label="Identity" 
+                    icon={User} 
+                    placeholder="Full Legal Name" 
+                    value={mentorNode.identity}
+                    onChange={(val) => setMentorNode({ ...mentorNode, identity: val })}
+                  />
+                  <MentorInput 
+                    label="Institutional Node" 
+                    icon={AtSign} 
+                    placeholder="executive@corp.com" 
+                    value={mentorNode.terminal}
+                    onChange={(val) => setMentorNode({ ...mentorNode, terminal: val })}
+                  />
                 </div>
                 
                 <div className="space-y-6">
@@ -141,7 +168,8 @@ export default function AdvisoryTerminal() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                     {EXPERIENCE_MATRIX.map(node => (
                       <button 
-                        key={node.level} type="button" 
+                        key={node.level} 
+                        type="button" 
                         onClick={() => setMentorNode({...mentorNode, tenure: node.level})}
                         className={`p-5 md:p-6 rounded-3xl border-2 transition-all duration-500 text-left ${
                           mentorNode.tenure === node.level ? "bg-[#0F1419] text-[#D4AF37] border-[#0F1419] shadow-lg" : "bg-white text-slate-400 border-slate-100 hover:border-[#D4AF37]/50"
@@ -156,22 +184,33 @@ export default function AdvisoryTerminal() {
 
                 <AnimatePresence>
                   {activeHandshake && (
-                    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="p-8 md:p-10 bg-[#0F1419] rounded-[2.5rem] md:rounded-[3rem] text-[#D4AF37] border border-[#D4AF37]/20 relative overflow-hidden">
+                    <motion.div 
+                      initial={{ opacity: 0, y: 10 }} 
+                      animate={{ opacity: 1, y: 0 }} 
+                      exit={{ opacity: 0, y: -10 }}
+                      className="p-8 md:p-10 bg-[#0F1419] rounded-[2.5rem] md:rounded-[3rem] text-[#D4AF37] border border-[#D4AF37]/20 relative overflow-hidden"
+                    >
                        <div className="flex justify-between items-center mb-6 relative z-10">
                           <div className="flex items-center gap-4">
                              <Cpu className="animate-spin text-[#D4AF37]" size={20} />
-                             <span className="text-[9px] font-black uppercase tracking-[0.3em]">Credential_Handshake_Active</span>
+                             <span className="text-[9px] font-black uppercase tracking-[0.3em]">
+                               {auditPercentage === 100 ? "Verification_Complete" : "Credential_Handshake_Active"}
+                             </span>
                           </div>
                           <span className="text-2xl font-black font-mono">{auditPercentage}%</span>
                        </div>
                        <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                          <motion.div style={{ width: `${auditPercentage}%` }} className="h-full bg-[#D4AF37] shadow-[0_0_10px_#D4AF37]" />
+                          <div style={{ width: `${auditPercentage}%` }} className="h-full bg-[#D4AF37] shadow-[0_0_10px_#D4AF37] transition-all duration-300" />
                        </div>
                     </motion.div>
                   )}
                 </AnimatePresence>
 
-                <button type="submit" disabled={activeHandshake} className="w-full py-8 md:py-10 bg-[#0F1419] text-[#D4AF37] rounded-full font-black uppercase tracking-[0.5em] md:tracking-[0.6em] italic text-[10px] md:text-xs shadow-xl hover:bg-[#D4AF37] hover:text-[#0F1419] transition-all disabled:opacity-50 group">
+                <button 
+                  type="submit" 
+                  disabled={activeHandshake} 
+                  className="w-full py-8 md:py-10 bg-[#0F1419] text-[#D4AF37] rounded-full font-black uppercase tracking-[0.5em] md:tracking-[0.6em] italic text-[10px] md:text-xs shadow-xl hover:bg-[#D4AF37] hover:text-[#0F1419] transition-all disabled:opacity-50 group"
+                >
                   Submit to Alpha Council <ChevronRight size={18} className="inline group-hover:translate-x-2 transition-transform duration-500" />
                 </button>
               </form>
@@ -195,12 +234,21 @@ export default function AdvisoryTerminal() {
   );
 }
 
-const MentorInput = ({ label, icon: Icon, placeholder }) => (
+const MentorInput = ({ label, icon: Icon, placeholder, value, onChange }) => (
   <div className="space-y-4">
-    <label className="text-[9px] md:text-[10px] font-black text-[#D4AF37] uppercase tracking-[0.3em] md:tracking-[0.4em] italic ml-4">{label}</label>
+    <label className="text-[9px] md:text-[10px] font-black text-[#D4AF37] uppercase tracking-[0.3em] md:tracking-[0.4em] italic ml-4">
+      {label}
+    </label>
     <div className="relative group">
-      <div className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#D4AF37] transition-colors duration-500"><Icon size={18} /></div>
-      <input className="w-full bg-[#FDF9F3] rounded-[1.8rem] py-5 md:py-6 pl-16 pr-6 transition-all outline-none font-bold text-sm shadow-inner italic border-transparent focus:bg-white focus:ring-2 focus:ring-[#D4AF37]" placeholder={placeholder} />
+      <div className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-[#D4AF37] transition-colors duration-500">
+        <Icon size={18} />
+      </div>
+      <input 
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full bg-[#FDF9F3] rounded-[1.8rem] py-5 md:py-6 pl-16 pr-6 transition-all outline-none font-bold text-sm shadow-inner italic border-transparent focus:bg-white focus:ring-2 focus:ring-[#D4AF37]" 
+        placeholder={placeholder} 
+      />
     </div>
   </div>
 );

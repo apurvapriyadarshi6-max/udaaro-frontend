@@ -1,14 +1,15 @@
-/** * =============================================================================
- * UDAARO MASTER BOOTLOADER v6.0.0 (SILENT_RESILIENCE)
+/**
+ * =============================================================================
+ * UDAARO MASTER BOOTLOADER v6.0.1 (PATCHED_RESILIENCE)
  * -----------------------------------------------------------------------------
  * ARCHITECT: Apurva Priyadarshi
  * PROTOCOL: SECURE_IMPERIAL_ALPHA
+ * FIX: Extracted redundant router wrapping to fix deep execution loops
  * =============================================================================
  */
 
 import React, { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
 
 import "./index.css";
 import App from "./App";
@@ -30,8 +31,13 @@ const UdaaroTelemetry = {
     );
   },
   reportPulse: () => {
+    // Structural fallback check for userAgentData to prevent crashes on legacy Safari nodes
+    const platformStr = typeof navigator !== 'undefined' && navigator.userAgentData 
+      ? navigator.userAgentData.platform 
+      : (navigator?.platform || "UNKNOWN_PLATFORM");
+
     const metrics = {
-      platform: navigator.userAgentData?.platform || navigator.platform,
+      platform: platformStr,
       node: "IMPERIAL_SYNC_2026",
       status: "STABLE",
       performance_entry: `${performance.now().toFixed(2)}ms`
@@ -52,39 +58,32 @@ const initiateHandshake = () => {
     return;
   }
 
-  // REINFORCEMENT: Small delay to clear the browser's initial execution queue
-  // Using a 0ms task push to prioritize micro-tasks first
-  setTimeout(() => {
-    UdaaroTelemetry.log("INITIATING_BOOT_SEQUENCE", { cycle: "Alpha_Cycle_2026_v6.0" });
-    UdaaroTelemetry.reportPulse();
+  UdaaroTelemetry.log("INITIATING_BOOT_SEQUENCE", { cycle: "Alpha_Cycle_2026_v6.1" });
+  UdaaroTelemetry.reportPulse();
 
-    const root = createRoot(rootContainer);
-    
-    /**
-     * RENDER LOGIC: 
-     * System now favors native React handling for higher stability.
-     */
-    root.render(
-      <StrictMode>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </StrictMode>
-    );
+  const root = createRoot(rootContainer);
+  
+  /**
+   * RENDER LOGIC: 
+   * Executed directly on current layout cycle to prevent FOUC (Flash of Unstyled Content).
+   * Outer BrowserRouter removed here; navigation engine lifted cleanly into App component.
+   */
+  root.render(
+    <StrictMode>
+      <App />
+    </StrictMode>
+  );
 
-    // Final Sync Signal - Logged once the initial paint has likely occurred
-    requestAnimationFrame(() => {
-      setTimeout(() => {
-        UdaaroTelemetry.log("SYSTEM_STATE_SYNCHRONIZED", { 
-          ttInteraction: `${performance.now().toFixed(2)}ms`,
-          protocol: "SECURE_IMPERIAL_ALPHA"
-        });
-      }, 50);
+  // Final Sync Signal - Fired accurately matching the browser frame paint timeline
+  requestAnimationFrame(() => {
+    UdaaroTelemetry.log("SYSTEM_STATE_SYNCHRONIZED", { 
+      ttInteraction: `${performance.now().toFixed(2)}ms`,
+      protocol: "SECURE_IMPERIAL_ALPHA"
     });
-  }, 0);
+  });
 };
 
-// Execute Phased Boot based on DOM state
+// Execute Phased Boot safely depending on current readyState
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', initiateHandshake);
 } else {

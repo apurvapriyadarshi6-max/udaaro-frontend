@@ -1,4 +1,13 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+/**
+ * =============================================================================
+ * UDAARO SOVEREIGN VENTURE OS - VANGUARD INTAKE COMPONENT
+ * -----------------------------------------------------------------------------
+ * ARCHITECT: Apurva Priyadarshi
+ * FIX: Native Async Handshake, Explicit Database Schema Structural Alignment
+ * =============================================================================
+ */
+
+import React, { useState, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
@@ -65,51 +74,53 @@ export default function VanguardIntake() {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  // --- LOGIC VETTING SIMULATION ---
-  const executeLogicVetting = useCallback(() => {
-    setIsVetting(true);
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += Math.floor(Math.random() * 8) + 2; // Slightly faster for UX
-      if (progress >= 100) {
-        setLogicVetting(100);
-        clearInterval(interval);
-        setTimeout(() => setStep(3), 800);
-      } else {
-        setLogicVetting(progress);
-      }
-    }, 120);
-
-    return () => clearInterval(interval); // Cleanup to prevent memory leaks
-  }, []);
-
-  const handleAdmissionRequest = (e) => {
+  // --- LIVE BACKEND LOGIC TRANSYNC ENGINE ---
+  const handleAdmissionRequest = async (e) => {
     e.preventDefault();
     if (!formData.thesis.trim()) return alert("Structural Thesis Required for Handshake.");
-    executeLogicVetting();
+    
+    setIsVetting(true);
+    setLogicVetting(15);
+
+    // Exact structural transposition pipeline to target database model fields safely
+    const operationalPayload = {
+      name: formData.name.trim(),
+      email: formData.email.trim(),
+      phone: formData.phone.trim(),
+      startup: formData.startup.trim(),
+      industry: formData.vertical,
+      stage: formData.stage,
+      fundingNeeded: "1.2%", // Match metric analytics expectations
+      description: formData.thesis.trim()
+    };
+
+    try {
+      setLogicVetting(45);
+      const response = await fetch("https://udaaro-backend.onrender.com/api/founders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(operationalPayload)
+      });
+
+      if (!response.ok) throw new Error("VOS_CLUSTER_REJECTION");
+
+      setLogicVetting(85);
+      
+      // Complete rendering path cleanly
+      setLogicVetting(100);
+      setTimeout(() => setStep(3), 600);
+
+    } catch (err) {
+      console.error("[UDAARO_INTAKE] CRITICAL_METRIC_DROP:", err);
+      alert("⚠️ SYSTEM_ERROR: Infrastructure handshake rejected by core database cluster.");
+      setIsVetting(false);
+      setLogicVetting(0);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFDFE] flex flex-col selection:bg-blue-600 selection:text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#FDFDFE] flex flex-col selection:bg-blue-600 selection:text-white overflow-x-hidden pt-20">
       
-      {/* 1. NAV BRIDGE */}
-      <nav className="p-6 md:p-10 sticky top-0 w-full z-[100] bg-white/70 backdrop-blur-2xl border-b border-slate-100 flex justify-between items-center px-6 md:px-16">
-        <Link to="/" className="flex items-center gap-4 md:gap-5 group">
-          <div className="w-10 h-10 md:w-12 md:h-12 bg-slate-950 text-white rounded-xl md:rounded-2xl flex items-center justify-center font-black italic group-hover:bg-blue-600 transition-all duration-700">U</div>
-          <div className="flex flex-col">
-            <span className="text-xl md:text-2xl font-black text-slate-950 uppercase italic tracking-tighter leading-none">Udaaro</span>
-            <span className="text-[8px] md:text-[9px] font-black text-blue-600 uppercase tracking-[0.5em] mt-1 italic">Vanguard_Intake_v3.5</span>
-          </div>
-        </Link>
-        <div className="flex items-center gap-6">
-          <div className="hidden lg:flex items-center gap-4 bg-slate-50 border border-slate-200 px-6 py-2.5 rounded-2xl">
-            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_#10b981]" />
-            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest italic">Node_Status: SECURE</span>
-          </div>
-          <Fingerprint className="text-blue-600" size={24} />
-        </div>
-      </nav>
-
       {/* 2. MAIN OPERATIONAL GRID */}
       <main className="flex-1 flex flex-col lg:flex-row">
         
@@ -210,6 +221,7 @@ export default function VanguardIntake() {
                     </InputNode>
                   </div>
                   <button 
+                    type="button"
                     onClick={() => setStep(2)} 
                     disabled={!formData.name || !formData.email}
                     className="w-full py-8 md:py-10 bg-slate-950 text-white rounded-full font-black uppercase tracking-[0.4em] italic text-[10px] md:text-xs shadow-xl hover:bg-blue-600 transition-all flex items-center justify-center gap-4 group disabled:opacity-50 disabled:cursor-not-allowed"
@@ -276,7 +288,7 @@ export default function VanguardIntake() {
                           <span className="text-blue-500 font-mono text-lg md:text-xl">{logicVetting}%</span>
                         </div>
                         <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden">
-                          <motion.div style={{ width: `${logicVetting}%` }} className="h-full bg-blue-600 shadow-[0_0_10px_blue]" />
+                          <motion.div animate={{ width: `${logicVetting}%` }} className="h-full bg-blue-600 shadow-[0_0_10px_blue]" />
                         </div>
                       </motion.div>
                     )}
@@ -299,7 +311,7 @@ export default function VanguardIntake() {
                 </div>
                 <h2 className="text-5xl md:text-6xl font-black italic tracking-tighter uppercase mb-6 text-slate-950">Sync_Success.</h2>
                 <p className="text-lg md:text-xl text-slate-500 italic font-medium max-w-sm mx-auto mb-12 md:mb-16 leading-relaxed">
-                  Institutional synchronization complete. Your venture logic has been queued for sovereign audit. Access codes arriving shortly.
+                  Institutional synchronization complete. Your venture logic has been successfully written to the global ledger node.
                 </p>
                 <Link to="/" className="inline-flex items-center gap-4 md:gap-6 px-12 md:px-16 py-6 md:py-8 bg-slate-950 text-white rounded-full font-black uppercase tracking-[0.4em] md:tracking-[0.5em] italic text-[9px] md:text-[10px] shadow-2xl hover:bg-blue-600 transition-all">
                   <Globe size={18} /> Return to Home Node

@@ -1,18 +1,28 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { BrowserRouter as Router, Routes, Route, Link, Navigate, useLocation } from "react-router-dom";
+/**
+ * =============================================================================
+ * UDAARO SOVEREIGN VENTURE OS - SECURITY SECURITY GATEWAY
+ * -----------------------------------------------------------------------------
+ * ARCHITECT: Apurva Priyadarshi
+ * FIX: Unified Token Vetting Middleware & Dynamic State Authorization
+ * =============================================================================
+ */
+
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import { 
-  Shield, Zap, Crown, Fingerprint, ArrowUpRight, Lock, Workflow, ChevronRight
+  KeyRound, UserCheck, ArrowRight, ShieldAlert, Fingerprint, 
+  Loader2, ArrowUpRight, Workflow, Crown, ChevronRight 
 } from "lucide-react";
 
-/** * MODULE 1: SECURITY & HANDSHAKE LOGIC
- * Refined for robust error handling and token lifecycle management.
- */
-const analyzeHandshake = (token) => {
+/** * MODULE 1: SECURITY & HANDSHAKE LOGIC */
+export const analyzeHandshake = (token) => {
   try {
     if (!token) return { valid: false, reason: "NULL_NODE" };
-    // Split and decode the JWT payload
-    const parts = token.split(".");
+    
+    // Clean split logic if token string contains 'Bearer ' descriptor
+    const cleanToken = token.startsWith("Bearer ") ? token.split(" ")[1] : token;
+    const parts = cleanToken.split(".");
     if (parts.length !== 3) return { valid: false, reason: "INVALID_FORMAT" };
     
     const payload = JSON.parse(atob(parts[1]));
@@ -28,41 +38,7 @@ const analyzeHandshake = (token) => {
   }
 };
 
-const ProtectedHandshake = ({ children }) => {
-  const [isVerifying, setIsVerifying] = useState(true);
-  const [auth, setAuth] = useState({ valid: false });
-  const location = useLocation();
-
-  useEffect(() => {
-    const verify = () => {
-      const token = localStorage.getItem("udaaro_access_token");
-      const result = analyzeHandshake(token);
-      setAuth(result);
-      // UX delay to maintain "Institutional Handshake" feel
-      const timer = setTimeout(() => setIsVerifying(false), 1500);
-      return () => clearTimeout(timer);
-    };
-    verify();
-  }, [location.pathname]);
-
-  if (isVerifying) return (
-    <div className="h-screen w-full bg-[#0F1419] flex flex-col items-center justify-center">
-      <motion.div 
-        animate={{ rotate: 360 }} 
-        transition={{ duration: 8, repeat: Infinity, ease: "linear" }} 
-        className="w-24 h-24 border-2 border-[#D4AF37]/10 rounded-full flex items-center justify-center"
-      >
-        <div className="w-16 h-16 border-t-2 border-[#D4AF37] rounded-full animate-spin" />
-      </motion.div>
-      <p className="mt-8 text-[9px] font-black text-[#D4AF37] uppercase tracking-[0.6em] animate-pulse">Neural_Sync_Active</p>
-    </div>
-  );
-
-  return auth.valid ? children : <Navigate to="/admin-login" state={{ from: location }} replace />;
-};
-
-/** * MODULE 2: ATOMS & UI INFRASTRUCTURE
- */
+/** * MODULE 2: ATOMS & UI INFRASTRUCTURE */
 const JaliPattern = () => (
   <div className="absolute inset-0 pointer-events-none opacity-[0.03] z-0 overflow-hidden">
     <svg width="100%" height="100%" aria-hidden="true">
@@ -92,94 +68,151 @@ const SectionHeader = ({ badge, title, subtitle, light = false }) => (
   </div>
 );
 
-/** * MODULE 3: LANDING ENGINE
- */
-const Landing = () => {
-  const { scrollYProgress } = useScroll();
-  const scale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
-  const opacity = useTransform(scrollYProgress, [0, 0.1], [1, 0.8]);
+/** * MODULE 3: EXECUTABLE ADMISSION CONTROLLER */
+export default function AdminLogin() {
+  const [credentials, setCredentials] = useState({ id: "", key: "" });
+  const [status, setStatus] = useState("READY"); // READY, SYNCING, DENIED
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Handle auto-reset for DENIED status
+  useEffect(() => {
+    if (status === "DENIED") {
+      const timer = setTimeout(() => setStatus("READY"), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [status]);
+
+  const handleAccessRequest = async (e) => {
+    e.preventDefault();
+    if (status === "SYNCING") return;
+
+    setStatus("SYNCING");
+
+    try {
+      const response = await fetch("https://udaaro-backend.onrender.com/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: credentials.id.trim(),
+          password: credentials.key
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        // Pack string directly formatted for your verification middlewares
+        localStorage.setItem("udaaro_access_token", `Bearer ${data.token}`);
+        
+        const destination = location.state?.from?.pathname || "/admin";
+        navigate(destination, { replace: true });
+      } else {
+        setStatus("DENIED");
+      }
+    } catch (err) {
+      console.error("[UDAARO_AUTH] COMPROMISED_HANDSHAKE_LINK:", err);
+      setStatus("DENIED");
+    }
+  };
 
   return (
-    <div className="bg-[#FDF9F3] text-[#0F1419] font-serif selection:bg-[#D4AF37] selection:text-white">
+    <div className="min-h-screen bg-[#FDF9F3] flex items-center justify-center p-4 md:p-6 relative overflow-hidden pt-24">
       <JaliPattern />
-      
-      {/* HERO SECTION */}
-      <motion.header style={{ scale, opacity }} className="relative min-h-screen flex items-center justify-center px-6 md:px-10 py-20">
-        <div className="max-w-[1400px] text-center z-10">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
-            <div className="mb-12 md:mb-16 inline-flex items-center gap-4 px-6 py-2 md:px-8 md:py-3 bg-white border border-[#D4AF37]/20 rounded-full shadow-sm">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.3em] italic text-[#0F1419]">Node: INDIA_VANGUARD_2026</span>
-            </div>
-            <h1 className="text-6xl md:text-[11rem] font-black uppercase italic tracking-tighter leading-[0.8] mb-12">
-              Engineering <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-b from-[#0F1419] via-[#D4AF37] to-[#0F1419]">Sovereignty.</span>
-            </h1>
-            <p className="max-w-3xl mx-auto text-lg md:text-3xl text-slate-500 font-medium leading-relaxed italic mb-16 md:mb-20">
-              Udaaro is an institutional <span className="text-[#0F1419] font-black underline decoration-[#D4AF37]/40 decoration-[6px] md:decoration-[10px] underline-offset-[8px]">Execution Skeleton</span> for elite founders.
-            </p>
-            <div className="flex flex-col md:flex-row justify-center gap-6 md:gap-10">
-              <Link to="/apply" className="px-12 md:px-20 py-6 md:py-10 bg-[#0F1419] text-[#D4AF37] rounded-3xl md:rounded-[3rem] font-black text-[10px] md:text-[11px] uppercase tracking-[0.5em] shadow-xl hover:bg-[#D4AF37] hover:text-white transition-all italic">Initiate Protocol</Link>
-              <Link to="/about" className="px-12 md:px-20 py-6 md:py-10 border-2 border-[#0F1419]/10 rounded-3xl md:rounded-[3rem] font-black text-[10px] md:text-[11px] uppercase tracking-[0.5em] hover:bg-white transition-all flex items-center justify-center gap-4 italic text-[#0F1419]">System Logic <ArrowUpRight size={18} /></Link>
-            </div>
-          </motion.div>
-        </div>
-      </motion.header>
 
-      {/* CORE MODEL SECTION */}
-      <section className="py-32 md:py-64 px-6 md:px-10 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <SectionHeader 
-            badge="The Operating Model"
-            title="System Over <br /> Service."
-            subtitle="Udaaro delivers repeatable systems that guide founders through each stage of company building—from idea to institution."
-          />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-16">
-            {[
-              { id: "01", icon: Fingerprint, t: "Curated Admission", d: "Entry-stage evaluation focusing on problem clarity, founder intent, and execution capability." },
-              { id: "02", icon: Workflow, t: "Strategic Synthesis", d: "Alignment with AI-driven matching systems for capital, mentorship, and opportunity mapping." },
-              { id: "03", icon: Crown, t: "Global Ascension", d: "Structured scaling support ensuring startups transition into independent, scalable companies." }
-            ].map((node) => (
-              <motion.div 
-                whileHover={{ y: -10 }}
-                key={node.id} 
-                className="p-10 md:p-16 bg-[#FDF9F3] border border-slate-100 hover:border-[#D4AF37]/30 rounded-[3rem] md:rounded-[5rem] transition-all group shadow-sm hover:shadow-xl"
-              >
-                <div className="text-4xl md:text-5xl font-black italic text-[#D4AF37]/20 group-hover:text-[#D4AF37] transition-colors mb-8 md:mb-10">{node.id}</div>
-                <node.icon size={42} className="text-[#0F1419] mb-8" />
-                <h4 className="text-3xl md:text-4xl font-black italic uppercase tracking-tighter mb-6 md:mb-8">{node.t}</h4>
-                <p className="text-lg md:text-xl text-slate-500 leading-relaxed italic font-medium">{node.d}</p>
-              </motion.div>
-            ))}
-          </div>
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="w-full max-w-xl bg-white border border-[#D4AF37]/20 rounded-[3rem] md:rounded-[4rem] shadow-2xl p-8 md:p-16 relative z-10"
+      >
+        <div className="text-center mb-12 md:mb-16">
+          <motion.div 
+            whileHover={{ scale: 1.05, rotate: 5 }}
+            className="w-16 h-16 md:w-20 md:h-20 bg-[#0F1419] text-[#D4AF37] rounded-[1.5rem] md:rounded-[2rem] flex items-center justify-center mx-auto mb-8 shadow-xl border border-[#D4AF37]/30"
+          >
+            <Fingerprint size={32} />
+          </motion.div>
+          <h1 className="text-3xl md:text-4xl font-black italic tracking-tighter uppercase mb-4 text-[#0F1419]">Executive Access</h1>
+          <p className="text-[9px] md:text-[10px] font-black text-[#D4AF37] uppercase tracking-[0.4em] md:tracking-[0.5em] italic">Node_Identity_Verification</p>
         </div>
-      </section>
+
+        <form onSubmit={handleAccessRequest} className="space-y-6 md:space-y-8">
+          {/* Founder ID / Email Input */}
+          <div className="space-y-2">
+            <label className="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-6">Founder ID / Email</label>
+            <div className="relative">
+              <UserCheck className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
+              <input 
+                required
+                type="email" 
+                autoComplete="username"
+                className="w-full bg-slate-50 border border-slate-100 rounded-2xl md:rounded-3xl py-5 md:py-6 px-16 text-sm font-medium italic outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/20 transition-all text-[#0F1419]"
+                placeholder="Ex: admin@udaaro.com"
+                value={credentials.id}
+                onChange={(e) => setCredentials(prev => ({...prev, id: e.target.value}))}
+              />
+            </div>
+          </div>
+
+          {/* Sovereign Key Input */}
+          <div className="space-y-2">
+            <label className="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-6">Sovereign Key</label>
+            <div className="relative">
+              <KeyRound className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
+              <input 
+                required
+                type="password" 
+                autoComplete="current-password"
+                className="w-full bg-slate-50 border border-slate-100 rounded-2xl md:rounded-3xl py-5 md:py-6 px-16 text-sm font-medium italic outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/20 transition-all text-[#0F1419]"
+                placeholder="••••••••••••"
+                value={credentials.key}
+                onChange={(e) => setCredentials(prev => ({...prev, key: e.target.value}))}
+              />
+            </div>
+          </div>
+
+          {/* Action Button */}
+          <button 
+            type="submit"
+            disabled={status === "SYNCING"}
+            className={`w-full py-6 md:py-8 rounded-[2rem] md:rounded-[2.5rem] font-black uppercase tracking-[0.3em] md:tracking-[0.4em] italic text-[10px] md:text-xs transition-all duration-500 flex items-center justify-center gap-4 ${
+              status === "DENIED" 
+                ? "bg-red-600 text-white shadow-[0_0_20px_rgba(220,38,38,0.3)]" 
+                : "bg-[#0F1419] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-white shadow-xl active:scale-[0.98]"
+            }`}
+          >
+            <AnimatePresence mode="wait">
+              {status === "READY" && (
+                <motion.div key="ready" className="flex items-center gap-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                  Initiate Handshake <ArrowRight size={16}/>
+                </motion.div>
+              )}
+              {status === "SYNCING" && (
+                <motion.div key="sync" className="flex items-center gap-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                  <Loader2 size={16} className="animate-spin" /> Analyzing_Logic...
+                </motion.div>
+              )}
+              {status === "DENIED" && (
+                <motion.div key="denied" className="flex items-center gap-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                  Identity_Vetting_Failed <ShieldAlert size={16}/>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </button>
+        </form>
+
+        {/* Footer Stats */}
+        <div className="mt-12 pt-8 border-t border-slate-100 flex justify-between items-center opacity-40">
+           <div className="flex items-center gap-3">
+             <div className={`w-1.5 h-1.5 rounded-full ${status === "DENIED" ? 'bg-red-500' : 'bg-emerald-500 animate-pulse'}`} />
+             <span className="text-[8px] md:text-[9px] font-black uppercase tracking-widest">Logic_Gateway_Secure</span>
+           </div>
+           <span className="text-[8px] md:text-[9px] font-black uppercase tracking-widest italic">Auth_v2.9_Sovereign</span>
+        </div>
+      </motion.div>
     </div>
   );
-};
-
-/** * MODULE 4: MASTER ROUTING
- */
-export default function UdaaroApp() {
-  return (
-    <Router>
-      <div className="min-h-screen selection:bg-[#D4AF37]/30">
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/privacy" element={<Privacy />} />
-          
-          {/* Dashboard and Core Admin require ProtectedHandshake */}
-          <Route path="/dashboard" element={
-            <ProtectedHandshake>
-              {/* <Dashboard /> component would go here */}
-              <div className="p-20 font-black italic uppercase">Access_Granted: Welcome to the Command Center.</div>
-            </ProtectedHandshake>
-          } />
-
-          {/* Fallback Node */}
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </div>
-    </Router>
-  );
 }
+
+/** * LANDING EXPORT FOR CONTEXTUAL ASSET SHARING */
+export { JaliPattern, SectionHeader };
