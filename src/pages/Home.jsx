@@ -1,25 +1,23 @@
-/** * INTEGRATION UPDATE: 
- * 1. Fixed Chart Responsiveness in MCP.
- * 2. Optimized the Imperial Font Injection.
- * 3. Refined the AI Core scroll-to-bottom logic.
- */
+/** * =============================================================================
+ * UDAARO INTELLIGENCE NODE & HOME MATRIX GATEWAY
+ * -----------------------------------------------------------------------------
+ * ARCHITECT: Apurva Priyadarshi
+ * REVISION: ZERO_DRIFT_ROUTER_DECOUPLING
+ * ============================================================================= */
 
 import React, { 
   useState, useEffect, useReducer, useRef, useMemo, 
   useCallback, Suspense 
 } from "react";
-import { 
-  Link, BrowserRouter as Router, Routes, Route, 
-  useLocation, Navigate
-} from "react-router-dom";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { Link, useLocation, Navigate, Routes, Route } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Shield, Zap, Cpu, Fingerprint, X, Send, 
   Landmark, Globe, Activity, BarChart3, 
   ShieldCheck, Microscope, Bot, Loader2, UserCheck, Target, TrendingUp
 } from "lucide-react";
 import { 
-  AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
+  AreaChart, Area, CartesianGrid, Tooltip, ResponsiveContainer
 } from "recharts";
 import ReactMarkdown from 'react-markdown';
 
@@ -50,87 +48,7 @@ const SovereignLoader = () => (
   </div>
 );
 
-// --- IV. SOVEREIGN NEURAL AI CORE ---
-const aiReducer = (state, action) => {
-  switch (action.type) {
-    case 'SET_THINKING': return { ...state, isThinking: action.payload };
-    case 'ADD_MESSAGE': return { ...state, messages: [...state.messages, action.payload] };
-    case 'TOGGLE': return { ...state, isOpen: !state.isOpen };
-    default: return state;
-  }
-};
-
-const SovereignAI = () => {
-  const [state, dispatch] = useReducer(aiReducer, {
-    messages: [{ role: "ai", content: "Imperial Neural Node Active. Architect recognized." }],
-    isThinking: false, isOpen: false
-  });
-  const [input, setInput] = useState("");
-  const scrollRef = useRef(null);
-
-  useEffect(() => {
-    if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-  }, [state.messages]);
-
-  const handleLogicQuery = async (e) => {
-    e.preventDefault();
-    if (!input.trim() || state.isThinking) return;
-    const query = input; setInput("");
-    dispatch({ type: 'ADD_MESSAGE', payload: { role: "user", content: query } });
-    dispatch({ type: 'SET_THINKING', payload: true });
-    
-    try {
-      const response = await fetch(`${UDAARO_CONFIG.apiBase}/api/ai/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: query }),
-      });
-      const data = await response.json();
-      dispatch({ type: 'ADD_MESSAGE', payload: { role: "ai", content: data.response } });
-    } catch (err) {
-      dispatch({ type: 'ADD_MESSAGE', payload: { role: "ai", content: "CRITICAL: Node_Offline." } });
-    } finally {
-      dispatch({ type: 'SET_THINKING', payload: false });
-    }
-  };
-
-  return (
-    <div className="fixed bottom-6 right-6 md:bottom-12 md:right-12 z-[10000]">
-      <AnimatePresence>
-        {state.isOpen && (
-          <motion.div 
-            initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 50 }}
-            className="w-[90vw] md:w-[500px] h-[70vh] bg-white border border-[#D4AF37]/30 rounded-[3rem] shadow-2xl flex flex-col overflow-hidden mb-6"
-          >
-            <div className="p-8 bg-[#0F1419] text-[#D4AF37] flex justify-between items-center">
-              <h4 className="font-black italic uppercase tracking-widest">Sovereign_AI</h4>
-              <button onClick={() => dispatch({ type: 'TOGGLE' })}><X size={20} /></button>
-            </div>
-            <div className="flex-1 p-8 overflow-y-auto space-y-8 bg-[#FDF9F3]/50" ref={scrollRef}>
-              {state.messages.map((m, i) => (
-                <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`p-6 rounded-2xl text-sm italic font-medium ${m.role === 'user' ? 'bg-[#0F1419] text-white' : 'bg-white border text-slate-800'}`}>
-                    <ReactMarkdown>{m.content}</ReactMarkdown>
-                  </div>
-                </div>
-              ))}
-              {state.isThinking && <Loader2 className="animate-spin text-[#D4AF37]" size={20} />}
-            </div>
-            <form onSubmit={handleLogicQuery} className="p-6 border-t bg-white flex gap-4">
-              <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Inject logic..." className="flex-1 bg-slate-50 rounded-xl px-4 py-3 outline-none text-xs" />
-              <button className="p-4 bg-[#0F1419] text-[#D4AF37] rounded-xl"><Send size={18} /></button>
-            </form>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      <button onClick={() => dispatch({ type: 'TOGGLE' })} className="w-16 h-16 md:w-20 md:h-20 bg-[#0F1419] border-4 border-[#D4AF37] rounded-full flex items-center justify-center text-[#D4AF37] shadow-xl">
-        <Bot size={32} />
-      </button>
-    </div>
-  );
-};
-
-// --- VI. DATA VISUALIZATION NODES ---
+// --- IV. DATA VISUALIZATION NODES ---
 const ImperialChart = ({ data }) => (
   <div className="bg-white p-8 md:p-12 rounded-[3rem] md:rounded-[4rem] shadow-2xl border border-slate-100 h-[450px] md:h-[600px] w-full">
     <ResponsiveContainer width="100%" height="100%">
@@ -149,7 +67,7 @@ const ImperialChart = ({ data }) => (
   </div>
 );
 
-// --- VIII. MASTER CONTROL MCP ---
+// --- V. MASTER CONTROL MCP ---
 const MasterControl = () => {
   const chartData = useMemo(() => Array.from({ length: 12 }, (_, i) => ({
     time: `${i}h`, res: 4000 + Math.random() * 2000
@@ -179,8 +97,8 @@ const MasterControl = () => {
   );
 };
 
-// --- XI. SYSTEM BOOT & ROUTING ---
-const AppCore = () => {
+// --- VI. MAIN INTERIOR CORE ENTRY LAYOUT ---
+export default function Home() {
   const [isReady, setIsReady] = useState(false);
   const location = useLocation();
 
@@ -211,21 +129,11 @@ const AppCore = () => {
         className="pt-20"
       >
         <Routes>
-          <Route path="/" element={<div className="h-screen flex items-center justify-center text-8xl font-black italic uppercase tracking-tighter">Imperial_Home</div>} />
+          <Route path="/" element={<div className="h-screen flex items-center justify-center text-8xl font-black italic uppercase tracking-tighter text-slate-900">Imperial_Home</div>} />
           <Route path="/intelligence" element={<MasterControl />} />
-          <Route path="*" element={<Navigate to="/" />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </motion.main>
-      
-      <SovereignAI />
     </div>
-  );
-};
-
-export default function App() {
-  return (
-    <Router>
-      <AppCore />
-    </Router>
   );
 }

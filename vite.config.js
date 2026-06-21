@@ -1,14 +1,16 @@
 /** * =============================================================================
- * UDAARO VITE CONFIGURATION - GOLD_BUILD_v6.1.2
+ * UDAARO VITE CONFIGURATION - GOLD_BUILD_v6.1.3 (PATCHED_PRODUCTION)
  * -----------------------------------------------------------------------------
  * ARCHITECT: Apurva Priyadarshi
- * REVISION: ZERO_DRIFT_PRODUCTION_SYNC
+ * REVISION: ZERO_DRIFT_PRODUCTION_SYNC & ABSOLUTE_PATH_ENFORCEMENT
  * ============================================================================= */
 
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig({
+  // Enforces complete absolute root asset path parsing across all dynamic fragments
+  base: '/',
   plugins: [react()],
   build: {
     // 1. NEUTRALIZE PRELOAD: Ensures modern browser polyfills load before the UI paints.
@@ -24,10 +26,10 @@ export default defineConfig({
             return 'vendor_imperial'; 
           }
         },
-        // Asset naming protocols for institutional cache-busting.
-        chunkFileNames: 'assets/js/[name]-[hash].js',
-        entryFileNames: 'assets/js/[name]-[hash].js',
-        assetFileNames: 'assets/[ext]/[name]-[hash].[ext]'
+        // Asset naming protocols aligned with explicit domain root path variables.
+        chunkFileNames: 'assets/[name]-[hash].js',
+        entryFileNames: 'assets/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]'
       }
     },
     // 3. TARGET SYNC: Aligned with ES2022 for modern institutional browser support.
@@ -36,7 +38,6 @@ export default defineConfig({
     sourcemap: false,
     
     // 4. SILENT RESILIENCE: High-grade minification.
-    // REQUIRES: npm install -D terser
     minify: 'terser',
     terserOptions: {
       compress: {
@@ -56,7 +57,5 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     host: true,
-  },
-  // Ensure the base path is correct for Vercel/Render deployments.
-  base: '/'
+  }
 })
